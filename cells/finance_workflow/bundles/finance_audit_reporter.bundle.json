@@ -1,0 +1,7 @@
+{
+  "bundle_id": "finance_audit_reporter",
+  "bundle_version": "phase3-foundation-v1",
+  "kind": "phase3_placeholder_bundle",
+  "role_name": "audit_reporter"
+}
+

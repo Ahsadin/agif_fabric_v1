@@ -1,0 +1,11 @@
+{
+  "workflow_name": "finance_document_intake",
+  "document_id": "doc-001",
+  "inputs": {
+    "currency": "EUR",
+    "document_type": "invoice",
+    "total": "119.00",
+    "vendor_name": "Acme GmbH"
+  }
+}
+

@@ -93,3 +93,30 @@
   - required empty project directories that should stay in source control now have placeholders
 - Assumed only:
   - future commit discipline in later threads
+
+## 2026-03-12 Phase 3
+- Added the first local runner and fabric foundation:
+  - `runner/cell`
+  - `runner/README.md`
+  - `intelligence/fabric/`
+- Added the committed Phase 3 proof fixtures and finance workflow registry:
+  - `cells/finance_workflow/blueprint_registry.json`
+  - `cells/finance_workflow/bundles/`
+  - `fixtures/document_workflow/phase3/`
+- Added Phase 3 base tests and deterministic verification:
+  - `05_testing/test_phase3_foundation.py`
+  - `05_testing/PHASE3_FOUNDATION_EVIDENCE.md`
+  - `scripts/check_phase3_foundation.py`
+- Adapted local foundations from the old repo patterns with written provenance in `00_admin/REFERENCE_IMPORT_MATRIX.md` and no runtime dependency on the old repo.
+- Earned the Phase 3 pass token `AGIF_FABRIC_P3_PASS`.
+- Locally verified:
+  - the runner foundation exists locally
+  - `runner/cell fabric init`, `run`, `status`, `replay`, and `evidence` work locally on the committed fixtures
+  - invalid config fails closed with bounded JSON
+  - `python3 scripts/check_phase3_foundation.py` passes locally
+  - the Phase 3 gate is checked complete in `01_plan/PHASE_GATE_CHECKLIST.md`
+  - the progress tracker now records `225/600`
+- Assumed only:
+  - later phase lifecycle behavior
+  - later phase governance depth
+  - later phase benchmark outcomes

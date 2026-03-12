@@ -30,8 +30,19 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Phase 0: complete and locally verified
 - Phase 1: complete and locally verified
 - Phase 2: complete in writing and locally verified
-- Phase 3: not started in this thread
-- This thread made documentation and tracking changes only. No runtime implementation was started here.
+- Phase 3: complete and locally verified
+- Phase 4: not started
+
+## Phase 3 Foundation
+- Local runner entrypoint: `runner/cell`
+- Frozen commands now implemented:
+  - `runner/cell fabric init`
+  - `runner/cell fabric run`
+  - `runner/cell fabric status`
+  - `runner/cell fabric replay`
+  - `runner/cell fabric evidence`
+- Local blueprint registry committed for the finance workflow proof domain.
+- Deterministic local check script: `scripts/check_phase3_foundation.py`
 
 ## Phase 2 Freeze Set
 - `03_design/AGIF_V1_ARCHITECTURE.md`
@@ -76,5 +87,6 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Phase 0 verification method: confirm the required folders and bootstrap files exist in this workspace.
 - Phase 1 verification method: confirm the required requirement and proof-boundary files exist and state the bounded claim clearly.
 - Phase 2 verification method: confirm the six design freeze docs exist and that the gate checklist and progress tracker record the freeze consistently.
+- Phase 3 verification method: run the deterministic runner foundation check and confirm the Phase 3 pass token and evidence note.
 - Local verification status is recorded in `01_plan/PROGRESS_TRACKER.md` and `CHANGELOG.md`.
-- Runtime behavior is still assumed only because no Phase 3 implementation work was done in this thread.
+- Later runtime behavior beyond the Phase 3 foundation remains assumed only until later phases verify it.

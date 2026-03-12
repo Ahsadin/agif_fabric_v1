@@ -1,12 +1,11 @@
 # Pass Tokens
 
-## Status
-This file exists because the execution plan requires it.
-
-No pass tokens are earned yet because runtime phases have not started.
+## Current Earned Tokens
+- `AGIF_FABRIC_P3_PASS`
+  - Earned on `2026-03-12`
+  - Local verification command: `python3 scripts/check_phase3_foundation.py`
 
 ## Reserved Tokens from the Plan
-- `AGIF_FABRIC_P3_PASS`
 - `AGIF_FABRIC_P4_PASS`
 - `AGIF_FABRIC_P5_PASS`
 - `AGIF_FABRIC_P6_PASS`

@@ -34,10 +34,10 @@
 - [x] Decision records cover all interface freezes.
 
 ## Phase 3
-- [ ] Runner foundation exists locally.
-- [ ] Fabric execution control exists locally.
-- [ ] Deterministic execution path exists.
-- [ ] Base execution tests pass locally.
+- [x] Runner foundation exists locally.
+- [x] Fabric execution control exists locally.
+- [x] Deterministic execution path exists.
+- [x] Base execution tests pass locally.
 
 ## Phase 4
 - [ ] Local memory model exists locally.

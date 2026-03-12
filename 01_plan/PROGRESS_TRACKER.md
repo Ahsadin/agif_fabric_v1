@@ -9,10 +9,10 @@
 - Placeholder files created early to satisfy the plan do not count as phase completion by themselves.
 
 ## Current Recorded Progress
-- Completed units: `140`
-- Progress now: `140/600`
-- Percent complete: `23.3%`
-- Basis: Phase 0 bootstrap, Phase 1 requirements freeze, and Phase 2 architecture freeze are complete.
+- Completed units: `225`
+- Progress now: `225/600`
+- Percent complete: `37.5%`
+- Basis: Phase 0 bootstrap, Phase 1 requirements freeze, Phase 2 architecture freeze, and Phase 3 runner and fabric foundation are complete.
 
 ## Verification Status
 - Locally verified:
@@ -32,9 +32,14 @@
   - the benchmark classes and metrics are frozen in writing
   - the Phase 2 gate checklist is marked complete
   - no runtime implementation files were changed in the Phase 2 thread
+  - Phase 3 runner foundation exists locally
+  - `runner/cell fabric init`, `run`, `status`, `replay`, and `evidence` exist locally
+  - deterministic Phase 3 fixtures exist locally
+  - `python3 scripts/check_phase3_foundation.py` passes locally
+  - `AGIF_FABRIC_P3_PASS` is earned and recorded in `05_testing/PASS_TOKENS.md`
 - Assumed only:
   - all later phases
-  - runtime behavior
+  - runtime behavior beyond the Phase 3 foundation
   - benchmark outcomes
   - paper results
 
@@ -44,7 +49,7 @@
 | Phase 0 | 20 | Complete and locally verified |
 | Phase 1 | 40 | Complete and locally verified |
 | Phase 2 | 80 | Complete and locally verified |
-| Phase 3 | 85 | Not started |
+| Phase 3 | 85 | Complete and locally verified |
 | Phase 4 | 80 | Not started |
 | Phase 5 | 95 | Not started |
 | Phase 6 | 65 | Not started |

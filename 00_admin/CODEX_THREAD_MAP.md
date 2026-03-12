@@ -1,0 +1,12 @@
+# Codex Thread Map
+
+| Thread ID | Workstream | Owner | Allowed files | Current status | Handoff file path |
+| --- | --- | --- | --- | --- | --- |
+| `phase0-bootstrap-2026-03-12` | Phase 0 bootstrap, project controls, and planning docs | Codex | Root bootstrap docs, `00_admin/`, `01_plan/`, and `04_execution/phase0_bootstrap_handoff.md` | Completed in this thread | `00_admin/codex_threads/handoffs/phase0-bootstrap-2026-03-12.md` |
+| `phase1-requirements-2026-03-12` | Phase 1 requirements freeze and proof boundary docs | Codex | `02_requirements/`, `DECISIONS.md`, `CHANGELOG.md`, `01_plan/`, `00_admin/CODEX_THREAD_MAP.md`, and `04_execution/phase1_requirements_handoff.md` | Completed in this thread | `00_admin/codex_threads/handoffs/phase1-requirements-2026-03-12.md` |
+| `phase2-architecture-freeze-2026-03-12` | Phase 2 architecture and interface freeze | Codex | `03_design/`, `DECISIONS.md`, `CHANGELOG.md`, `PROJECT_README.md`, `01_plan/`, `00_admin/CODEX_THREAD_MAP.md`, `00_admin/codex_threads/handoffs/phase2-architecture-freeze-2026-03-12.md`, and `04_execution/phase2_architecture_freeze_handoff.md` | Completed in this thread | `00_admin/codex_threads/handoffs/phase2-architecture-freeze-2026-03-12.md` |
+| `repo-init-2026-03-12` | Git initialization and ignore policy setup | Codex | `.git/`, `.gitignore`, `CHANGELOG.md`, `00_admin/CODEX_THREAD_MAP.md`, `00_admin/codex_threads/handoffs/repo-init-2026-03-12.md`, and `04_execution/repo_init_handoff.md` | Completed in this thread | `00_admin/codex_threads/handoffs/repo-init-2026-03-12.md` |
+
+## Notes
+- One thread should own one workstream at a time.
+- New threads should add a new row before making changes.

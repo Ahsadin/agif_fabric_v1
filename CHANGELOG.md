@@ -1,0 +1,95 @@
+# Changelog
+
+## 2026-03-12
+- Created the standalone AGIF v1 project bootstrap in `/Users/ahsadin/Documents/Projects/ENF/AGIF/agif_fabric_v1`.
+- Added the required root source-of-truth files:
+  - `AGENTS.md`
+  - `PROJECT_README.md`
+  - `DECISIONS.md`
+  - `CHANGELOG.md`
+- Created the required project directories for planning, design, execution, testing, outputs, assets, logs, docs, runner, cells, intelligence, personalization, fixtures, and scripts.
+- Added the required admin control files in `00_admin/`.
+- Added the required planning files in `01_plan/`.
+- Added a Phase 0 thread handoff note in `04_execution/phase0_bootstrap_handoff.md`.
+- Locally verified:
+  - required directories were created in this workspace
+  - required bootstrap files were created in this workspace
+- Assumed only:
+  - future phase execution
+  - future runtime behavior
+  - future imports from the old repo
+
+## 2026-03-12 Phase 1
+- Added the Phase 1 requirements files:
+  - `02_requirements/AGIF_V1_REQUIREMENTS.md`
+  - `02_requirements/PROOF_BOUNDARY.md`
+  - `02_requirements/FALSIFICATION_THRESHOLDS.md`
+- Froze the proof boundary to document/workflow intelligence with the finance document workflow as the first real tissue system.
+- Froze the out-of-scope claims for AGIF v1 so the project does not over-claim AGI, large-scale emergence, or embodied intelligence.
+- Froze hard-fail thresholds for local runtime, old-repo runtime dependence, multi-cell separation, bounded adaptation, memory discipline, governance recovery, baseline comparison, and reproducibility.
+- Corrected the Phase 1 docs to include the exact numeric thresholds from the full execution plan.
+- Updated planning and decision records to mark Phase 1 complete.
+- Locally verified:
+  - the three Phase 1 requirement files exist in this workspace
+  - the requirement files state scope, proof boundary, failure conditions, and out-of-scope claims
+  - the finance workflow proof domain is explicitly bounded in writing
+  - the exact frozen numeric thresholds from the full plan are now recorded in the Phase 1 docs
+- Assumed only:
+  - future architecture choices
+  - future implementation quality
+  - future benchmark performance
+
+## 2026-03-12 Plan Reconciliation
+- Marked `/Users/ahsadin/Downloads/PLAN.md` as the authoritative execution plan in the local rules and project readme.
+- Added the plan-required placeholder design files in `03_design/`.
+- Added the plan-required placeholder testing files in `05_testing/`.
+- Added the plan-expected admin thread paths under `00_admin/codex_threads/`.
+- Added the plan-expected output subfolders under `06_outputs/`.
+- Added summary handoff notes in `00_admin/codex_threads/handoffs/` for the completed Phase 0 and Phase 1 workstreams.
+- Locally verified:
+  - the placeholder design files now exist
+  - the placeholder testing files now exist
+  - the codex thread directories now exist
+  - the output subfolders now exist
+- Assumed only:
+  - future content for Phase 2 design freeze
+  - future content for runtime testing
+
+## 2026-03-12 Phase 2
+- Replaced the six Phase 2 placeholder design docs with explicit architecture and interface freeze documents:
+  - `03_design/AGIF_V1_ARCHITECTURE.md`
+  - `03_design/INTERFACE_FREEZE.md`
+  - `03_design/MEMORY_MODEL.md`
+  - `03_design/LIFECYCLE_MODEL.md`
+  - `03_design/AUTHORITY_MODEL.md`
+  - `03_design/BENCHMARK_CONTRACT.md`
+- Froze the full AGIF v1 architecture in writing while keeping the long-horizon AGIF path visible and clearly non-claimed for v1.
+- Froze the exact Phase 2 interface fields, need-signal taxonomy, lifecycle state set, lifecycle transition set, split and merge rules, merge approval quorum, memory tiers, CLI contract, benchmark classes, benchmark metrics, and machine envelope.
+- Updated root decisions and planning records to mark Phase 2 complete in writing.
+- Updated the project README so the verified project state reflects Phases 0 through 2 complete.
+- Locally verified:
+  - all six required Phase 2 design docs exist in this workspace
+  - the required interface fields are written explicitly
+  - lifecycle states and transition rules are written explicitly
+  - CLI commands and stdout contract are written explicitly
+  - benchmark classes and required metrics are written explicitly
+  - the Phase 2 gate is checked complete in `01_plan/PHASE_GATE_CHECKLIST.md`
+  - the progress tracker now records `140/600`
+  - no runtime implementation files were changed in this thread
+- Assumed only:
+  - Phase 3 implementation quality
+  - runtime behavior
+  - benchmark outcomes
+
+## 2026-03-12 Repository Setup
+- Initialized Git for the standalone AGIF v1 workspace.
+- Added a root `.gitignore` for macOS files, editor files, Python caches, local temp files, local secrets, local runtime state, and `08_logs/`.
+- Added minimal `.gitkeep` placeholders in required empty project directories so the committed repo keeps the verified project structure.
+- Kept core project files in scope for version control, including project docs, design docs, plan docs, scripts, fixtures, and evidence manifests.
+- Locally verified:
+  - the workspace was not a Git repository before this thread started
+  - Git was initialized locally in this workspace
+  - `.gitignore` now exists at the project root
+  - required empty project directories that should stay in source control now have placeholders
+- Assumed only:
+  - future commit discipline in later threads

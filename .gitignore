@@ -1,0 +1,54 @@
+# macOS and system files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Local secrets and machine-local config
+.env
+.env.*
+.python-version
+
+# Local temp and cache files
+.cache/
+tmp/
+temp/
+*.tmp
+*.log
+*.pid
+
+# Local database and runtime state
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+state/
+runtime_state/
+
+# Build and packaging leftovers
+build/
+dist/
+*.egg-info/
+
+# Runtime and generated outputs not committed by default
+08_logs/

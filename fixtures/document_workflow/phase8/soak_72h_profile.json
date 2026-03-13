@@ -1,0 +1,20 @@
+{
+  "profile_id": "phase8_soak_72h",
+  "description": "Resumable 72h Phase 8 soak profile",
+  "config_ref": "minimal_fabric_config_longrun.json",
+  "stress_config_ref": "minimal_fabric_config_stress.json",
+  "plan_ref": "longrun_plan.json",
+  "stress_scenario_ref": "stress_scenario.json",
+  "target_cycle_count": null,
+  "target_duration_hours": 72,
+  "minimum_cycle_count": 72,
+  "cycle_sequence": [
+    "cold_followup",
+    "seed_then_followup",
+    "repeat_followup",
+    "governed_holds",
+    "reuse_mix",
+    "seed_refresh"
+  ],
+  "default_wakelock": "caffeinate"
+}

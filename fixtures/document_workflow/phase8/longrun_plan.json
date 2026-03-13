@@ -1,0 +1,129 @@
+{
+  "plan_id": "phase8_finance_longrun_v1",
+  "cases": [
+    {
+      "case_id": "invoice_seed_reference",
+      "payload_path": "../phase7/case_invoice_seed_reference.json",
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "1200.50",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "descriptor_opportunity": false
+    },
+    {
+      "case_id": "invoice_followup_alias",
+      "payload_path": "../phase7/case_invoice_followup_alias.json",
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "761.60",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "descriptor_opportunity": true
+    },
+    {
+      "case_id": "invoice_followup_alias_repeat",
+      "payload_path": "../phase7/case_invoice_followup_alias_repeat.json",
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "481.95",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "descriptor_opportunity": true
+    },
+    {
+      "case_id": "invoice_anomaly_hold",
+      "payload_path": "../phase7/case_invoice_anomaly_hold.json",
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Orbit Travel Claims Ltd",
+        "normalized_currency": "EUR",
+        "normalized_total": "9500.00",
+        "reviewer_status": "review_required",
+        "governance_action": "hold_for_review",
+        "final_status": "hold"
+      },
+      "descriptor_opportunity": false
+    },
+    {
+      "case_id": "invoice_total_mismatch_hold",
+      "payload_path": "../phase7/case_invoice_total_mismatch_hold.json",
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Fabrikam Stationery GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "140.00",
+        "reviewer_status": "review_required",
+        "governance_action": "hold_for_review",
+        "final_status": "hold"
+      },
+      "descriptor_opportunity": false
+    }
+  ],
+  "cycles": [
+    {
+      "cycle_id": "cold_followup",
+      "purpose": "cold-start followup before reviewed correction memory exists",
+      "case_ids": [
+        "invoice_followup_alias"
+      ]
+    },
+    {
+      "cycle_id": "seed_then_followup",
+      "purpose": "seed reviewed correction memory and reuse it inside the bounded finance path",
+      "case_ids": [
+        "invoice_seed_reference",
+        "invoice_followup_alias"
+      ]
+    },
+    {
+      "cycle_id": "repeat_followup",
+      "purpose": "check cross-cycle descriptor reuse on a second alias-heavy followup",
+      "case_ids": [
+        "invoice_followup_alias_repeat"
+      ]
+    },
+    {
+      "cycle_id": "governed_holds",
+      "purpose": "keep risky outputs on hold under anomaly and correction pressure",
+      "case_ids": [
+        "invoice_anomaly_hold",
+        "invoice_total_mismatch_hold"
+      ]
+    },
+    {
+      "cycle_id": "reuse_mix",
+      "purpose": "mix reuse-heavy and governance-heavy documents in one repeated bounded cycle",
+      "case_ids": [
+        "invoice_followup_alias",
+        "invoice_followup_alias_repeat",
+        "invoice_anomaly_hold"
+      ]
+    },
+    {
+      "cycle_id": "seed_refresh",
+      "purpose": "refresh the known-good reference path after repeated pressure",
+      "case_ids": [
+        "invoice_seed_reference",
+        "invoice_total_mismatch_hold"
+      ]
+    }
+  ]
+}

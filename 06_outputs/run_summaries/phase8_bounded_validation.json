@@ -1,0 +1,316 @@
+{
+  "completion": {
+    "bounded_validation_ready": true,
+    "phase8_open_blockers": [
+      "real 24h soak not completed locally",
+      "real 72h soak not completed locally"
+    ],
+    "phase_complete": false,
+    "real_24h_completed": false,
+    "real_72h_completed": false,
+    "usefulness_gate_passed": true
+  },
+  "cycles": [
+    {
+      "accepted_count": 0,
+      "active_promoted_count": 1,
+      "active_to_logical_ratio": 0.909091,
+      "authority_review_count": 2,
+      "average_score": 0.375,
+      "case_count": 1,
+      "case_rows": [
+        {
+          "accepted": false,
+          "case_id": "invoice_followup_alias",
+          "correctness_score": 0.375,
+          "descriptor_reuse_used": false,
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "reviewer_status": "review_required"
+        }
+      ],
+      "cycle_id": "cold_followup",
+      "cycle_index": 1,
+      "descriptor_reuse_count": 0,
+      "estimated_runtime_memory_bytes": 1507328,
+      "hold_count": 1,
+      "memory_density_gain": 0.000429553,
+      "need_signal_count": 2,
+      "purpose": "cold-start followup before reviewed correction memory exists",
+      "reviewed_descriptor_count": 1,
+      "routing_decision_count": 10,
+      "state_digest": "1f94882accaa42c69a0a15600e1071b85780d798909a4bee51673a45416c56db",
+      "within_runtime_cap": true
+    },
+    {
+      "accepted_count": 2,
+      "active_promoted_count": 3,
+      "active_to_logical_ratio": 0.909091,
+      "authority_review_count": 5,
+      "average_score": 1.0,
+      "case_count": 2,
+      "case_rows": [
+        {
+          "accepted": true,
+          "case_id": "invoice_seed_reference",
+          "correctness_score": 1.0,
+          "descriptor_reuse_used": false,
+          "final_status": "accepted",
+          "governance_action": "approved_release",
+          "reviewer_status": "clear"
+        },
+        {
+          "accepted": true,
+          "case_id": "invoice_followup_alias",
+          "correctness_score": 1.0,
+          "descriptor_reuse_used": true,
+          "final_status": "accepted",
+          "governance_action": "approved_release",
+          "reviewer_status": "clear"
+        }
+      ],
+      "cycle_id": "seed_then_followup",
+      "cycle_index": 2,
+      "descriptor_reuse_count": 1,
+      "estimated_runtime_memory_bytes": 1507328,
+      "hold_count": 0,
+      "memory_density_gain": 0.000783392,
+      "need_signal_count": 2,
+      "purpose": "seed reviewed correction memory and reuse it inside the bounded finance path",
+      "reviewed_descriptor_count": 3,
+      "routing_decision_count": 30,
+      "state_digest": "1f94882accaa42c69a0a15600e1071b85780d798909a4bee51673a45416c56db",
+      "within_runtime_cap": true
+    },
+    {
+      "accepted_count": 1,
+      "active_promoted_count": 4,
+      "active_to_logical_ratio": 0.909091,
+      "authority_review_count": 7,
+      "average_score": 1.0,
+      "case_count": 1,
+      "case_rows": [
+        {
+          "accepted": true,
+          "case_id": "invoice_followup_alias_repeat",
+          "correctness_score": 1.0,
+          "descriptor_reuse_used": true,
+          "final_status": "accepted",
+          "governance_action": "approved_release",
+          "reviewer_status": "clear"
+        }
+      ],
+      "cycle_id": "repeat_followup",
+      "cycle_index": 3,
+      "descriptor_reuse_count": 1,
+      "estimated_runtime_memory_bytes": 1507328,
+      "hold_count": 0,
+      "memory_density_gain": 0.000291886,
+      "need_signal_count": 3,
+      "purpose": "check cross-cycle descriptor reuse on a second alias-heavy followup",
+      "reviewed_descriptor_count": 4,
+      "routing_decision_count": 40,
+      "state_digest": "1f94882accaa42c69a0a15600e1071b85780d798909a4bee51673a45416c56db",
+      "within_runtime_cap": true
+    },
+    {
+      "accepted_count": 0,
+      "active_promoted_count": 6,
+      "active_to_logical_ratio": 0.909091,
+      "authority_review_count": 11,
+      "average_score": 1.0,
+      "case_count": 2,
+      "case_rows": [
+        {
+          "accepted": false,
+          "case_id": "invoice_anomaly_hold",
+          "correctness_score": 1.0,
+          "descriptor_reuse_used": false,
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "reviewer_status": "review_required"
+        },
+        {
+          "accepted": false,
+          "case_id": "invoice_total_mismatch_hold",
+          "correctness_score": 1.0,
+          "descriptor_reuse_used": false,
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "reviewer_status": "review_required"
+        }
+      ],
+      "cycle_id": "governed_holds",
+      "cycle_index": 4,
+      "descriptor_reuse_count": 0,
+      "estimated_runtime_memory_bytes": 1507328,
+      "hold_count": 2,
+      "memory_density_gain": 0.000386473,
+      "need_signal_count": 5,
+      "purpose": "keep risky outputs on hold under anomaly and correction pressure",
+      "reviewed_descriptor_count": 6,
+      "routing_decision_count": 60,
+      "state_digest": "1f94882accaa42c69a0a15600e1071b85780d798909a4bee51673a45416c56db",
+      "within_runtime_cap": true
+    },
+    {
+      "accepted_count": 0,
+      "active_promoted_count": 6,
+      "active_to_logical_ratio": 0.909091,
+      "authority_review_count": 17,
+      "average_score": 0.583333,
+      "case_count": 3,
+      "case_rows": [
+        {
+          "accepted": false,
+          "case_id": "invoice_followup_alias",
+          "correctness_score": 0.375,
+          "descriptor_reuse_used": false,
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "reviewer_status": "review_required"
+        },
+        {
+          "accepted": false,
+          "case_id": "invoice_followup_alias_repeat",
+          "correctness_score": 0.375,
+          "descriptor_reuse_used": false,
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "reviewer_status": "review_required"
+        },
+        {
+          "accepted": false,
+          "case_id": "invoice_anomaly_hold",
+          "correctness_score": 1.0,
+          "descriptor_reuse_used": false,
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "reviewer_status": "review_required"
+        }
+      ],
+      "cycle_id": "reuse_mix",
+      "cycle_index": 5,
+      "descriptor_reuse_count": 0,
+      "estimated_runtime_memory_bytes": 1507328,
+      "hold_count": 3,
+      "memory_density_gain": 0.000338164,
+      "need_signal_count": 6,
+      "purpose": "mix reuse-heavy and governance-heavy documents in one repeated bounded cycle",
+      "reviewed_descriptor_count": 6,
+      "routing_decision_count": 90,
+      "state_digest": "1f94882accaa42c69a0a15600e1071b85780d798909a4bee51673a45416c56db",
+      "within_runtime_cap": true
+    },
+    {
+      "accepted_count": 1,
+      "active_promoted_count": 6,
+      "active_to_logical_ratio": 0.909091,
+      "authority_review_count": 20,
+      "average_score": 1.0,
+      "case_count": 2,
+      "case_rows": [
+        {
+          "accepted": true,
+          "case_id": "invoice_seed_reference",
+          "correctness_score": 1.0,
+          "descriptor_reuse_used": false,
+          "final_status": "accepted",
+          "governance_action": "approved_release",
+          "reviewer_status": "clear"
+        },
+        {
+          "accepted": false,
+          "case_id": "invoice_total_mismatch_hold",
+          "correctness_score": 1.0,
+          "descriptor_reuse_used": false,
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "reviewer_status": "review_required"
+        }
+      ],
+      "cycle_id": "seed_refresh",
+      "cycle_index": 6,
+      "descriptor_reuse_count": 0,
+      "estimated_runtime_memory_bytes": 1507328,
+      "hold_count": 1,
+      "memory_density_gain": 0.000386324,
+      "need_signal_count": 6,
+      "purpose": "refresh the known-good reference path after repeated pressure",
+      "reviewed_descriptor_count": 6,
+      "routing_decision_count": 110,
+      "state_digest": "1f94882accaa42c69a0a15600e1071b85780d798909a4bee51673a45416c56db",
+      "within_runtime_cap": true
+    }
+  ],
+  "failure_cases": [
+    "expected governed failure: AUTHORITY_REACTIVATION_VETO"
+  ],
+  "profile_id": "phase8_short_validation",
+  "stress_results": {
+    "memory_pressure": {
+      "cold_bytes_after": 4803,
+      "compressed_memory_count": 10,
+      "headline": "memory pressure triggered consolidation and stayed inside bounded caps",
+      "memory_pressure_signal_count": 0,
+      "passed": true,
+      "retired_memory_count": 0,
+      "triggered": true,
+      "warm_bytes_after": 7775,
+      "warm_bytes_before": 5177,
+      "within_caps_after": {
+        "cold": true,
+        "ephemeral": true,
+        "hot": true,
+        "warm": true
+      }
+    },
+    "replay_rollback": {
+      "headline": "replay reproduced the prior run and rollback restored the pre-quarantine lifecycle state",
+      "lifecycle_replay_match": true,
+      "passed": true,
+      "replay_match": true,
+      "rollback_restored": true
+    },
+    "routing_pressure": {
+      "abstained_confidence_band": "low",
+      "abstained_selection_mode": "abstained",
+      "headline": "routing abstained under full pressure and recovered when capacity returned",
+      "passed": true,
+      "recovered_confidence_band": "moderate",
+      "recovered_router": "finance_priority_router"
+    },
+    "split_merge": {
+      "active_to_logical_ratio": 0.125,
+      "headline": "governed split and merge both executed with replay-safe lineage tracking",
+      "passed": true,
+      "replay_match": true,
+      "rounds": [
+        {
+          "merge_event_id": "lifecycle_00012",
+          "retired_cell_id": "finance_intake_router__child_002",
+          "split_event_id": "lifecycle_00007",
+          "survivor_cell_id": "finance_intake_router__child_001"
+        },
+        {
+          "merge_event_id": "lifecycle_00020",
+          "retired_cell_id": "finance_intake_router__child_001__child_004",
+          "split_event_id": "lifecycle_00015",
+          "survivor_cell_id": "finance_intake_router__child_001__child_003"
+        }
+      ]
+    },
+    "trust_quarantine": {
+      "authority_veto_count": 2,
+      "headline": "authority vetoed risky reactivation and governance quarantined the active low-trust cell",
+      "passed": true,
+      "veto_code": "AUTHORITY_REACTIVATION_VETO"
+    }
+  },
+  "trends": {
+    "descriptor_reuse_benefit": 0.625,
+    "max_active_to_logical_ratio": 0.909091,
+    "memory_density_delta": -4.3229e-05,
+    "resource_stability_within_cap": true
+  }
+}

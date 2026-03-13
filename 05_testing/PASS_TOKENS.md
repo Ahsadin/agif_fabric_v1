@@ -24,3 +24,10 @@
 ## Reserved Tokens from the Plan
 - `AGIF_FABRIC_P8_PASS`
 - `AGIF_FABRIC_P9_PASS`
+
+## Harness Readiness Tokens
+- `AGIF_FABRIC_P8_HARNESS_READY`
+  - Recorded on `2026-03-13`
+  - Local verification command: `python3 scripts/check_phase8_soak.py`
+  - Meaning: the bounded Phase 8 harness, stress lanes, resumable manifests, and summary outputs are locally verified
+  - Important: this is not the Phase 8 completion token and does not replace `AGIF_FABRIC_P8_PASS`

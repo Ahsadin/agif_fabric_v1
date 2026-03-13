@@ -1,5 +1,43 @@
 # Changelog
 
+## 2026-03-13 Phase 8 Harness Setup
+- Added a bounded Phase 8 long-run harness without changing the frozen `runner/cell fabric` command names or Phase 2 interface shapes:
+  - `intelligence/fabric/benchmarking/phase8.py`
+  - `scripts/run_phase8_soak.py`
+  - `scripts/check_phase8_soak.py`
+  - `05_testing/test_phase8_soak.py`
+- Added deterministic Phase 8 fixtures:
+  - `fixtures/document_workflow/phase8/minimal_fabric_config_longrun.json`
+  - `fixtures/document_workflow/phase8/minimal_fabric_config_stress.json`
+  - `fixtures/document_workflow/phase8/longrun_plan.json`
+  - `fixtures/document_workflow/phase8/stress_scenario.json`
+  - `fixtures/document_workflow/phase8/short_validation_profile.json`
+  - `fixtures/document_workflow/phase8/soak_24h_profile.json`
+  - `fixtures/document_workflow/phase8/soak_72h_profile.json`
+- Added bounded Phase 8 outputs and evidence:
+  - `05_testing/PHASE8_LONGRUN_EVIDENCE.md`
+  - `06_outputs/run_summaries/phase8_bounded_validation.md`
+  - `06_outputs/run_summaries/phase8_bounded_validation.json`
+  - `00_admin/codex_threads/handoffs/phase8-soak-harness-2026-03-13.md`
+- Updated the project records to keep Phase 8 status honest:
+  - `DECISIONS.md`
+  - `PROJECT_README.md`
+  - `01_plan/PROGRESS_TRACKER.md`
+  - `01_plan/PHASE_GATE_CHECKLIST.md`
+  - `05_testing/PASS_TOKENS.md`
+  - `00_admin/CODEX_THREAD_MAP.md`
+- Locally verified:
+  - `python3 scripts/check_phase8_soak.py` passes locally
+  - the bounded Phase 8 harness reuses reviewed descriptors across repeated cycles locally
+  - split and merge stress, memory pressure, routing pressure, trust/quarantine fault injection, and replay/rollback recovery all execute locally
+  - the bounded validation summary is written locally under `06_outputs/run_summaries/`
+  - earlier regressions still pass locally through the chained Phase 8 check
+- Assumed only:
+  - real 24h soak completion
+  - real 72h soak completion
+  - `AGIF_FABRIC_P8_PASS`
+  - progress above `525/600`
+
 ## 2026-03-13 Phase 7 Benchmark Stabilization
 - Stabilized the checked-in Phase 7 benchmark artifacts without changing the runtime benchmark logic or frozen CLI commands:
   - `intelligence/fabric/benchmarking/phase7.py`

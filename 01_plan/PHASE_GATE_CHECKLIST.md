@@ -85,11 +85,14 @@
 - [x] Phase 7.5 hardening improved benchmark explanations, tissue analytics, bounded resource reporting, and structural-pressure honesty without changing the frozen benchmark classes or project units.
 
 ## Phase 8
-- [ ] Long-run growth stays bounded under repeated local runs.
-- [ ] Soak tests pass locally under the written soak policy.
-- [ ] Evidence capture remains repeatable across long-run tests.
-- [ ] Runtime working set stays at or below `12 GB`.
-- [ ] Total project and evidence footprint stays at or below `35 GB`.
+- [x] Phase 8 fixtures, run profiles, and a resumable soak harness exist locally.
+- [x] A bounded local validation run exercises repeated workflow cycles and the planned stress lanes locally.
+- [x] Run manifests and restart-resume semantics exist locally.
+- [x] Bounded validation summaries can be regenerated locally.
+- [x] The bounded local validation stayed inside the written `12 GB` runtime working-set cap.
+- [ ] Real 24h soak completed locally.
+- [ ] Real 72h soak completed locally.
+- [ ] Full Phase 8 closure evidence exists locally and earns `AGIF_FABRIC_P8_PASS`.
 
 ## Phase 9
 - [ ] Paper draft exists with a claims matrix tied to the frozen thresholds.

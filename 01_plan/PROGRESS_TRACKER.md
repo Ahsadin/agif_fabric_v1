@@ -14,6 +14,11 @@
 - Percent complete: `87.5%`
 - Basis: Phase 0 bootstrap, Phase 1 requirements freeze, Phase 2 architecture freeze, Phase 3 runner and fabric foundation, Phase 4 elastic lifecycle and lineage, Phase 5 reviewed memory, quantized consolidation, and bounded growth, Phase 6 need signals, routing, utility, and authority, and Phase 7 domain tissues and benchmark system are complete.
 
+## 2026-03-13 Phase 8 Harness Note
+- A Phase 8 soak harness and bounded local validation pass were implemented locally.
+- This pass adds repeated finance workflow cycles, resumable run manifests, bounded stress lanes, and deterministic Phase 8 output summaries.
+- The progress units remain `525/600` because the locked plan awards the `45` Phase 8 units only after real 24h and 72h local soak evidence closes the full Phase 8 gate.
+
 ## 2026-03-13 Hardening Note
 - A Phase 4.5 + 5.5 hardening pass was completed locally.
 - This pass improved lifecycle quality and memory quality inside already-closed Phases 4 and 5.
@@ -83,9 +88,14 @@
   - `AGIF_FABRIC_P7_PASS` is earned and recorded in `05_testing/PASS_TOKENS.md`
   - the Phase 7.5 hardening pass strengthens the same benchmark suite without changing the committed project units
   - the hardened result tables now include counterfactual notes, tissue analytics, bounded resource deltas, and explicit structural-pressure signals locally
+  - the Phase 8 soak harness and bounded local validation exist locally
+  - `python3 scripts/check_phase8_soak.py` passes locally
+  - the bounded validation summary under `06_outputs/run_summaries/` exists locally
+  - repeated finance workflow cycles now show descriptor reuse benefit locally
+  - split/merge stress, memory saturation pressure, routing pressure, trust/quarantine fault injection, and replay/rollback recovery all execute locally
 - Assumed only:
-  - Phase 8 and Phase 9
-  - long-run soak behavior beyond the deterministic Phase 7 suite
+  - real 24h and 72h soak completion for Phase 8
+  - Phase 9
   - benchmark outcomes beyond the committed Phase 7 finance cases
   - paper results
 
@@ -100,5 +110,5 @@
 | Phase 5 | 95 | Complete and locally verified |
 | Phase 6 | 65 | Complete and locally verified |
 | Phase 7 | 60 | Complete and locally verified |
-| Phase 8 | 45 | Not started |
+| Phase 8 | 45 | Harness implemented and locally bounded-verified; full closure still open |
 | Phase 9 | 30 | Not started |

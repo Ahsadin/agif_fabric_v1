@@ -1,0 +1,57 @@
+{
+  "fabric_id": "agif-fabric-v1-phase8-stress",
+  "proof_domain": "document/workflow intelligence",
+  "machine_profile": {
+    "name": "Apple M4 MacBook Air",
+    "ram_gb": 16,
+    "free_disk_gib": 65
+  },
+  "active_population_cap": 24,
+  "logical_population_cap": 128,
+  "memory_caps": {
+    "hot_bytes": 131072,
+    "warm_bytes": 262144,
+    "cold_bytes": 262144,
+    "raw_log_bytes": 131072,
+    "raw_log_entries": 8,
+    "replay_entries": 16,
+    "replay_files": 8
+  },
+  "storage_caps": {
+    "runtime_working_set_gb": 12,
+    "project_footprint_gb": 35
+  },
+  "workspace_policy": {
+    "mode": "bounded_local_workspace_v1"
+  },
+  "governance_policy": {
+    "mode": "phase8_stress_validation_v1",
+    "human_boundary": "document/workflow intelligence",
+    "default_governance_approver": "governance:phase8_local_board",
+    "default_tissue_coordinator": "tissue:finance_document_workflow:coordinator",
+    "default_memory_reviewer": "governance:phase5_memory_reviewer",
+    "burst_active_population_cap": 48,
+    "descriptor_trust_floor": 0.6,
+    "memory_runtime_trust_floor": 0.6,
+    "risky_reactivation_trust_floor": 0.6
+  },
+  "need_signal_policy": {
+    "allowed_signal_kinds": [
+      "overload",
+      "uncertainty",
+      "novelty",
+      "redundancy",
+      "memory_pressure",
+      "trust_risk",
+      "coordination_gap"
+    ],
+    "default_signal_ttl_seconds": 900
+  },
+  "blueprint_registry_path": "fixtures/document_workflow/phase6/blueprint_registry_phase6.json",
+  "benchmark_profile": {
+    "name": "phase8_stress_validation",
+    "class_name": "stress_validation",
+    "adaptation_enabled": true,
+    "descriptor_sharing_enabled": true
+  }
+}

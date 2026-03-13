@@ -20,6 +20,7 @@ RUNNER = REPO_ROOT / "runner" / "cell"
 CONFIG_PATH = REPO_ROOT / "fixtures" / "document_workflow" / "phase5" / "minimal_fabric_config.json"
 GOOD_PAYLOAD_PATH = REPO_ROOT / "fixtures" / "document_workflow" / "phase5" / "sample_workflow_payload_good.json"
 BAD_PAYLOAD_PATH = REPO_ROOT / "fixtures" / "document_workflow" / "phase5" / "sample_workflow_payload_bad.json"
+LOW_VALUE_PAYLOAD_PATH = REPO_ROOT / "fixtures" / "document_workflow" / "phase5" / "sample_workflow_payload_low_value.json"
 SUPERSEDE_PAYLOAD_PATH = REPO_ROOT / "fixtures" / "document_workflow" / "phase5" / "sample_workflow_payload_supersede.json"
 REPLAY_MANIFEST_PATH = REPO_ROOT / "fixtures" / "document_workflow" / "phase5" / "sample_replay_manifest.json"
 
@@ -89,11 +90,15 @@ class Phase5MemoryTest(unittest.TestCase):
         self.assertEqual(summary["raw_log_promoted_count"], 0)
         self.assertEqual(summary["active_promoted_count"], 1)
         self.assertEqual(summary["active_descriptor_count"], 1)
+        self.assertEqual(summary["memory_class_counts"]["routing_useful_memory"], 1)
+        self.assertGreater(summary["review_metrics"]["promotion_rate"], 0.0)
         promoted_record = next(iter(promoted["active"].values()))
         descriptor_record = next(iter(descriptors["active"].values()))
         self.assertEqual(promoted_record["retention_tier"], "warm")
         self.assertEqual(descriptor_record["storage_tier"], "warm")
         self.assertNotEqual(memory.load_raw_logs()[0]["payload_ref"], promoted_record["payload_ref"])
+        self.assertIn("novelty", decisions[-1]["reason"])
+        self.assertGreater(promoted_record["value_score"], 0.6)
 
         self.run_cli(["fabric", "run"], stdin_text=GOOD_PAYLOAD_PATH.read_text(encoding="utf-8"))
         _, _, _, _, _, memory = self.init_runtime()
@@ -101,15 +106,19 @@ class Phase5MemoryTest(unittest.TestCase):
         duplicate_decisions = memory.load_decisions()
         self.assertEqual(duplicate_decisions[-1]["decision"], "compress")
         self.assertEqual(duplicate_summary["active_promoted_count"], 1)
+        self.assertGreater(duplicate_summary["review_metrics"]["reuse_rate"], 0.0)
+        self.assertGreater(duplicate_summary["review_metrics"]["duplicate_compression_gain_bytes"], 0)
 
         self.run_cli(["fabric", "run"], stdin_text=SUPERSEDE_PAYLOAD_PATH.read_text(encoding="utf-8"))
         _, _, _, _, _, memory = self.init_runtime()
         superseded_promoted = memory.load_promoted_memories()
         superseded_descriptors = memory.load_descriptors()
         active_descriptor = next(iter(superseded_descriptors["active"].values()))
+        active_memory = next(iter(superseded_promoted["active"].values()))
         self.assertEqual(len(superseded_promoted["active"]), 1)
         self.assertGreaterEqual(len(superseded_promoted["archived"]), 1)
         self.assertIsNotNone(active_descriptor["supersedes_descriptor_id"])
+        self.assertIsNotNone(active_memory["supersession_delta"])
 
         for index in range(2, 8):
             payload = self.make_variant_payload(
@@ -129,6 +138,8 @@ class Phase5MemoryTest(unittest.TestCase):
         self.assertTrue(memory.replay_decisions()["traceable"])
         self.assertTrue(memory.replay_decisions()["replay_match"])
         self.assertTrue(any(signal["signal_kind"] == "memory_pressure" for signal in lifecycle.load_need_signals()))
+        self.assertGreaterEqual(bounded_summary["review_metrics"]["supersession_rate"], 0.0)
+        self.assertTrue(all(priority >= 0.0 for priority in bounded_summary["retention_priorities"].values()))
 
         protected_cold = next(record for record in active_memories.values() if record["retention_tier"] == "cold")
         protected_path = REPO_ROOT / protected_cold["payload_ref"]
@@ -211,6 +222,83 @@ class Phase5MemoryTest(unittest.TestCase):
         self.assertIsInstance(deferred_state["payload_ref"], str)
         self.assertTrue((REPO_ROOT / deferred_state["payload_ref"]).exists())
         self.assertEqual(memory.summary()["pending_review_count"], 1)
+
+    def test_phase5_value_scoring_and_trust_weighted_conflicts(self) -> None:
+        self.run_cli(["fabric", "init", str(CONFIG_PATH)])
+        self.run_cli(["fabric", "run"], stdin_text=GOOD_PAYLOAD_PATH.read_text(encoding="utf-8"))
+
+        _, _, _, _, _, memory = self.init_runtime()
+        low_value_payload = json.loads(LOW_VALUE_PAYLOAD_PATH.read_text(encoding="utf-8"))
+        low_value_candidate = memory.nominate_candidate(
+            payload={
+                "workflow_name": low_value_payload["workflow_name"],
+                "document_id": low_value_payload["document_id"],
+                "inputs": low_value_payload["inputs"],
+                "selected_cells": ["finance_intake_router"],
+                "selected_roles": ["intake_router"],
+                "source_run_ref": "fixture:low-value",
+                "source_workspace_ref": "fixture:low-value",
+                "source_log_refs": [],
+            },
+            source_ref="fixture:low-value",
+            source_log_refs=[],
+            producer_cell_id="finance_intake_router",
+            descriptor_kind="workflow_intake",
+            task_scope="finance_document_intake:doc-phase5-low-value",
+            trust_ref="trust:experimental_low_v1",
+        )
+        low_value_decision = memory._default_review_decision(low_value_candidate["candidate_id"])
+        self.assertEqual(low_value_decision["decision"], "defer")
+        memory.review_candidate(
+            candidate_id=low_value_candidate["candidate_id"],
+            reviewer_id="governance:phase5_memory_reviewer",
+            decision=low_value_decision["decision"],
+            compression_mode=low_value_decision["compression_mode"],
+            retention_tier=low_value_decision["retention_tier"],
+            reason=low_value_decision["reason"],
+        )
+
+        conflicting_candidate = memory.nominate_candidate(
+            payload={
+                "workflow_name": "finance_document_intake",
+                "document_id": "doc-phase5-001",
+                "inputs": {
+                    "currency": "EUR",
+                    "document_type": "invoice",
+                    "total": "999.00",
+                    "vendor_name": "Conflicting Low Trust Vendor",
+                },
+                "selected_cells": ["finance_intake_router"],
+                "selected_roles": ["intake_router"],
+                "source_run_ref": "fixture:conflict",
+                "source_workspace_ref": "fixture:conflict",
+                "source_log_refs": [],
+            },
+            source_ref="fixture:conflict",
+            source_log_refs=[],
+            producer_cell_id="finance_intake_router",
+            descriptor_kind="workflow_intake",
+            task_scope="finance_document_intake:doc-phase5-001",
+            trust_ref="trust:experimental_low_v1",
+        )
+        conflicting_decision = memory._default_review_decision(conflicting_candidate["candidate_id"])
+        self.assertEqual(conflicting_decision["decision"], "defer")
+        self.assertIn("higher-trust", conflicting_decision["reason"])
+        memory.review_candidate(
+            candidate_id=conflicting_candidate["candidate_id"],
+            reviewer_id="governance:phase5_memory_reviewer",
+            decision=conflicting_decision["decision"],
+            compression_mode=conflicting_decision["compression_mode"],
+            retention_tier=conflicting_decision["retention_tier"],
+            reason=conflicting_decision["reason"],
+        )
+
+        summary = memory.summary()
+        active_memory = next(iter(memory.load_promoted_memories()["active"].values()))
+        self.assertEqual(summary["active_promoted_count"], 1)
+        self.assertGreater(summary["review_metrics"]["defer_rate"], 0.0)
+        self.assertGreater(active_memory["trust_score"], 0.7)
+        self.assertGreater(summary["retention_priorities"][active_memory["memory_id"]], 0.5)
 
 
 if __name__ == "__main__":

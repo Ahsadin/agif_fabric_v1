@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Deterministic local check for the Phase 4 lifecycle and lineage runtime."""
+"""Deterministic local check for the hardened Phase 4 lifecycle and lineage runtime."""
 
 from __future__ import annotations
 

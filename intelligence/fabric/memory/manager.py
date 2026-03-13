@@ -46,6 +46,13 @@ DESCRIPTOR_FIELDS = (
     "created_utc",
     "supersedes_descriptor_id",
 )
+MEMORY_CLASS_NAMES = {
+    "correction_memory",
+    "pattern_memory",
+    "routing_useful_memory",
+    "failure_memory",
+    "policy_useful_memory",
+}
 
 
 class FabricMemoryManager:
@@ -269,6 +276,14 @@ class FabricMemoryManager:
         payload_path = self.store.memory_tier_payload_path(self.fabric_id, "hot", candidate_id)
         write_json_atomic(payload_path, payload)
         review_ready, review_reason = self._validate_candidate_payload(payload)
+        assessment = self._assess_candidate_value(
+            candidate_payload=payload,
+            producer_cell_id=producer_cell_id,
+            descriptor_kind=descriptor_kind,
+            task_scope=task_scope,
+            trust_ref=trust_ref,
+            review_ready=review_ready,
+        )
         record = {
             "candidate_id": candidate_id,
             "candidate_kind": "memory_candidate",
@@ -293,6 +308,10 @@ class FabricMemoryManager:
             "created_utc": utc_now_iso(),
             "review_ready": review_ready,
             "review_reason": review_reason,
+            "memory_class": assessment["memory_class"],
+            "value_score": assessment["value_score"],
+            "review_scores": assessment["scores"],
+            "assessment_reason": assessment["reason"],
         }
         candidates["entries"][candidate_id] = record
         write_json_atomic(self.store.memory_candidates_path(self.fabric_id), candidates)
@@ -340,9 +359,21 @@ class FabricMemoryManager:
         if normalized_decision == "reject":
             candidate["status"] = "rejected"
             self._clear_candidate_payload(candidate)
+            self._record_lifecycle_memory_outcome(
+                lifecycle_manager=lifecycle_manager,
+                candidate=candidate,
+                outcome_kind="reject",
+                detail=str(reason),
+            )
             result = {"candidate_id": candidate_id}
         elif normalized_decision == "defer":
             candidate["status"] = "deferred"
+            self._record_lifecycle_memory_outcome(
+                lifecycle_manager=lifecycle_manager,
+                candidate=candidate,
+                outcome_kind="defer",
+                detail=str(reason),
+            )
             result = {"candidate_id": candidate_id}
         elif normalized_decision in {"promote", "compress"}:
             if normalized_decision == "compress" and chosen_tier == "cold":
@@ -460,13 +491,13 @@ class FabricMemoryManager:
         compressed_memory_ids: list[str] = []
         retired_memory_ids: list[str] = []
         while self.summary()["tier_usage_bytes"]["warm"] > self.memory_caps["warm_bytes"]:
-            target = self._oldest_active_memory(tier="warm")
+            target = self._select_pressure_target(tier="warm", allow_high_trust=False)
             if target is None:
                 break
             self._compress_existing_memory(
                 memory_id=target["memory_id"],
                 reviewer_id=self.default_reviewer_id,
-                reason=reason,
+                reason="memory pressure compressed low-value warm memory into colder storage",
                 target_tier="cold",
                 compression_mode="quantized_cold_v1",
             )
@@ -474,13 +505,13 @@ class FabricMemoryManager:
 
         self.garbage_collect(reason="memory_pressure_cleanup", lifecycle_manager=lifecycle_manager)
         while self.summary()["tier_usage_bytes"]["cold"] > self.memory_caps["cold_bytes"]:
-            target = self._oldest_active_memory(tier="cold")
+            target = self._select_pressure_target(tier="cold", allow_high_trust=False)
             if target is None:
                 break
             self.retire_memory(
                 memory_id=target["memory_id"],
                 reviewer_id=self.default_reviewer_id,
-                reason="cold memory cap pressure triggered governed retirement",
+                reason="low_value_stale_cold_retirement",
             )
             retired_memory_ids.append(target["memory_id"])
             self.garbage_collect(reason="post_retire_cold_gc", lifecycle_manager=lifecycle_manager)
@@ -690,6 +721,40 @@ class FabricMemoryManager:
             for record in promoted["active"].values()
             if isinstance(record.get("payload_ref"), str)
         }
+        decisions = self.load_decisions()
+        active_records = list(promoted["active"].values())
+        archived_records = list(promoted["archived"].values())
+        total_review_actions = len([item for item in decisions if item["decision"] in {"reject", "defer", "promote", "compress"}])
+        promoted_count = len([item for item in decisions if item["decision"] == "promote"])
+        deferred_count = len([item for item in decisions if item["decision"] == "defer"])
+        rejected_count = len([item for item in decisions if item["decision"] == "reject"])
+        duplicate_reuse_events = sum(int(record.get("reuse_count", 0)) for record in active_records + archived_records)
+        duplicate_gain_bytes = sum(
+            int(record.get("duplicate_compression_gain_bytes", 0))
+            for record in active_records + archived_records
+        )
+        supersession_count = len(
+            [
+                record
+                for record in active_records + archived_records
+                if record.get("supersedes_memory_id") is not None
+            ]
+        )
+        stale_retirement_count = len(
+            [
+                item
+                for item in decisions
+                if item["decision"] == "retire" and str(item["reason"]) == "low_value_stale_cold_retirement"
+            ]
+        )
+        class_counts = {
+            name: len([record for record in active_records if record.get("memory_class") == name])
+            for name in sorted(MEMORY_CLASS_NAMES)
+        }
+        pressure_priority = {
+            str(record["memory_id"]): round(self._retention_priority(record), 6)
+            for record in active_records
+        }
         needs = self._load_optional_need_signals()
         return {
             "tier_usage_bytes": tier_usage_bytes,
@@ -717,6 +782,27 @@ class FabricMemoryManager:
             "cold_reference_integrity": cold_reference_integrity,
             "raw_log_promoted_count": len(raw_log_refs & promoted_payload_refs),
             "bounded_replay_store": replay["bounded"],
+            "memory_class_counts": class_counts,
+            "review_metrics": {
+                "promotion_rate": 0.0 if total_review_actions == 0 else round(promoted_count / float(total_review_actions), 6),
+                "defer_rate": 0.0 if total_review_actions == 0 else round(deferred_count / float(total_review_actions), 6),
+                "reject_rate": 0.0 if total_review_actions == 0 else round(rejected_count / float(total_review_actions), 6),
+                "reuse_rate": 0.0
+                if (len(active_records) + len(archived_records)) == 0
+                else round(duplicate_reuse_events / float(len(active_records) + len(archived_records)), 6),
+                "supersession_rate": 0.0
+                if max(1, promoted_count) == 0
+                else round(supersession_count / float(max(1, promoted_count)), 6),
+                "duplicate_compression_gain_bytes": duplicate_gain_bytes,
+                "stale_retirement_rate": 0.0
+                if len([item for item in decisions if item["decision"] == "retire"]) == 0
+                else round(
+                    stale_retirement_count
+                    / float(len([item for item in decisions if item["decision"] == "retire"])),
+                    6,
+                ),
+            },
+            "retention_priorities": pressure_priority,
             "state_digest": self._active_state_digest(),
         }
 
@@ -754,21 +840,40 @@ class FabricMemoryManager:
         descriptors = self.load_descriptors()
         promoted = self.load_promoted_memories()
         active_memory = self._find_active_memory_by_key(promoted["active"], candidate["memory_key"])
-        if active_memory is not None and active_memory["payload_digest"] == payload_digest:
-            active_memory["last_reviewed_utc"] = utc_now_iso()
-            active_memory["review_count"] = int(active_memory.get("review_count", 0)) + 1
-            promoted["active"][active_memory["memory_id"]] = active_memory
-            write_json_atomic(self.store.promoted_memory_path(self.fabric_id), promoted)
-            return {
-                "memory_id": active_memory["memory_id"],
-                "descriptor_id": active_memory["descriptor_id"],
-            }
+        if active_memory is not None:
+            active_payload = self._load_payload_ref(active_memory["payload_ref"], code="MEMORY_INVALID")
+            if active_memory["payload_digest"] == payload_digest or (
+                self._payload_semantic_digest(active_payload) == self._payload_semantic_digest(target_payload)
+            ):
+                active_memory["last_reviewed_utc"] = utc_now_iso()
+                active_memory["review_count"] = int(active_memory.get("review_count", 0)) + 1
+                active_memory["reuse_count"] = int(active_memory.get("reuse_count", 0)) + 1
+                active_memory["usefulness_hits"] = int(active_memory.get("usefulness_hits", 0)) + 1
+                active_memory["last_reused_utc"] = utc_now_iso()
+                active_memory["duplicate_compression_gain_bytes"] = int(active_memory.get("duplicate_compression_gain_bytes", 0)) + len(
+                    canonical_json_bytes(candidate_payload)
+                )
+                promoted["active"][active_memory["memory_id"]] = active_memory
+                write_json_atomic(self.store.promoted_memory_path(self.fabric_id), promoted)
+                self._record_lifecycle_memory_outcome(
+                    lifecycle_manager=lifecycle_manager,
+                    candidate=candidate,
+                    outcome_kind="reuse",
+                    detail="duplicate reviewed memory reused existing promoted artifact",
+                )
+                return {
+                    "memory_id": active_memory["memory_id"],
+                    "descriptor_id": active_memory["descriptor_id"],
+                }
 
         superseded_descriptor_id = None
         superseded_memory_id = None
+        supersession_delta = None
         if active_memory is not None:
             superseded_descriptor_id = active_memory["descriptor_id"]
             superseded_memory_id = active_memory["memory_id"]
+            prior_payload = self._load_payload_ref(active_memory["payload_ref"], code="MEMORY_INVALID")
+            supersession_delta = self._build_supersession_delta(prior_payload=prior_payload, next_payload=target_payload)
             self._archive_memory(
                 memory_id=active_memory["memory_id"],
                 archived_reason="superseded by reviewed promoted memory",
@@ -801,16 +906,30 @@ class FabricMemoryManager:
             "retention_tier": decision["retention_tier"],
             "compression_mode": decision["compression_mode"],
             "trust_ref": candidate["trust_ref"],
+            "trust_score": self._trust_score(candidate["trust_ref"]),
+            "memory_class": candidate.get("memory_class"),
+            "value_score": float(candidate.get("value_score", 0.0)),
+            "review_scores": deepcopy(candidate.get("review_scores", {})),
             "created_utc": utc_now_iso(),
             "source_ref": candidate["source_ref"],
             "source_log_refs": list(candidate["source_log_refs"]),
             "supersedes_memory_id": superseded_memory_id,
+            "supersession_delta": supersession_delta,
             "review_count": 1,
+            "reuse_count": 0,
+            "usefulness_hits": 0,
+            "duplicate_compression_gain_bytes": 0,
         }
         descriptors["active"][descriptor_id] = descriptor
         promoted["active"][memory_id] = promoted_record
         write_json_atomic(self.store.descriptor_store_path(self.fabric_id), descriptors)
         write_json_atomic(self.store.promoted_memory_path(self.fabric_id), promoted)
+        self._record_lifecycle_memory_outcome(
+            lifecycle_manager=lifecycle_manager,
+            candidate=candidate,
+            outcome_kind="promote",
+            detail=str(decision["reason"]),
+        )
         return {"memory_id": memory_id, "descriptor_id": descriptor_id}
 
     def _compress_existing_memory(
@@ -856,6 +975,7 @@ class FabricMemoryManager:
         memory_record["payload_bytes"] = len(canonical_json_bytes(compressed_payload))
         memory_record["retention_tier"] = target_tier
         memory_record["compression_mode"] = compression_mode
+        memory_record["review_count"] = int(memory_record.get("review_count", 0)) + 1
         promoted["active"][memory_id] = memory_record
 
         descriptor["payload_ref"] = repo_relative(new_path)
@@ -921,16 +1041,19 @@ class FabricMemoryManager:
             "document_id": candidate_payload.get("document_id"),
             "producer_cell_id": candidate["producer_cell_id"],
             "descriptor_kind": candidate["descriptor_kind"],
+            "memory_class": candidate.get("memory_class"),
             "summary_vector": [
                 self._quantize_text(inputs.get("vendor_name"), limit=18),
                 self._quantize_text(inputs.get("document_type"), limit=12),
                 self._quantize_text(inputs.get("currency"), limit=8),
                 self._quantize_total(inputs.get("total")),
             ],
-            "selected_roles": list(candidate_payload.get("selected_roles", []))[:2],
+            "reuse_hints": {
+                "vendor_token": self._quantize_text(inputs.get("vendor_name"), limit=8),
+                "document_type": self._quantize_text(inputs.get("document_type"), limit=8),
+                "routing_hint": "router" if any("router" in str(item) for item in candidate_payload.get("selected_cells", [])) else "local",
+            },
             "source_run_ref": candidate_payload.get("source_run_ref"),
-            "source_workspace_ref": candidate_payload.get("source_workspace_ref"),
-            "source_log_refs": list(candidate_payload.get("source_log_refs", []))[:1],
             "compression_mode": compression_mode,
             "retention_tier": retention_tier,
         }
@@ -944,7 +1067,9 @@ class FabricMemoryManager:
                 "document_id": payload.get("document_id"),
                 "workflow_name": payload.get("workflow_name"),
                 "descriptor_kind": payload.get("descriptor_kind"),
+                "memory_class": payload.get("memory_class"),
                 "summary_vector": list(payload.get("summary_vector", []))[:4],
+                "prototype_hint": (payload.get("reuse_hints") or {}).get("document_type"),
                 "source_run_ref": payload.get("source_run_ref"),
                 "compression_mode": payload.get("compression_mode"),
             }
@@ -995,6 +1120,8 @@ class FabricMemoryManager:
             retention_tier="warm",
             compression_mode="quantized_summary_v1",
         )
+        review_scores = dict(candidate.get("review_scores") or {})
+        value_score = float(candidate.get("value_score", 0.0))
         promoted = self.load_promoted_memories()
         active_memory = self._find_active_memory_by_key(promoted["active"], candidate["memory_key"])
         if active_memory is not None and active_memory["payload_digest"] == canonical_json_hash(warm_payload):
@@ -1004,6 +1131,47 @@ class FabricMemoryManager:
                 "retention_tier": str(active_memory["retention_tier"]),
                 "reason": "duplicate candidate consolidated into existing reviewed memory",
             }
+        if active_memory is not None:
+            existing_trust = float(active_memory.get("trust_score", self._trust_score(str(active_memory.get("trust_ref", "")))))
+            existing_value = float(active_memory.get("value_score", 0.0))
+            candidate_trust = float(review_scores.get("trust_score", 0.0))
+            if existing_trust > candidate_trust and value_score <= existing_value + 0.12:
+                return {
+                    "decision": "defer" if value_score >= 0.45 else "reject",
+                    "compression_mode": "review_buffer_v1" if value_score >= 0.45 else "review_reject_v1",
+                    "retention_tier": "hot",
+                    "reason": "conflicting candidate could override a higher-trust reviewed memory",
+                }
+            if float(review_scores.get("conflict_risk", 0.0)) >= 0.65 and (
+                value_score >= 0.65 and candidate_trust >= existing_trust
+            ):
+                if self._tier_usage_bytes("warm") + len(canonical_json_bytes(warm_payload)) > self.memory_caps["warm_bytes"]:
+                    return {
+                        "decision": "compress",
+                        "compression_mode": "quantized_cold_v1",
+                        "retention_tier": "cold",
+                        "reason": "high-value conflicting candidate superseded existing memory under warm pressure",
+                    }
+                return {
+                    "decision": "promote",
+                    "compression_mode": "quantized_summary_v1",
+                    "retention_tier": "warm",
+                    "reason": "high-value conflicting candidate superseded an older memory with equal trust",
+                }
+        if value_score < 0.38:
+            return {
+                "decision": "reject",
+                "compression_mode": "review_reject_v1",
+                "retention_tier": "hot",
+                "reason": "candidate value score is too low for durable reviewed memory",
+            }
+        if value_score < 0.6 or float(review_scores.get("conflict_risk", 0.0)) >= 0.65:
+            return {
+                "decision": "defer",
+                "compression_mode": "review_buffer_v1",
+                "retention_tier": "hot",
+                "reason": "candidate needs more evidence because value is provisional or conflict risk is elevated",
+            }
 
         projected_warm = self._tier_usage_bytes("warm") + len(canonical_json_bytes(warm_payload))
         if projected_warm > self.memory_caps["warm_bytes"]:
@@ -1011,13 +1179,13 @@ class FabricMemoryManager:
                 "decision": "compress",
                 "compression_mode": "quantized_cold_v1",
                 "retention_tier": "cold",
-                "reason": "memory pressure triggered immediate cold compression",
+                "reason": "memory pressure preserved a high-value candidate by promoting it directly into cold compressed storage",
             }
         return {
             "decision": "promote",
             "compression_mode": "quantized_summary_v1",
             "retention_tier": "warm",
-            "reason": "reviewed candidate promoted into reusable warm memory",
+            "reason": "reviewed candidate cleared novelty, usefulness, trust, and reuse scoring for warm retention",
         }
 
     def _validate_candidate_payload(self, payload: dict[str, Any]) -> tuple[bool, str]:
@@ -1034,6 +1202,218 @@ class FabricMemoryManager:
         if not isinstance(selected_cells, list) or len(selected_cells) == 0:
             return False, "candidate is missing selected cell context"
         return True, "candidate passed reviewed memory readiness"
+
+    def _assess_candidate_value(
+        self,
+        *,
+        candidate_payload: dict[str, Any],
+        producer_cell_id: str,
+        descriptor_kind: str,
+        task_scope: str,
+        trust_ref: str,
+        review_ready: bool,
+    ) -> dict[str, Any]:
+        inputs = candidate_payload.get("inputs")
+        if not isinstance(inputs, dict):
+            inputs = {}
+        selected_cells = candidate_payload.get("selected_cells")
+        if not isinstance(selected_cells, list):
+            selected_cells = []
+        memory_key = self._memory_key(
+            producer_cell_id=producer_cell_id,
+            descriptor_kind=descriptor_kind,
+            task_scope=task_scope,
+        )
+        promoted = self.load_promoted_memories()
+        active_memory = self._find_active_memory_by_key(promoted["active"], memory_key)
+        warm_candidate = self._compress_payload_for_tier(
+            payload={
+                "task_scope": task_scope,
+                "workflow_name": candidate_payload.get("workflow_name"),
+                "document_id": candidate_payload.get("document_id"),
+                "descriptor_kind": descriptor_kind,
+                "summary_vector": [
+                    self._quantize_text(inputs.get("vendor_name"), limit=18),
+                    self._quantize_text(inputs.get("document_type"), limit=12),
+                    self._quantize_text(inputs.get("currency"), limit=8),
+                    self._quantize_total(inputs.get("total")),
+                ],
+                "reuse_hints": {
+                    "document_type": self._quantize_text(inputs.get("document_type"), limit=8),
+                },
+                "value_profile": [],
+            },
+            retention_tier="warm",
+        )
+        warm_digest = canonical_json_hash(warm_candidate)
+        novelty_score = 0.9
+        conflict_risk = 0.0
+        if active_memory is not None:
+            if active_memory["payload_digest"] == warm_digest:
+                novelty_score = 0.05
+                conflict_risk = 0.05
+            else:
+                novelty_score = 0.48
+                active_trust = float(active_memory.get("trust_score", self._trust_score(str(active_memory.get("trust_ref", "")))))
+                candidate_trust = self._trust_score(trust_ref)
+                conflict_risk = 0.75 if active_trust >= candidate_trust else 0.45
+        usefulness_score = min(
+            1.0,
+            0.2
+            + (0.2 if self._quantize_text(inputs.get("vendor_name"), limit=18) else 0.0)
+            + (0.2 if self._quantize_text(inputs.get("document_type"), limit=12) else 0.0)
+            + (0.15 if self._quantize_text(inputs.get("currency"), limit=8) else 0.0)
+            + (0.15 if self._quantize_total(inputs.get("total")) else 0.0)
+            + (0.1 if len(selected_cells) > 0 else 0.0),
+        )
+        trust_score = self._trust_score(trust_ref)
+        reuse_potential = min(
+            1.0,
+            0.35
+            + (0.2 if self._quantize_text(inputs.get("document_type"), limit=12) else 0.0)
+            + (0.2 if self._quantize_text(inputs.get("vendor_name"), limit=18) else 0.0)
+            + (0.15 if any("router" in str(item) for item in selected_cells) else 0.0),
+        )
+        raw_bytes = len(canonical_json_bytes(candidate_payload))
+        warm_bytes = len(canonical_json_bytes(warm_candidate))
+        compression_gain = 0.0 if raw_bytes <= 0 else round(max(0.0, 1.0 - (warm_bytes / float(raw_bytes))), 6)
+        memory_class = self._classify_memory_type(
+            payload=candidate_payload,
+            descriptor_kind=descriptor_kind,
+            producer_cell_id=producer_cell_id,
+        )
+        value_score = max(
+            0.0,
+            min(
+                1.0,
+                round(
+                    (0.28 * novelty_score)
+                    + (0.24 * usefulness_score)
+                    + (0.18 * trust_score)
+                    + (0.18 * reuse_potential)
+                    + (0.12 * compression_gain)
+                    - (0.2 * conflict_risk)
+                    + (0.05 if review_ready else -0.2),
+                    6,
+                ),
+            ),
+        )
+        reason = "candidate scored for novelty, usefulness, trust, reuse, compression, and conflict risk"
+        return {
+            "memory_class": memory_class,
+            "value_score": value_score,
+            "reason": reason,
+            "scores": {
+                "novelty_score": round(novelty_score, 6),
+                "usefulness_score": round(usefulness_score, 6),
+                "trust_score": round(trust_score, 6),
+                "reuse_potential": round(reuse_potential, 6),
+                "compression_gain": compression_gain,
+                "conflict_risk": round(conflict_risk, 6),
+            },
+        }
+
+    def _classify_memory_type(
+        self,
+        *,
+        payload: dict[str, Any],
+        descriptor_kind: str,
+        producer_cell_id: str,
+    ) -> str:
+        inputs = payload.get("inputs")
+        if not isinstance(inputs, dict):
+            inputs = {}
+        if any(key.startswith("policy_") for key in inputs.keys()) or "policy" in descriptor_kind:
+            return "policy_useful_memory"
+        if "correction_of" in inputs:
+            return "correction_memory"
+        if any(key.startswith("failure_") or key.startswith("error_") for key in inputs.keys()):
+            return "failure_memory"
+        if "router" in producer_cell_id or any("router" in str(item) for item in payload.get("selected_cells", [])):
+            return "routing_useful_memory"
+        return "pattern_memory"
+
+    def _trust_score(self, trust_ref: str) -> float:
+        if "experimental" in trust_ref:
+            return 0.35
+        if "policy" in trust_ref:
+            return 0.95
+        if "bounded_local" in trust_ref:
+            return 0.76
+        return 0.6
+
+    def _retention_priority(self, record: dict[str, Any]) -> float:
+        trust_score = float(record.get("trust_score", self._trust_score(str(record.get("trust_ref", "")))))
+        value_score = float(record.get("value_score", 0.0))
+        reuse_score = min(1.0, float(record.get("reuse_count", 0)) / 3.0)
+        policy_bonus = 0.2 if str(record.get("memory_class")) == "policy_useful_memory" else 0.0
+        return round((0.4 * trust_score) + (0.35 * value_score) + (0.15 * reuse_score) + policy_bonus, 6)
+
+    def _select_pressure_target(self, *, tier: str, allow_high_trust: bool) -> dict[str, Any] | None:
+        promoted = self.load_promoted_memories()
+        matches = [
+            deepcopy(record)
+            for record in promoted["active"].values()
+            if str(record.get("retention_tier")) == tier
+        ]
+        if not allow_high_trust:
+            filtered = [
+                record
+                for record in matches
+                if float(record.get("trust_score", self._trust_score(str(record.get("trust_ref", ""))))) < 0.9
+                and str(record.get("memory_class")) != "policy_useful_memory"
+            ]
+            if filtered:
+                matches = filtered
+        if not matches:
+            return None
+        matches.sort(
+            key=lambda item: (
+                self._retention_priority(item),
+                float(item.get("value_score", 0.0)),
+                float(item.get("trust_score", self._trust_score(str(item.get("trust_ref", ""))))),
+                str(item.get("created_utc", "")),
+                str(item.get("memory_id", "")),
+            )
+        )
+        return matches[0]
+
+    def _build_supersession_delta(self, *, prior_payload: dict[str, Any], next_payload: dict[str, Any]) -> dict[str, Any]:
+        prior_vector = list(prior_payload.get("summary_vector", []))
+        next_vector = list(next_payload.get("summary_vector", []))
+        changes = [
+            index
+            for index, (before, after) in enumerate(zip(prior_vector, next_vector, strict=False))
+            if before != after
+        ]
+        return {
+            "changed_vector_slots": changes,
+            "prior_digest": canonical_json_hash(prior_payload),
+            "next_digest": canonical_json_hash(next_payload),
+        }
+
+    def _record_lifecycle_memory_outcome(
+        self,
+        *,
+        lifecycle_manager: Any | None,
+        candidate: dict[str, Any],
+        outcome_kind: str,
+        detail: str,
+    ) -> None:
+        if lifecycle_manager is None or not hasattr(lifecycle_manager, "record_memory_outcome"):
+            return
+        lifecycle_manager.record_memory_outcome(
+            producer_cell_id=str(candidate["producer_cell_id"]),
+            outcome_kind=outcome_kind,
+            value_score=float(candidate.get("value_score", 0.0)),
+            memory_class=str(candidate.get("memory_class", "pattern_memory")),
+            detail=ensure_non_empty_string(detail, "memory lifecycle detail", code="MEMORY_INVALID"),
+        )
+
+    def _payload_semantic_digest(self, payload: dict[str, Any]) -> str:
+        normalized = dict(payload)
+        normalized.pop("compression_mode", None)
+        return canonical_json_hash(normalized)
 
     def _validate_decision(self, decision: dict[str, Any]) -> None:
         ensure_exact_keys(decision, DECISION_FIELDS, "MemoryPromotionDecision", code="MEMORY_INVALID")
@@ -1232,6 +1612,10 @@ class FabricMemoryManager:
                     "retention_tier": item["retention_tier"],
                     "compression_mode": item["compression_mode"],
                     "supersedes_memory_id": item["supersedes_memory_id"],
+                    "memory_class": item.get("memory_class"),
+                    "value_score": item.get("value_score"),
+                    "trust_score": item.get("trust_score"),
+                    "reuse_count": item.get("reuse_count", 0),
                 }
                 for _, item in sorted(promoted["active"].items())
             ],

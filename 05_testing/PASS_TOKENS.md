@@ -7,9 +7,11 @@
 - `AGIF_FABRIC_P4_PASS`
   - Earned on `2026-03-13`
   - Local verification command: `python3 scripts/check_phase4_lifecycle.py`
+  - Re-verified on `2026-03-13` during the Phase 4.5 hardening pass with the same command
 - `AGIF_FABRIC_P5_PASS`
   - Earned on `2026-03-13`
   - Local verification command: `python3 scripts/check_phase5_memory.py`
+  - Re-verified on `2026-03-13` during the Phase 5.5 hardening pass with the same command
 
 ## Reserved Tokens from the Plan
 - `AGIF_FABRIC_P6_PASS`

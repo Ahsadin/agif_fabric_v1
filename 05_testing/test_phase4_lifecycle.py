@@ -154,6 +154,10 @@ class Phase4LifecycleTest(unittest.TestCase):
         summary = manager.summary()
         self.assertGreater(summary["logical_population"], summary["active_population"])
         self.assertTrue(summary["within_runtime_working_set_cap"])
+        self.assertGreaterEqual(summary["structural_usefulness"]["split_useful_count"], 1)
+        self.assertGreaterEqual(summary["structural_usefulness"]["merge_useful_count"], 1)
+        self.assertIn(parent_record["lineage_id"], summary["lineage_usefulness"])
+        self.assertGreaterEqual(summary["lineage_usefulness"][parent_record["lineage_id"]]["useful_split_count"], 1)
 
         history_path = store.lifecycle_history_path("agif-fabric-v1-local")
         self.assertTrue(history_path.exists())
@@ -176,6 +180,16 @@ class Phase4LifecycleTest(unittest.TestCase):
             self.assertTrue(event["reason"])
             self.assertTrue(event["rollback_ref"])
             self.assertIn(event["transition"], allowed_transitions)
+        split_commit = next(entry for entry in history_payload["entries"] if entry["details"].get("kind") == "split_commit")
+        self.assertEqual(
+            split_commit["details"]["usefulness_reason"],
+            "split relieves sustained overload on the active branch",
+        )
+        merge_survivor = next(entry for entry in history_payload["entries"] if entry["details"].get("kind") == "merge_survivor")
+        self.assertEqual(
+            merge_survivor["details"]["usefulness_reason"],
+            "merge removes real redundancy while keeping the surviving branch replay-safe",
+        )
 
         evidence_path = Path(self.tempdir.name) / "phase4_evidence.json"
         evidence_payload = self.run_cli(["fabric", "evidence", str(evidence_path)])
@@ -204,10 +218,100 @@ class Phase4LifecycleTest(unittest.TestCase):
                 need_signal=self.make_signal("merge", "need-merge-invalid"),
                 reason="invalid cross-role merge should fail closed",
             )
-        self.assertEqual(err.exception.code, "MERGE_CONFLICT")
+        self.assertEqual(err.exception.code, "MERGE_SPECIALIZATION_RISK")
         veto_log = manager.load_veto_log()
         self.assertEqual(len(veto_log), 1)
         self.assertEqual(veto_log[0]["action"], "merge")
+        self.assertEqual(veto_log[0]["code"], "MERGE_SPECIALIZATION_RISK")
+
+    def test_split_guardrails_and_activation_thrashing(self) -> None:
+        self.run_cli(["fabric", "init", str(CONFIG_PATH)])
+        _, _, _, _, manager = self.init_runtime()
+        actors = self.scenario["actors"]
+
+        manager.activate_cell(cell_id="finance_intake_router", proposer=actors["proposer"], reason="activate intake router")
+        with self.assertRaises(FabricError) as err:
+            manager.split_cell(
+                parent_cell_id="finance_intake_router",
+                child_role_names=["router_alpha"],
+                proposer=actors["proposer"],
+                governance_approver=actors["governance_approver"],
+                need_signal=self.make_signal("split_weak", "need-split-weak"),
+                reason="weak split pressure should not be enough",
+            )
+        self.assertEqual(err.exception.code, "SPLIT_WEAK_PRESSURE")
+
+        manager.hibernate_cell(
+            cell_id="finance_intake_router",
+            proposer=actors["proposer"],
+            tissue_approver=actors["tissue_approver"],
+            reason="pack for compact dormancy",
+        )
+        manager.activate_cell(
+            cell_id="finance_intake_router",
+            proposer=actors["proposer"],
+            reason="first reactivation stays allowed",
+        )
+        manager.hibernate_cell(
+            cell_id="finance_intake_router",
+            proposer=actors["proposer"],
+            tissue_approver=actors["tissue_approver"],
+            reason="second compact dormancy step",
+        )
+        with self.assertRaises(FabricError) as thrash_err:
+            manager.activate_cell(
+                cell_id="finance_intake_router",
+                proposer=actors["proposer"],
+                reason="third immediate reactivation should be blocked as thrash",
+            )
+        self.assertEqual(thrash_err.exception.code, "LIFECYCLE_THRASH")
+        self.assertGreaterEqual(manager.summary()["structural_usefulness"]["thrash_prevented_count"], 1)
+
+    def test_dormancy_profile_preserves_needed_state_compactly(self) -> None:
+        self.run_cli(["fabric", "init", str(CONFIG_PATH)])
+        _, _, _, store, manager = self.init_runtime()
+        actors = self.scenario["actors"]
+
+        manager.activate_cell(
+            cell_id="finance_intake_router",
+            proposer=actors["proposer"],
+            reason="activate intake router for dormancy compaction",
+            workflow_ref="fixture:phase45-dormancy",
+        )
+        runtime_path = store.runtime_states_path("agif-fabric-v1-local")
+        runtime_payload = json.loads(runtime_path.read_text(encoding="utf-8"))
+        runtime_payload["states"]["finance_intake_router"]["workspace_subscriptions"] = ["workspace:finance"]
+        runtime_payload["states"]["finance_intake_router"]["loaded_descriptor_refs"] = ["memory/warm/payloads/mem_fixture.json"]
+        runtime_payload["states"]["finance_intake_router"]["current_need_signals"] = ["need-dormancy-001"]
+        runtime_path.write_text(json.dumps(runtime_payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+        manager.hibernate_cell(
+            cell_id="finance_intake_router",
+            proposer=actors["proposer"],
+            tissue_approver=actors["tissue_approver"],
+            reason="compact dormant state should preserve only what is needed",
+        )
+        dormant_runtime = manager.get_runtime_state("finance_intake_router")
+        dormant_logical = manager.get_cell_record("finance_intake_router")
+        self.assertEqual(dormant_runtime["workspace_subscriptions"], [])
+        self.assertEqual(dormant_runtime["loaded_descriptor_refs"], [])
+        self.assertEqual(dormant_runtime["current_need_signals"], [])
+        self.assertEqual(dormant_logical["dormancy_profile"]["packed_workspace_subscriptions"], ["workspace:finance"])
+        self.assertEqual(dormant_logical["dormancy_profile"]["packed_descriptor_refs"], ["memory/warm/payloads/mem_fixture.json"])
+        self.assertGreater(dormant_logical["dormancy_profile"]["compaction_saved_bytes"], 0)
+
+        manager.activate_cell(
+            cell_id="finance_intake_router",
+            proposer=actors["proposer"],
+            reason="reactivate from compact dormancy profile",
+        )
+        restored_runtime = manager.get_runtime_state("finance_intake_router")
+        self.assertEqual(restored_runtime["active_task_ref"], "fixture:phase45-dormancy")
+        self.assertEqual(restored_runtime["workspace_subscriptions"], ["workspace:finance"])
+        self.assertEqual(restored_runtime["loaded_descriptor_refs"], ["memory/warm/payloads/mem_fixture.json"])
+        summary = manager.summary()
+        self.assertGreaterEqual(summary["structural_usefulness"]["dormancy_saved_bytes"], 1)
+        self.assertGreaterEqual(summary["structural_usefulness"]["reactivation_useful_count"], 1)
 
     def test_burst_population_returns_to_steady_after_consolidation(self) -> None:
         self.run_cli(["fabric", "init", str(CONFIG_PATH)])

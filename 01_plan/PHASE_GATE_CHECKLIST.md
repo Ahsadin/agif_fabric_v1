@@ -44,8 +44,12 @@
 - [x] Dormant blueprint storage exists locally.
 - [x] Governed activation, split, merge, hibernate, reactivate, and retire flows exist locally.
 - [x] Split inheritance rules are enforced locally.
+- [x] Split rejects weak pressure and records usefulness reasons locally.
 - [x] Merge veto and conflict-aware consolidation exist locally.
+- [x] Merge rejects specialization-destroying branches locally.
 - [x] Lineage ledger and rollback-safe lifecycle history exist locally.
+- [x] Compact dormancy, reactivation usefulness, and lifecycle anti-thrashing guardrails exist locally.
+- [x] Structural usefulness and lineage usefulness summaries exist locally.
 - [x] Burst active population reaches `48` and returns automatically to steady `24` after consolidation.
 - [x] Lifecycle replay passes locally.
 
@@ -54,7 +58,10 @@
 - [x] Raw logs are stored ephemerally and are not auto-promoted into long-term memory.
 - [x] Reviewed memory supports reject, defer, promote, compress, and retire locally.
 - [x] Reviewed promotion decisions use the frozen `MemoryPromotionDecision` shape.
+- [x] Reviewer scoring uses novelty, usefulness, trust, reuse potential, compression gain, and conflict risk locally.
 - [x] Quantized consolidation, deduplication, supersession, bounded replay, and memory GC work locally.
+- [x] Trust-weighted conflict handling and strategic memory-pressure retention exist locally.
+- [x] Memory reuse, supersession, duplicate compression gain, and stale retirement metrics are recorded locally.
 - [x] Referenced cold payloads are protected and unreferenced cold payloads can be retired safely.
 - [x] `memory_pressure` is recorded as a first-class need signal and triggers consolidation locally.
 - [x] Phase 5 fixtures, tests, and evidence pass locally.

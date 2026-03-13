@@ -33,6 +33,7 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Phase 3: complete and locally verified
 - Phase 4: complete and locally verified
 - Phase 5: complete and locally verified
+- Phase 4.5 + 5.5 hardening: complete and locally verified without changing project units
 
 ## Phase 3 Foundation
 - Local runner entrypoint: `runner/cell`
@@ -48,6 +49,8 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 ## Phase 4 Lifecycle Runtime
 - Logical population and active runtime population are now tracked separately in the local fabric runtime state.
 - Dormant blueprint storage, activation, split, merge, hibernate, reactivate, retire, lineage ledger, veto log, and rollback snapshots now exist locally.
+- Split now rejects weak pressure, records usefulness reasons, and exposes structural usefulness and lineage usefulness summaries.
+- Hibernate now packs compact dormancy profiles, reactivation restores preserved context, and repeated activate/hibernate oscillation is bounded.
 - The local proof target is now verified for:
   - logical population cap `128`
   - steady active population `24`
@@ -64,6 +67,9 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Raw logs remain in the separate ephemeral store and are never promoted directly into long-term memory.
 - Reviewed promotion now records frozen `MemoryPromotionDecision` objects for reject, defer, promote, compress, and retire paths.
 - Deduplication, supersession, bounded replay, garbage collection, and memory-pressure consolidation now exist locally.
+- Reviewer scoring now weighs novelty, usefulness, trust, reuse potential, compression gain, and conflict risk before promotion.
+- Trust-weighted conflict handling now defers weaker conflicting memory, duplicate review now reuses the existing promoted artifact, and pressure handling now prefers lower-priority memory for consolidation or retirement.
+- Memory summary now reports reuse, supersession, duplicate compression gain, stale retirement rate, and retention priorities.
 - Deterministic Phase 5 fixtures now live under `fixtures/document_workflow/phase5/`.
 - Deterministic local Phase 5 check script: `scripts/check_phase5_memory.py`
 
@@ -113,5 +119,6 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Phase 3 verification method: run the deterministic runner foundation check and confirm the Phase 3 pass token and evidence note.
 - Phase 4 verification method: run the deterministic lifecycle and lineage check and confirm the Phase 4 pass token and evidence note.
 - Phase 5 verification method: run the deterministic reviewed-memory check and confirm the Phase 5 pass token and evidence note.
+- Hardening verification method: run the Phase 4 and Phase 5 deterministic checks again and confirm `05_testing/PHASE45_HARDENING_EVIDENCE.md`.
 - Local verification status is recorded in `01_plan/PROGRESS_TRACKER.md` and `CHANGELOG.md`.
 - Later runtime behavior beyond the Phase 5 reviewed memory runtime remains assumed only until later phases verify it.

@@ -1,0 +1,7 @@
+{
+  "workflow_name": "finance_document_intake",
+  "document_id": "doc-phase5-low-value",
+  "inputs": {
+    "currency": "EUR"
+  }
+}

@@ -140,6 +140,9 @@ class FabricStateStore:
     def lineage_ledger_path(self, fabric_id: str) -> Path:
         return self.fabric_dir(fabric_id) / "lifecycle" / "lineage_ledger.json"
 
+    def lifecycle_metrics_path(self, fabric_id: str) -> Path:
+        return self.fabric_dir(fabric_id) / "lifecycle" / "metrics.json"
+
     def lifecycle_snapshot_path(self, fabric_id: str, snapshot_name: str) -> Path:
         return self.fabric_dir(fabric_id) / "lifecycle" / "snapshots" / f"{snapshot_name}.json"
 

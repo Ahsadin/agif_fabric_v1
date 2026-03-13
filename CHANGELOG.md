@@ -193,3 +193,40 @@
   - Phase 6 routing, utility, and authority depth
   - long-duration soak behavior beyond the deterministic local Phase 5 test
   - benchmark outcomes beyond the local Phase 5 check
+
+## 2026-03-13 Phase 4.5 + 5.5 Hardening
+- Hardened the existing lifecycle runtime without changing the frozen Phase 2 interface or CLI surface:
+  - `intelligence/fabric/lifecycle/engine.py`
+  - `intelligence/fabric/state_store.py`
+  - `fixtures/document_workflow/phase4/lifecycle_scenario.json`
+  - `05_testing/test_phase4_lifecycle.py`
+  - `scripts/check_phase4_lifecycle.py`
+- Split now rejects weak pressure, records usefulness reasons, and tracks lineage usefulness and structural usefulness metrics.
+- Merge now rejects specialization-destroying branches earlier and explains the reason through deterministic veto and evidence paths.
+- Hibernate now packs a compact dormancy profile, reactivation restores preserved runtime context, and repeated activate/hibernate oscillation is bounded.
+- Hardened the existing reviewed-memory runtime:
+  - `intelligence/fabric/memory/manager.py`
+  - `fixtures/document_workflow/phase5/sample_workflow_payload_low_value.json`
+  - `05_testing/test_phase5_memory.py`
+  - `scripts/check_phase5_memory.py`
+- Memory review now scores candidates by novelty, usefulness, trust, reuse potential, compression gain, and conflict risk.
+- Lower-trust conflicting memory is deferred instead of silently overriding stronger reviewed memory.
+- Duplicate memory now reuses the existing promoted artifact, superseding updates retain delta metadata, and pressure handling now prefers lower-priority memory for consolidation or retirement.
+- Added the combined hardening evidence note:
+  - `05_testing/PHASE45_HARDENING_EVIDENCE.md`
+- Updated project records and admin tracking for the hardening thread without changing the completed project units:
+  - `DECISIONS.md`
+  - `PROJECT_README.md`
+  - `01_plan/PROGRESS_TRACKER.md`
+  - `01_plan/PHASE_GATE_CHECKLIST.md`
+  - `05_testing/PASS_TOKENS.md`
+  - `00_admin/CODEX_THREAD_MAP.md`
+  - `00_admin/codex_threads/handoffs/`
+- Locally verified:
+  - `python3 scripts/check_phase4_lifecycle.py`
+  - `python3 scripts/check_phase5_memory.py`
+  - `python3 scripts/check_phase3_foundation.py`
+- Assumed only:
+  - Phase 6 and later behavior
+  - long-duration soak behavior beyond the deterministic hardening checks
+  - benchmark outcomes beyond the current local proof

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Deterministic local check for the Phase 5 reviewed memory runtime."""
+"""Deterministic local check for the hardened Phase 5 reviewed memory runtime."""
 
 from __future__ import annotations
 

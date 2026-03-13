@@ -22,6 +22,18 @@
       "resolution_ref": null,
       "created_utc": "2026-03-13T00:00:00Z"
     },
+    "split_weak": {
+      "source_type": "tissue",
+      "source_id": "finance_document_workflow",
+      "signal_kind": "overload",
+      "severity": 0.2,
+      "evidence_ref": "fixture:phase45:split_weak",
+      "proposed_action": "split_active_cell",
+      "status": "open",
+      "expires_at_utc": "2026-03-13T01:15:00Z",
+      "resolution_ref": null,
+      "created_utc": "2026-03-13T00:05:00Z"
+    },
     "merge": {
       "source_type": "tissue",
       "source_id": "finance_document_workflow",

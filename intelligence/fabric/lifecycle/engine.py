@@ -29,6 +29,11 @@ RETIRED_STATE = "retired"
 ACTIVE_STATE = "active"
 SPLIT_PENDING_STATE = "split_pending"
 CONSOLIDATING_STATE = "consolidating"
+SPLIT_SIGNAL_KINDS = {"overload", "novelty", "coordination_gap"}
+MERGE_SIGNAL_KINDS = {"redundancy"}
+SPLIT_SEVERITY_FLOOR = 0.75
+MERGE_SEVERITY_FLOOR = 0.65
+RECENT_TRANSITION_WINDOW = 4
 
 
 class FabricLifecycleManager:
@@ -74,6 +79,10 @@ class FabricLifecycleManager:
         ledger = self._load_or_initialize(
             self.store.lineage_ledger_path(self.fabric_id),
             {"schema_version": "agif.fabric.lineage_ledger.v1", "entries": []},
+        )
+        self._load_or_initialize(
+            self.store.lifecycle_metrics_path(self.fabric_id),
+            self._default_lifecycle_metrics(),
         )
         self._load_or_initialize(
             self.store.veto_log_path(self.fabric_id),
@@ -153,6 +162,10 @@ class FabricLifecycleManager:
             self.store.lineage_ledger_path(self.fabric_id),
             {"schema_version": "agif.fabric.lineage_ledger.v1", "entries": []},
         )
+        metrics = self._load_or_initialize(
+            self.store.lifecycle_metrics_path(self.fabric_id),
+            self._default_lifecycle_metrics(),
+        )
         vetoes = self._load_or_initialize(
             self.store.veto_log_path(self.fabric_id),
             {"schema_version": "agif.fabric.veto_log.v1", "entries": []},
@@ -196,6 +209,8 @@ class FabricLifecycleManager:
             else round(active_population / float(len(logical_cells)), 6),
             "state_digest": self._state_digest(logical_cells, runtime_states),
             "last_lifecycle_event_ref": history["entries"][-1]["event"]["event_id"] if history["entries"] else None,
+            "structural_usefulness": deepcopy(metrics["structural"]),
+            "lineage_usefulness": deepcopy(metrics["lineages"]),
         }
         self._refresh_state(summary)
         return summary
@@ -256,6 +271,20 @@ class FabricLifecycleManager:
         current_state = runtime_record["runtime_state"]
         if current_state != DORMANT_STATE:
             raise FabricError("LIFECYCLE_INVALID", f"Cell {cell_id} must be dormant before activation.")
+        if self._would_oscillate(logical_record, attempted_transition="activate"):
+            self._record_guardrail_event(
+                lineage_id=logical_record["lineage_id"],
+                cell_id=cell_id,
+                reason="prevented repeated activate/hibernate oscillation",
+            )
+            self._raise_veto(
+                action="activate",
+                code="LIFECYCLE_THRASH",
+                message=f"Activation for {cell_id} is temporarily blocked to prevent lifecycle oscillation.",
+                proposer=proposer,
+                related_cells=[cell_id],
+                reason=reason,
+            )
 
         active_population = self._count_active(runtime["states"])
         use_burst = allow_burst or active_population >= self.steady_active_target
@@ -278,9 +307,25 @@ class FabricLifecycleManager:
 
         updated_logical = deepcopy(logical_record)
         updated_logical["lifecycle_state"] = ACTIVE_STATE
+        updated_logical["lifecycle_guardrails"] = self._advance_guardrails(
+            logical_record,
+            transition="reactivate" if logical_record["activation_count"] > 0 else "activate",
+            history=history,
+            usefulness_reason="reactivate from compact dormant state"
+            if logical_record.get("dormancy_profile")
+            else "activate admitted into live runtime",
+        )
         updated_runtime = deepcopy(runtime_record)
         updated_runtime["runtime_state"] = ACTIVE_STATE
-        updated_runtime["active_task_ref"] = workflow_ref
+        dormancy_profile = logical_record.get("dormancy_profile") or {}
+        restored_task_ref = workflow_ref
+        if restored_task_ref is None and isinstance(dormancy_profile, dict):
+            restored_task_ref = dormancy_profile.get("packed_active_task_ref")
+        updated_runtime["active_task_ref"] = restored_task_ref
+        if isinstance(dormancy_profile, dict) and dormancy_profile:
+            updated_runtime["workspace_subscriptions"] = sorted(dormancy_profile.get("packed_workspace_subscriptions", []))
+            updated_runtime["loaded_descriptor_refs"] = sorted(dormancy_profile.get("packed_descriptor_refs", []))
+            updated_runtime["current_need_signals"] = sorted(dormancy_profile.get("packed_need_signals", []))
         if need_signal is not None:
             updated_runtime["current_need_signals"] = self._append_unique(
                 updated_runtime["current_need_signals"], str(need_signal["need_signal_id"])
@@ -320,8 +365,19 @@ class FabricLifecycleManager:
                 "workflow_ref": workflow_ref,
                 "allow_burst": use_burst,
                 "need_signal_id": None if need_signal is None else need_signal["need_signal_id"],
+                "usefulness_reason": "reactivate from compact dormant state"
+                if logical_record.get("dormancy_profile")
+                else "activate admitted into live runtime",
             },
         )
+        if int(logical_record["activation_count"]) > 0 and logical_record.get("dormancy_profile"):
+            self._record_structural_usefulness(
+                lineage_id=logical_record["lineage_id"],
+                cell_id=cell_id,
+                metric_kind="reactivation",
+                usefulness_score=0.8,
+                usefulness_reason="reactivation reused the compact dormant profile",
+            )
         return {
             "event_id": event["event_id"],
             "cell_id": cell_id,
@@ -400,6 +456,25 @@ class FabricLifecycleManager:
         governance_actor = ensure_governance_actor(governance_approver, self.config["governance_policy"])
         signal = ensure_need_signal(need_signal, action="split")
         self.register_need_signal(signal=signal)
+        split_assessment = self._assess_split_request(
+            parent_record=parent_record,
+            history=history,
+            signal=signal,
+        )
+        if not split_assessment["allowed"]:
+            self._record_guardrail_event(
+                lineage_id=parent_record["lineage_id"],
+                cell_id=parent_cell_id,
+                reason=split_assessment["message"],
+            )
+            self._raise_veto(
+                action="split",
+                code=split_assessment["code"],
+                message=split_assessment["message"],
+                proposer=proposer,
+                related_cells=[parent_cell_id],
+                reason=reason,
+            )
 
         current_logical_population = len(logical["cells"])
         if current_logical_population + len(child_role_names) > int(self.config["logical_population_cap"]):
@@ -425,6 +500,12 @@ class FabricLifecycleManager:
 
         split_pending_logical = deepcopy(parent_record)
         split_pending_logical["lifecycle_state"] = SPLIT_PENDING_STATE
+        split_pending_logical["lifecycle_guardrails"] = self._advance_guardrails(
+            parent_record,
+            transition="split_pending",
+            history=history,
+            usefulness_reason=split_assessment["usefulness_reason"],
+        )
         split_pending_runtime = deepcopy(parent_runtime)
         split_pending_runtime["runtime_state"] = SPLIT_PENDING_STATE
         split_pending_runtime["current_need_signals"] = self._append_unique(
@@ -459,6 +540,8 @@ class FabricLifecycleManager:
                 "kind": "split_pending",
                 "need_signal_id": signal["need_signal_id"],
                 "requested_children": len(child_role_names),
+                "usefulness_reason": split_assessment["usefulness_reason"],
+                "usefulness_score": split_assessment["usefulness_score"],
             },
         )
 
@@ -476,6 +559,12 @@ class FabricLifecycleManager:
         lineage_entries: list[dict[str, Any]] = []
         parent_dormant = deepcopy(parent_record)
         parent_dormant["lifecycle_state"] = DORMANT_STATE
+        parent_dormant["lifecycle_guardrails"] = self._advance_guardrails(
+            parent_record,
+            transition="split",
+            history=history,
+            usefulness_reason=split_assessment["usefulness_reason"],
+        )
         logical_after[parent_cell_id] = parent_dormant
         parent_runtime_after = deepcopy(parent_runtime)
         parent_runtime_after["runtime_state"] = DORMANT_STATE
@@ -507,6 +596,13 @@ class FabricLifecycleManager:
                 merged_from_cell_ids=[],
                 trust_ancestry=parent_record["trust_ancestry"],
             )
+            child_logical["lifecycle_guardrails"] = self._advance_guardrails(
+                child_logical,
+                transition="split_child",
+                history=history,
+                usefulness_reason=split_assessment["usefulness_reason"],
+            )
+            child_logical["dormancy_profile"] = None
             child_runtime = self._build_runtime_state(
                 cell_id=child_id,
                 lineage_id=parent_record["lineage_id"],
@@ -551,7 +647,17 @@ class FabricLifecycleManager:
                 "need_signal_id": signal["need_signal_id"],
                 "child_ids": child_ids,
                 "child_role_names": child_role_names,
+                "usefulness_reason": split_assessment["usefulness_reason"],
+                "usefulness_score": split_assessment["usefulness_score"],
             },
+        )
+        self._record_structural_usefulness(
+            lineage_id=parent_record["lineage_id"],
+            cell_id=parent_cell_id,
+            metric_kind="split",
+            usefulness_score=split_assessment["usefulness_score"],
+            usefulness_reason=split_assessment["usefulness_reason"],
+            metadata={"child_ids": child_ids},
         )
         return {
             "event_id": event["event_id"],
@@ -590,6 +696,27 @@ class FabricLifecycleManager:
                 related_cells=[survivor_cell_id, merged_cell_id],
                 reason=reason,
             )
+        signal = ensure_need_signal(need_signal, action="merge")
+        merge_assessment = self._assess_merge_request(
+            survivor=survivor,
+            merged=merged,
+            history=history,
+            signal=signal,
+        )
+        if not merge_assessment["allowed"]:
+            self._record_guardrail_event(
+                lineage_id=survivor["lineage_id"],
+                cell_id=survivor_cell_id,
+                reason=merge_assessment["message"],
+            )
+            self._raise_veto(
+                action="merge",
+                code=merge_assessment["code"],
+                message=merge_assessment["message"],
+                proposer=proposer,
+                related_cells=[survivor_cell_id, merged_cell_id],
+                reason=reason,
+            )
         conflicts = self._collect_merge_conflicts(survivor, merged, survivor_runtime, merged_runtime)
         if conflicts:
             self._raise_veto(
@@ -603,11 +730,18 @@ class FabricLifecycleManager:
 
         tissue_actor = ensure_tissue_actor(tissue_approver, self.config["governance_policy"], survivor["blueprint"]["allowed_tissues"])
         governance_actor = ensure_governance_actor(governance_approver, self.config["governance_policy"])
-        signal = ensure_need_signal(need_signal, action="merge")
         self.register_need_signal(signal=signal)
 
         for cell_id, record in ((survivor_cell_id, survivor), (merged_cell_id, merged)):
-            logical_after = {cell_id: {**deepcopy(record), "lifecycle_state": CONSOLIDATING_STATE}}
+            updated_logical = deepcopy(record)
+            updated_logical["lifecycle_state"] = CONSOLIDATING_STATE
+            updated_logical["lifecycle_guardrails"] = self._advance_guardrails(
+                record,
+                transition="merge_consolidating",
+                history=history,
+                usefulness_reason=merge_assessment["usefulness_reason"],
+            )
+            logical_after = {cell_id: updated_logical}
             runtime_after = {cell_id: {**deepcopy(runtime["states"][cell_id]), "runtime_state": CONSOLIDATING_STATE}}
             self._record_transition(
                 logical=logical,
@@ -638,6 +772,8 @@ class FabricLifecycleManager:
                     "kind": "merge_consolidating",
                     "need_signal_id": signal["need_signal_id"],
                     "partner_cell_id": merged_cell_id if cell_id == survivor_cell_id else survivor_cell_id,
+                    "usefulness_reason": merge_assessment["usefulness_reason"],
+                    "usefulness_score": merge_assessment["usefulness_score"],
                 },
             )
             logical, runtime, history, ledger = self._load_runtime_bundle()
@@ -654,6 +790,12 @@ class FabricLifecycleManager:
         )
         survivor_after["ancestor_cell_ids"] = sorted(set(survivor["ancestor_cell_ids"] + merged["ancestor_cell_ids"]))
         survivor_after["trust_ancestry"] = deepcopy(survivor["trust_ancestry"] + merged["trust_ancestry"])
+        survivor_after["lifecycle_guardrails"] = self._advance_guardrails(
+            survivor,
+            transition="merge",
+            history=history,
+            usefulness_reason=merge_assessment["usefulness_reason"],
+        )
         survivor_runtime_after = deepcopy(survivor_runtime)
         survivor_runtime_after["runtime_state"] = DORMANT_STATE
         survivor_runtime_after["active_task_ref"] = None
@@ -686,6 +828,8 @@ class FabricLifecycleManager:
                 "kind": "merge_survivor",
                 "need_signal_id": signal["need_signal_id"],
                 "merged_cell_id": merged_cell_id,
+                "usefulness_reason": merge_assessment["usefulness_reason"],
+                "usefulness_score": merge_assessment["usefulness_score"],
             },
         )
         logical, runtime, history, ledger = self._load_runtime_bundle()
@@ -693,6 +837,12 @@ class FabricLifecycleManager:
         merged_runtime = self._require_runtime_cell(runtime, merged_cell_id)
         merged_dormant = deepcopy(merged)
         merged_dormant["lifecycle_state"] = DORMANT_STATE
+        merged_dormant["lifecycle_guardrails"] = self._advance_guardrails(
+            merged,
+            transition="merge_source",
+            history=history,
+            usefulness_reason=merge_assessment["usefulness_reason"],
+        )
         merged_runtime_after = deepcopy(merged_runtime)
         merged_runtime_after["runtime_state"] = DORMANT_STATE
         merged_runtime_after["active_task_ref"] = None
@@ -734,6 +884,14 @@ class FabricLifecycleManager:
             reason=f"retire merged source after consolidation into {survivor_cell_id}",
             normalize_after=False,
         )
+        self._record_structural_usefulness(
+            lineage_id=survivor["lineage_id"],
+            cell_id=survivor_cell_id,
+            metric_kind="merge",
+            usefulness_score=merge_assessment["usefulness_score"],
+            usefulness_reason=merge_assessment["usefulness_reason"],
+            metadata={"merged_cell_id": merged_cell_id},
+        )
         self._auto_return_to_steady(
             proposer="fabric:auto_consolidation",
             approver=tissue_actor,
@@ -760,7 +918,22 @@ class FabricLifecycleManager:
         runtime_record = self._require_runtime_cell(runtime, cell_id)
         if runtime_record["runtime_state"] != ACTIVE_STATE:
             raise FabricError("LIFECYCLE_INVALID", f"Hibernate requires an active cell: {cell_id}.")
+        if self._would_oscillate(logical_record, attempted_transition="hibernate"):
+            self._record_guardrail_event(
+                lineage_id=logical_record["lineage_id"],
+                cell_id=cell_id,
+                reason="prevented repeated activate/hibernate oscillation",
+            )
+            self._raise_veto(
+                action="hibernate",
+                code="LIFECYCLE_THRASH",
+                message=f"Hibernation for {cell_id} is temporarily blocked to prevent lifecycle oscillation.",
+                proposer=proposer,
+                related_cells=[cell_id],
+                reason=reason,
+            )
         tissue_actor = ensure_tissue_actor(tissue_approver, self.config["governance_policy"], logical_record["blueprint"]["allowed_tissues"])
+        dormancy_profile = self._build_dormancy_profile(logical_record=logical_record, runtime_record=runtime_record)
 
         self._record_transition(
             logical=logical,
@@ -774,7 +947,18 @@ class FabricLifecycleManager:
             approver=tissue_actor,
             reason=reason,
             created_utc=utc_now_iso(),
-            logical_after={cell_id: {**deepcopy(logical_record), "lifecycle_state": CONSOLIDATING_STATE}},
+            logical_after={
+                cell_id: {
+                    **deepcopy(logical_record),
+                    "lifecycle_state": CONSOLIDATING_STATE,
+                    "lifecycle_guardrails": self._advance_guardrails(
+                        logical_record,
+                        transition="hibernate_consolidating",
+                        history=history,
+                        usefulness_reason="pack active state into compact dormancy",
+                    ),
+                }
+            },
             runtime_after={cell_id: {**deepcopy(runtime_record), "runtime_state": CONSOLIDATING_STATE}},
             lineage_entries=[
                 self._build_lineage_entry(
@@ -804,12 +988,27 @@ class FabricLifecycleManager:
             approver=tissue_actor,
             reason=reason,
             created_utc=utc_now_iso(),
-            logical_after={cell_id: {**deepcopy(logical_record), "lifecycle_state": DORMANT_STATE}},
+            logical_after={
+                cell_id: {
+                    **deepcopy(logical_record),
+                    "lifecycle_state": DORMANT_STATE,
+                    "dormancy_profile": dormancy_profile,
+                    "lifecycle_guardrails": self._advance_guardrails(
+                        logical_record,
+                        transition="hibernate",
+                        history=history,
+                        usefulness_reason="pack active state into compact dormancy",
+                    ),
+                }
+            },
             runtime_after={
                 cell_id: {
                     **deepcopy(runtime_record),
                     "runtime_state": DORMANT_STATE,
                     "active_task_ref": None,
+                    "workspace_subscriptions": [],
+                    "loaded_descriptor_refs": [],
+                    "current_need_signals": [],
                 }
             },
             lineage_entries=[
@@ -823,7 +1022,19 @@ class FabricLifecycleManager:
                     note=reason,
                 )
             ],
-            details={"kind": "hibernate_dormant"},
+            details={
+                "kind": "hibernate_dormant",
+                "usefulness_reason": "pack active state into compact dormancy",
+                "compaction_saved_bytes": dormancy_profile["compaction_saved_bytes"],
+            },
+        )
+        self._record_structural_usefulness(
+            lineage_id=logical_record["lineage_id"],
+            cell_id=cell_id,
+            metric_kind="hibernate",
+            usefulness_score=dormancy_profile["compaction_ratio"],
+            usefulness_reason="pack active state into compact dormancy",
+            metadata={"compaction_saved_bytes": dormancy_profile["compaction_saved_bytes"]},
         )
         if normalize_after:
             self._auto_return_to_steady(
@@ -856,6 +1067,12 @@ class FabricLifecycleManager:
         retired_logical = deepcopy(logical_record)
         retired_logical["lifecycle_state"] = RETIRED_STATE
         retired_logical["retired_utc"] = utc_now_iso()
+        retired_logical["lifecycle_guardrails"] = self._advance_guardrails(
+            logical_record,
+            transition="retire",
+            history=history,
+            usefulness_reason="retire dormant cell while preserving lineage traceability",
+        )
         retired_runtime = deepcopy(runtime_record)
         retired_runtime["runtime_state"] = RETIRED_STATE
         event = self._record_transition(
@@ -964,6 +1181,64 @@ class FabricLifecycleManager:
         )
         return [deepcopy(item) for item in vetoes["entries"]]
 
+    def record_memory_outcome(
+        self,
+        *,
+        producer_cell_id: str,
+        outcome_kind: str,
+        value_score: float,
+        memory_class: str,
+        detail: str,
+    ) -> None:
+        logical = self._load_or_initialize(
+            self.store.logical_population_path(self.fabric_id),
+            {"schema_version": "agif.fabric.logical_population.v1", "cells": {}},
+        )
+        producer = logical["cells"].get(producer_cell_id)
+        if producer is None:
+            return
+        metrics = self._load_or_initialize(
+            self.store.lifecycle_metrics_path(self.fabric_id),
+            self._default_lifecycle_metrics(),
+        )
+        lineage_metrics = deepcopy(metrics["lineages"].get(producer["lineage_id"], self._default_lineage_metrics(producer["lineage_id"])))
+        structural = deepcopy(metrics["structural"])
+        if outcome_kind == "promote":
+            lineage_metrics["promoted_memory_count"] += 1
+            structural["memory_promoted_count"] += 1
+        elif outcome_kind == "compress":
+            lineage_metrics["compressed_memory_count"] += 1
+        elif outcome_kind == "reject":
+            lineage_metrics["rejected_memory_count"] += 1
+            structural["memory_rejected_count"] += 1
+        elif outcome_kind == "defer":
+            lineage_metrics["deferred_memory_count"] += 1
+        elif outcome_kind == "reuse":
+            lineage_metrics["reused_memory_count"] += 1
+            structural["memory_reused_count"] += 1
+        lineage_metrics["memory_value_total"] = round(
+            float(lineage_metrics.get("memory_value_total", 0.0)) + max(0.0, float(value_score)),
+            6,
+        )
+        if producer.get("parent_cell_id"):
+            lineage_metrics["split_descendant_promoted_memory_count"] += 1 if outcome_kind in {"promote", "reuse"} else 0
+        if producer.get("merged_from_cell_ids"):
+            lineage_metrics["merge_descendant_promoted_memory_count"] += 1 if outcome_kind in {"promote", "reuse"} else 0
+        lineage_metrics["last_usefulness_reason"] = ensure_non_empty_string(
+            detail,
+            "lifecycle memory outcome detail",
+            code="STATE_INVALID",
+        )
+        lineage_metrics["last_memory_class"] = ensure_non_empty_string(
+            memory_class,
+            "lifecycle memory class",
+            code="STATE_INVALID",
+        )
+        lineage_metrics["usefulness_score"] = self._compute_lineage_usefulness_score(lineage_metrics)
+        metrics["lineages"][producer["lineage_id"]] = lineage_metrics
+        metrics["structural"] = self._normalize_structural_metrics(structural, metrics["lineages"])
+        write_json_atomic(self.store.lifecycle_metrics_path(self.fabric_id), metrics)
+
     def _auto_return_to_steady(self, *, proposer: str, approver: str, reason: str) -> None:
         active_cells = self.list_active_cells()
         overflow = len(active_cells) - self.steady_active_target
@@ -977,6 +1252,296 @@ class FabricLifecycleManager:
                 reason=reason,
                 normalize_after=False,
             )
+
+    def _default_lifecycle_metrics(self) -> dict[str, Any]:
+        return {
+            "schema_version": "agif.fabric.lifecycle.metrics.v1",
+            "lineages": {},
+            "structural": {
+                "split_useful_count": 0,
+                "merge_useful_count": 0,
+                "reactivation_useful_count": 0,
+                "dormancy_saved_bytes": 0,
+                "thrash_prevented_count": 0,
+                "memory_promoted_count": 0,
+                "memory_rejected_count": 0,
+                "memory_reused_count": 0,
+                "memory_linked_lineages": 0,
+            },
+        }
+
+    def _default_lineage_metrics(self, lineage_id: str) -> dict[str, Any]:
+        return {
+            "lineage_id": lineage_id,
+            "useful_split_count": 0,
+            "useful_merge_count": 0,
+            "useful_reactivation_count": 0,
+            "dormancy_saved_bytes": 0,
+            "promoted_memory_count": 0,
+            "compressed_memory_count": 0,
+            "rejected_memory_count": 0,
+            "deferred_memory_count": 0,
+            "reused_memory_count": 0,
+            "split_descendant_promoted_memory_count": 0,
+            "merge_descendant_promoted_memory_count": 0,
+            "memory_value_total": 0.0,
+            "usefulness_score": 0.0,
+            "last_usefulness_reason": None,
+            "last_memory_class": None,
+        }
+
+    def _default_guardrails(self) -> dict[str, Any]:
+        return {
+            "recent_transitions": [],
+            "last_transition_index": 0,
+            "split_cooldown_until": 0,
+            "merge_cooldown_until": 0,
+            "last_usefulness_reason": None,
+        }
+
+    def _advance_guardrails(
+        self,
+        record: dict[str, Any],
+        *,
+        transition: str,
+        history: dict[str, Any],
+        usefulness_reason: str,
+    ) -> dict[str, Any]:
+        guardrails = deepcopy(record.get("lifecycle_guardrails") or self._default_guardrails())
+        event_index = len(history["entries"]) + 1
+        recent = [item for item in guardrails.get("recent_transitions", []) if isinstance(item, dict)]
+        recent.append({"transition": transition, "event_index": event_index})
+        guardrails["recent_transitions"] = recent[-RECENT_TRANSITION_WINDOW:]
+        guardrails["last_transition_index"] = event_index
+        guardrails["last_usefulness_reason"] = usefulness_reason
+        if transition == "split":
+            guardrails["split_cooldown_until"] = event_index + 2
+        if transition == "merge":
+            guardrails["merge_cooldown_until"] = event_index + 2
+        return guardrails
+
+    def _would_oscillate(self, record: dict[str, Any], *, attempted_transition: str) -> bool:
+        raw_recent = [
+            self._canonical_transition_name(str(item.get("transition")))
+            for item in (record.get("lifecycle_guardrails") or {}).get("recent_transitions", [])
+            if isinstance(item, dict) and item.get("transition")
+        ]
+        recent: list[str] = []
+        for item in raw_recent:
+            if recent and recent[-1] == item:
+                continue
+            recent.append(item)
+        if attempted_transition == "activate":
+            return recent[-3:] == ["hibernate", "activate", "hibernate"]
+        return False
+
+    def _canonical_transition_name(self, transition: str) -> str:
+        if transition in {"activate", "reactivate"}:
+            return "activate"
+        if transition.startswith("hibernate"):
+            return "hibernate"
+        if transition.startswith("merge"):
+            return "merge"
+        if transition.startswith("split"):
+            return "split"
+        return transition
+
+    def _assess_split_request(
+        self,
+        *,
+        parent_record: dict[str, Any],
+        history: dict[str, Any],
+        signal: dict[str, Any],
+    ) -> dict[str, Any]:
+        signal_kind = str(signal.get("signal_kind", ""))
+        severity = self._safe_float(signal.get("severity"))
+        if signal_kind not in SPLIT_SIGNAL_KINDS:
+            return {
+                "allowed": False,
+                "code": "SPLIT_LOW_UTILITY",
+                "message": f"Split for {parent_record['cell_id']} requires overload, novelty, or coordination pressure.",
+            }
+        if severity < SPLIT_SEVERITY_FLOOR:
+            return {
+                "allowed": False,
+                "code": "SPLIT_WEAK_PRESSURE",
+                "message": f"Split for {parent_record['cell_id']} was rejected because the pressure signal is too weak.",
+            }
+        guardrails = parent_record.get("lifecycle_guardrails") or {}
+        if int(guardrails.get("split_cooldown_until", 0)) > len(history["entries"]):
+            return {
+                "allowed": False,
+                "code": "LIFECYCLE_COOLDOWN",
+                "message": f"Split for {parent_record['cell_id']} is still in cooldown after a recent structural change.",
+            }
+        usefulness_reason = {
+            "overload": "split relieves sustained overload on the active branch",
+            "novelty": "split isolates persistent novelty into a specialist branch",
+            "coordination_gap": "split creates a clearer specialist branch for coordination pressure",
+        }[signal_kind]
+        return {
+            "allowed": True,
+            "code": "OK",
+            "message": usefulness_reason,
+            "usefulness_reason": usefulness_reason,
+            "usefulness_score": round(max(severity, 0.8 if signal_kind == "novelty" else severity), 3),
+        }
+
+    def _assess_merge_request(
+        self,
+        *,
+        survivor: dict[str, Any],
+        merged: dict[str, Any],
+        history: dict[str, Any],
+        signal: dict[str, Any],
+    ) -> dict[str, Any]:
+        signal_kind = str(signal.get("signal_kind", ""))
+        severity = self._safe_float(signal.get("severity"))
+        if signal_kind not in MERGE_SIGNAL_KINDS:
+            return {
+                "allowed": False,
+                "code": "MERGE_LOW_UTILITY",
+                "message": f"Merge for {survivor['cell_id']} and {merged['cell_id']} requires a redundancy signal.",
+            }
+        if severity < MERGE_SEVERITY_FLOOR:
+            return {
+                "allowed": False,
+                "code": "MERGE_WEAK_PRESSURE",
+                "message": f"Merge for {survivor['cell_id']} and {merged['cell_id']} was rejected because redundancy pressure is weak.",
+            }
+        for record in (survivor, merged):
+            guardrails = record.get("lifecycle_guardrails") or {}
+            if int(guardrails.get("merge_cooldown_until", 0)) > len(history["entries"]):
+                return {
+                    "allowed": False,
+                    "code": "LIFECYCLE_COOLDOWN",
+                    "message": f"Merge for {survivor['cell_id']} and {merged['cell_id']} is still in cooldown after a recent structural change.",
+                }
+        if survivor["source_blueprint_cell_id"] != merged["source_blueprint_cell_id"] or survivor["source_role_name"] != merged["source_role_name"]:
+            return {
+                "allowed": False,
+                "code": "MERGE_SPECIALIZATION_RISK",
+                "message": f"Merge for {survivor['cell_id']} and {merged['cell_id']} would destroy useful specialization ancestry.",
+            }
+        usefulness_gap = abs(
+            int(survivor.get("activation_count", 0)) - int(merged.get("activation_count", 0))
+        )
+        if usefulness_gap > 2:
+            return {
+                "allowed": False,
+                "code": "MERGE_SPECIALIZATION_RISK",
+                "message": f"Merge for {survivor['cell_id']} and {merged['cell_id']} would collapse unevenly proven branches.",
+            }
+        usefulness_reason = "merge removes real redundancy while keeping the surviving branch replay-safe"
+        return {
+            "allowed": True,
+            "code": "OK",
+            "message": usefulness_reason,
+            "usefulness_reason": usefulness_reason,
+            "usefulness_score": round(max(0.7, severity), 3),
+        }
+
+    def _build_dormancy_profile(self, *, logical_record: dict[str, Any], runtime_record: dict[str, Any]) -> dict[str, Any]:
+        active_bytes = int(logical_record["blueprint"]["working_memory_bytes"]) + int(logical_record["blueprint"]["descriptor_cache_bytes"])
+        dormant_bytes = int(logical_record["blueprint"]["idle_memory_bytes"])
+        saved_bytes = max(0, active_bytes - dormant_bytes)
+        return {
+            "schema_version": "agif.fabric.dormancy_profile.v1",
+            "packed_active_task_ref": runtime_record.get("active_task_ref"),
+            "packed_workspace_subscriptions": sorted(runtime_record.get("workspace_subscriptions", [])),
+            "packed_descriptor_refs": sorted(runtime_record.get("loaded_descriptor_refs", [])),
+            "packed_need_signals": sorted(runtime_record.get("current_need_signals", [])),
+            "compaction_saved_bytes": saved_bytes,
+            "compaction_ratio": 0.0 if active_bytes <= 0 else round(saved_bytes / float(active_bytes), 6),
+            "packed_state_digest": canonical_json_hash(
+                {
+                    "workspace_subscriptions": runtime_record.get("workspace_subscriptions", []),
+                    "loaded_descriptor_refs": runtime_record.get("loaded_descriptor_refs", []),
+                    "current_need_signals": runtime_record.get("current_need_signals", []),
+                }
+            ),
+        }
+
+    def _record_structural_usefulness(
+        self,
+        *,
+        lineage_id: str,
+        cell_id: str,
+        metric_kind: str,
+        usefulness_score: float,
+        usefulness_reason: str,
+        metadata: dict[str, Any] | None = None,
+    ) -> None:
+        metrics = self._load_or_initialize(
+            self.store.lifecycle_metrics_path(self.fabric_id),
+            self._default_lifecycle_metrics(),
+        )
+        lineage_metrics = deepcopy(metrics["lineages"].get(lineage_id, self._default_lineage_metrics(lineage_id)))
+        structural = deepcopy(metrics["structural"])
+        if metric_kind == "split":
+            lineage_metrics["useful_split_count"] += 1
+            structural["split_useful_count"] += 1
+        elif metric_kind == "merge":
+            lineage_metrics["useful_merge_count"] += 1
+            structural["merge_useful_count"] += 1
+        elif metric_kind == "reactivation":
+            lineage_metrics["useful_reactivation_count"] += 1
+            structural["reactivation_useful_count"] += 1
+        elif metric_kind == "hibernate":
+            saved_bytes = int((metadata or {}).get("compaction_saved_bytes", 0))
+            lineage_metrics["dormancy_saved_bytes"] += saved_bytes
+            structural["dormancy_saved_bytes"] += saved_bytes
+        lineage_metrics["last_usefulness_reason"] = usefulness_reason
+        lineage_metrics["usefulness_score"] = self._compute_lineage_usefulness_score(lineage_metrics, base_delta=usefulness_score)
+        metrics["lineages"][lineage_id] = lineage_metrics
+        metrics["structural"] = self._normalize_structural_metrics(structural, metrics["lineages"])
+        write_json_atomic(self.store.lifecycle_metrics_path(self.fabric_id), metrics)
+
+    def _record_guardrail_event(self, *, lineage_id: str, cell_id: str, reason: str) -> None:
+        metrics = self._load_or_initialize(
+            self.store.lifecycle_metrics_path(self.fabric_id),
+            self._default_lifecycle_metrics(),
+        )
+        lineage_metrics = deepcopy(metrics["lineages"].get(lineage_id, self._default_lineage_metrics(lineage_id)))
+        structural = deepcopy(metrics["structural"])
+        structural["thrash_prevented_count"] += 1
+        lineage_metrics["last_usefulness_reason"] = reason
+        lineage_metrics["usefulness_score"] = self._compute_lineage_usefulness_score(lineage_metrics)
+        metrics["lineages"][lineage_id] = lineage_metrics
+        metrics["structural"] = self._normalize_structural_metrics(structural, metrics["lineages"])
+        write_json_atomic(self.store.lifecycle_metrics_path(self.fabric_id), metrics)
+        del cell_id
+
+    def _compute_lineage_usefulness_score(self, lineage_metrics: dict[str, Any], *, base_delta: float = 0.0) -> float:
+        score = (
+            0.18 * int(lineage_metrics.get("useful_split_count", 0))
+            + 0.18 * int(lineage_metrics.get("useful_merge_count", 0))
+            + 0.12 * int(lineage_metrics.get("useful_reactivation_count", 0))
+            + 0.22 * int(lineage_metrics.get("promoted_memory_count", 0))
+            + 0.12 * int(lineage_metrics.get("reused_memory_count", 0))
+            + 0.08 * int(lineage_metrics.get("compressed_memory_count", 0))
+            + 0.000001 * int(lineage_metrics.get("dormancy_saved_bytes", 0))
+            + 0.04 * float(lineage_metrics.get("memory_value_total", 0.0))
+            + 0.06 * float(base_delta)
+        )
+        return round(min(1.0, score), 6)
+
+    def _normalize_structural_metrics(self, structural: dict[str, Any], lineages: dict[str, Any]) -> dict[str, Any]:
+        normalized = deepcopy(structural)
+        normalized["memory_linked_lineages"] = len(
+            [
+                lineage
+                for lineage in lineages.values()
+                if int(lineage.get("promoted_memory_count", 0)) > 0 or int(lineage.get("reused_memory_count", 0)) > 0
+            ]
+        )
+        return normalized
+
+    def _safe_float(self, value: Any) -> float:
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            return 0.0
 
     def _load_runtime_bundle(self) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
         logical = self._load_or_initialize(
@@ -1123,6 +1688,8 @@ class FabricLifecycleManager:
             "source_role_name": source_role_name,
             "merged_from_cell_ids": list(merged_from_cell_ids),
             "activation_count": 0,
+            "dormancy_profile": None,
+            "lifecycle_guardrails": self._default_guardrails(),
             "retired_utc": None,
         }
 
@@ -1280,6 +1847,38 @@ class FabricLifecycleManager:
         return sorted(set(values + [item]))
 
     def _state_digest(self, logical_cells: dict[str, Any], runtime_states: dict[str, Any]) -> str:
+        structural_logical = {
+            cell_id: {
+                "cell_id": record["cell_id"],
+                "lineage_id": record["lineage_id"],
+                "lifecycle_state": record["lifecycle_state"],
+                "blueprint": {
+                    "cell_id": record["blueprint"]["cell_id"],
+                    "role_name": record["blueprint"]["role_name"],
+                    "role_family": record["blueprint"]["role_family"],
+                    "allowed_tissues": list(record["blueprint"]["allowed_tissues"]),
+                    "descriptor_kinds": list(record["blueprint"]["descriptor_kinds"]),
+                    "working_memory_bytes": record["blueprint"]["working_memory_bytes"],
+                    "descriptor_cache_bytes": record["blueprint"]["descriptor_cache_bytes"],
+                    "idle_memory_bytes": record["blueprint"]["idle_memory_bytes"],
+                },
+                "descriptor_eligibility": list(record["descriptor_eligibility"]),
+                "parent_cell_id": record["parent_cell_id"],
+                "ancestor_cell_ids": list(record["ancestor_cell_ids"]),
+                "source_blueprint_cell_id": record["source_blueprint_cell_id"],
+                "source_role_name": record["source_role_name"],
+                "merged_from_cell_ids": list(record["merged_from_cell_ids"]),
+                "activation_count": record["activation_count"],
+                "dormancy_profile": None
+                if not isinstance(record.get("dormancy_profile"), dict)
+                else {
+                    "compaction_saved_bytes": record["dormancy_profile"].get("compaction_saved_bytes"),
+                    "compaction_ratio": record["dormancy_profile"].get("compaction_ratio"),
+                    "packed_state_digest": record["dormancy_profile"].get("packed_state_digest"),
+                },
+            }
+            for cell_id, record in sorted(logical_cells.items())
+        }
         structural_runtime = {
             cell_id: {
                 "cell_id": record["cell_id"],
@@ -1290,7 +1889,7 @@ class FabricLifecycleManager:
             }
             for cell_id, record in sorted(runtime_states.items())
         }
-        return canonical_json_hash({"logical": logical_cells, "runtime": structural_runtime})
+        return canonical_json_hash({"logical": structural_logical, "runtime": structural_runtime})
 
     def _load_or_initialize(self, path: Any, default_payload: dict[str, Any]) -> dict[str, Any]:
         if not path.exists():

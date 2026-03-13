@@ -1,5 +1,50 @@
 # Changelog
 
+## 2026-03-13 Phase 8.5 Hardening
+- First reconciled the already-committed Phase 7.6 state honestly:
+  - confirmed the worktree was clean locally before new edits
+  - confirmed committed Phase 7.6 work exists in `03fbda5`
+  - re-ran `python3 scripts/check_phase7_benchmarks.py` locally
+  - confirmed the rerun still leaves the tracked Phase 7 result files clean
+- Hardened the already-open Phase 8 harness without changing the frozen `runner/cell fabric` command names, without claiming `AGIF_FABRIC_P8_PASS`, and without raising progress above `525/600`:
+  - `intelligence/fabric/benchmarking/phase8.py`
+  - `fixtures/document_workflow/phase8/longrun_plan.json`
+  - `05_testing/test_phase8_soak.py`
+  - `scripts/check_phase8_soak.py`
+- Strengthened the bounded Phase 8 analysis layer with:
+  - stronger cycle health metrics over time
+  - explicit drift indicators for descriptor usefulness, routing quality, governance intervention, memory value, and recurring unresolved pressure
+  - bounded checkpoint-resume realism checks for cycle-boundary and stress-boundary recovery
+  - clearer long-run memory and governance quality summaries
+  - a clearer failure taxonomy and blocker report
+- Reconciled Phase 8 with the committed Phase 7.6 benchmark system by adding the governance-sensitive `invoice_high_value_alias_hold` case into the repeated long-run mix.
+- Added the new hardening evidence and handoff files:
+  - `05_testing/PHASE85_HARDENING_EVIDENCE.md`
+  - `00_admin/codex_threads/handoffs/phase85-hardening-2026-03-13.md`
+- Regenerated the bounded Phase 8 summary outputs:
+  - `06_outputs/run_summaries/phase8_bounded_validation.md`
+  - `06_outputs/run_summaries/phase8_bounded_validation.json`
+- Updated the project records:
+  - `DECISIONS.md`
+  - `PROJECT_README.md`
+  - `01_plan/PROGRESS_TRACKER.md`
+  - `01_plan/PHASE_GATE_CHECKLIST.md`
+  - `05_testing/PASS_TOKENS.md`
+  - `00_admin/CODEX_THREAD_MAP.md`
+- Locally verified:
+  - `python3 scripts/check_phase8_soak.py` passes locally
+  - `python3 scripts/check_phase7_benchmarks.py` passes locally in this thread
+  - `python3 scripts/check_phase6_routing_authority.py` passes locally through the chained Phase 8 check
+  - `python3 scripts/check_phase5_memory.py` passes locally through the chained Phase 8 check
+  - `python3 scripts/check_phase4_lifecycle.py` passes locally through the chained Phase 8 check
+  - `python3 scripts/check_phase3_foundation.py` passes locally through the chained Phase 8 check
+  - the bounded summary now shows descriptor usefulness drift, one governed reuse-hold case, checkpoint-boundary resume coverage, and an explicit failure taxonomy locally
+- Assumed only:
+  - real 24h soak completion
+  - real 72h soak completion
+  - `AGIF_FABRIC_P8_PASS`
+  - progress above `525/600`
+
 ## 2026-03-13 Phase 7.6 Hardening
 - Hardened the already-closed Phase 7 finance benchmark system without changing the frozen Phase 2 CLI surface or raising project units above `525/600`:
   - `intelligence/fabric/domain/finance.py`

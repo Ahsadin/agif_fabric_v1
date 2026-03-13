@@ -39,6 +39,22 @@ def main() -> int:
     if not completion["bounded_validation_ready"]:
         print("Phase 8 bounded validation is not ready.", file=sys.stderr)
         return 1
+    if not completion.get("resume_gate_passed"):
+        print("Phase 8 resume gate is not ready.", file=sys.stderr)
+        return 1
+    summary = validation["artifact_summary"]
+    if not summary["resume_checks"]["all_passed"]:
+        print("Phase 8 resume scenarios did not all pass.", file=sys.stderr)
+        return 1
+    if summary["drift"]["descriptor_usefulness_drift"]["delta"] <= 0.0:
+        print("Phase 8 descriptor usefulness drift signal is missing.", file=sys.stderr)
+        return 1
+    if summary["trends"]["governed_reuse_hold_count"] <= 0:
+        print("Phase 8 Phase 7.6-aligned reuse hold coverage is missing.", file=sys.stderr)
+        return 1
+    if "real 24h soak not completed locally" not in summary["blocker_report"]["still_missing_for_closure"]:
+        print("Phase 8 blocker reporting is incomplete.", file=sys.stderr)
+        return 1
     print("AGIF_FABRIC_P8_HARNESS_READY")
     return 0
 

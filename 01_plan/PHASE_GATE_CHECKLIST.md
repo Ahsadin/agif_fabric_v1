@@ -91,6 +91,7 @@
 - [x] Run manifests and restart-resume semantics exist locally.
 - [x] Bounded validation summaries can be regenerated locally.
 - [x] The bounded local validation stayed inside the written `12 GB` runtime working-set cap.
+- [x] Phase 8.5 hardening now adds stronger cycle-health metrics, drift indicators, checkpoint-boundary resume analysis, and blocker reporting locally without claiming Phase 8 closure.
 - [ ] Real 24h soak completed locally.
 - [ ] Real 72h soak completed locally.
 - [ ] Full Phase 8 closure evidence exists locally and earns `AGIF_FABRIC_P8_PASS`.

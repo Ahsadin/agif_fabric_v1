@@ -19,6 +19,11 @@
 - This pass adds repeated finance workflow cycles, resumable run manifests, bounded stress lanes, and deterministic Phase 8 output summaries.
 - The progress units remain `525/600` because the locked plan awards the `45` Phase 8 units only after real 24h and 72h local soak evidence closes the full Phase 8 gate.
 
+## 2026-03-13 Phase 8.5 Hardening Note
+- A bounded Phase 8.5 hardening pass was completed locally after the committed Phase 7.6 state was re-verified cleanly.
+- This pass adds stronger cycle-health metrics, drift indicators, checkpoint-boundary resume checks, clearer memory and governance quality summaries, a clearer failure taxonomy, and better blocker reporting inside the already-open Phase 8 evidence layer.
+- The progress units remain `525/600` because the locked plan does not award extra units for hardening inside an open phase until the real 24h and 72h evidence closes Phase 8 itself.
+
 ## 2026-03-13 Hardening Note
 - A Phase 4.5 + 5.5 hardening pass was completed locally.
 - This pass improved lifecycle quality and memory quality inside already-closed Phases 4 and 5.
@@ -98,6 +103,7 @@
   - `python3 scripts/check_phase8_soak.py` passes locally
   - the bounded validation summary under `06_outputs/run_summaries/` exists locally
   - repeated finance workflow cycles now show descriptor reuse benefit locally
+  - the bounded validation now also shows descriptor usefulness drift, one governance-preserved reuse hold case, checkpoint-boundary resume realism, and an explicit failure taxonomy locally
   - split/merge stress, memory saturation pressure, routing pressure, trust/quarantine fault injection, and replay/rollback recovery all execute locally
 - Assumed only:
   - real 24h and 72h soak completion for Phase 8
@@ -116,5 +122,5 @@
 | Phase 5 | 95 | Complete and locally verified |
 | Phase 6 | 65 | Complete and locally verified |
 | Phase 7 | 60 | Complete and locally verified |
-| Phase 8 | 45 | Harness implemented and locally bounded-verified; full closure still open |
+| Phase 8 | 45 | Harness implemented, Phase 8.5 hardening locally verified, and full closure still open |
 | Phase 9 | 30 | Not started |

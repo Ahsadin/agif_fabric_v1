@@ -31,4 +31,5 @@
   - Recorded on `2026-03-13`
   - Local verification command: `python3 scripts/check_phase8_soak.py`
   - Meaning: the bounded Phase 8 harness, stress lanes, resumable manifests, and summary outputs are locally verified
+  - Re-verified on `2026-03-13` during the Phase 8.5 hardening pass with the same command
   - Important: this is not the Phase 8 completion token and does not replace `AGIF_FABRIC_P8_PASS`

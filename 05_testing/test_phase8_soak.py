@@ -9,6 +9,7 @@ from pathlib import Path
 
 from intelligence.fabric.benchmarking.phase8 import (
     PHASE8_SHORT_PROFILE,
+    run_phase8_bounded_validation,
     run_phase8_profile,
     write_phase8_summary,
 )
@@ -30,14 +31,34 @@ class Phase8SoakTest(unittest.TestCase):
             self.assertFalse(resumed["completion"]["phase_complete"])
             summary = resumed["artifact_summary"]
             self.assertGreater(summary["trends"]["descriptor_reuse_benefit"], 0.0)
+            self.assertGreater(summary["trends"]["governed_reuse_hold_count"], 0)
+            self.assertIn("routing_quality_drift", summary["drift"])
+            self.assertIn("memory_pollution", summary["failure_taxonomy"])
+            self.assertEqual(summary["manifest_continuity"]["checkpoint_scope"], "cycle_and_stress_boundary_only")
             self.assertTrue(summary["stress_results"]["memory_pressure"]["triggered"])
             self.assertTrue(summary["stress_results"]["replay_rollback"]["rollback_restored"])
             self.assertEqual(summary["completion"]["phase8_open_blockers"][0], "real 24h soak not completed locally")
+            self.assertTrue(
+                any(
+                    row["case_id"] == "invoice_high_value_alias_hold"
+                    and row["descriptor_reuse_used"]
+                    and row["final_status"] == "hold"
+                    for cycle in summary["cycles"]
+                    for row in cycle["case_rows"]
+                )
+            )
+
+    def test_phase8_bounded_validation_checks_resume_scenarios(self) -> None:
+        result = run_phase8_bounded_validation()
+        summary = result["artifact_summary"]
+        self.assertTrue(summary["resume_checks"]["all_passed"])
+        self.assertTrue(summary["completion"]["resume_gate_passed"])
+        self.assertIn("quarantine_resume", summary["resume_checks"]["scenarios"])
+        self.assertIn("still_missing_for_closure", summary["blocker_report"])
 
     def test_phase8_summary_writer_is_deterministic(self) -> None:
         with tempfile.TemporaryDirectory() as tempdir:
-            run_root = Path(tempdir) / "phase8_summary"
-            result = run_phase8_profile(PHASE8_SHORT_PROFILE, run_root=run_root, resume=True)
+            result = run_phase8_bounded_validation()
             output_dir = Path(tempdir) / "outputs"
             write_phase8_summary(result, output_dir=output_dir, basename="phase8_test_summary")
             first_json = (output_dir / "phase8_test_summary.json").read_text(encoding="utf-8")
@@ -55,6 +76,7 @@ class Phase8SoakTest(unittest.TestCase):
         payload = json.loads(first_json)
         self.assertNotIn("workflow_id", json.dumps(payload))
         self.assertIn("runtime timestamps", first_markdown)
+        self.assertIn("Resume Realism", first_markdown)
 
 
 if __name__ == "__main__":

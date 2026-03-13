@@ -18,7 +18,7 @@ from intelligence.fabric.common import (
     write_json_atomic,
 )
 from intelligence.fabric.execution.bounded_executor import execute_foundation_workflow
-from intelligence.fabric.governance.policy import summarize_governance
+from intelligence.fabric.lifecycle import FabricLifecycleManager
 from intelligence.fabric.metrics.reporting import build_status_metrics
 from intelligence.fabric.memory.episodic_store import EpisodicStore
 from intelligence.fabric.memory.suggestions_store import SuggestionsStore
@@ -100,6 +100,10 @@ def command_init(config_path: Path) -> dict[str, Any]:
         registry_path=registry_path,
         initialized_utc=utc_now_iso(),
     )
+    lifecycle = FabricLifecycleManager(store=store, state=state, config=config).bootstrap_population(
+        registry=registry,
+        initialized_utc=state["initialized_utc"],
+    )
     return {
         "command": "fabric init",
         "fabric_id": config["fabric_id"],
@@ -110,6 +114,7 @@ def command_init(config_path: Path) -> dict[str, Any]:
         "config_ref": repo_relative(resolved_config_path),
         "blueprint_registry_ref": repo_relative(registry_path),
         "status": state["status"],
+        "population": lifecycle,
     }
 
 
@@ -123,11 +128,18 @@ def command_status() -> dict[str, Any]:
             "state_root": repo_relative(store.root),
         }
 
+    config, _, _, _ = load_fabric_bootstrap((REPO_ROOT / str(state["config_ref"])).resolve())
+    lifecycle = FabricLifecycleManager(store=store, state=state, config=config)
+    population = lifecycle.summary()
+    state = store.load_state(state["fabric_id"])
     metrics = build_status_metrics(state)
     needs = score_foundation_needs(
         fabric_id=state["fabric_id"],
         registered_blueprints=int(state["registered_blueprint_count"]),
         active_population_cap=int(state["active_population_cap"]),
+        logical_population=population["logical_population"],
+        active_population=population["active_population"],
+        burst_active_population_cap=population["burst_active_population_cap"],
     )
     suggestions_store = SuggestionsStore(store.fabric_dir(state["fabric_id"]) / "suggestions.json")
     return {
@@ -140,7 +152,10 @@ def command_status() -> dict[str, Any]:
         "blueprint_registry_ref": state["blueprint_registry_ref"],
         "metrics": metrics,
         "needs": needs,
+        "recorded_need_signals": lifecycle.load_need_signals(),
         "active_suggestions": suggestions_store.count_active(),
+        "governance": lifecycle.governance_summary(),
+        "population": population,
         "last_run_ref": state.get("last_run_ref"),
         "last_replay_ref": state.get("last_replay_ref"),
     }
@@ -148,7 +163,7 @@ def command_status() -> dict[str, Any]:
 
 def command_run() -> dict[str, Any]:
     workflow_payload = _load_stdin_json()
-    state, config, registry, store = _load_current_runtime_context()
+    state, config, registry, store, lifecycle = _load_current_runtime_context()
 
     execution = execute_foundation_workflow(
         workflow_payload=workflow_payload,
@@ -156,6 +171,10 @@ def command_run() -> dict[str, Any]:
         proof_domain=config["proof_domain"],
     )
     workflow_id = execution["workflow_id"]
+    activation = lifecycle.activate_for_workflow(
+        cell_ids=list(execution["result"]["selected_cells"]),
+        workflow_id=workflow_id,
+    )
     workspace_snapshot = build_workspace_snapshot(
         workflow_id=workflow_id,
         workflow_payload=workflow_payload,
@@ -180,6 +199,7 @@ def command_run() -> dict[str, Any]:
     }
     run_path = store.run_path(state["fabric_id"], workflow_id)
     write_json_atomic(run_path, run_record)
+    lifecycle.set_active_task_refs(cell_ids=list(execution["result"]["selected_cells"]), workflow_ref=None)
 
     episodic_store = EpisodicStore(store.fabric_dir(state["fabric_id"]) / "episodic_events.json")
     episodic_store.append_event(
@@ -190,6 +210,7 @@ def command_run() -> dict[str, Any]:
         }
     )
 
+    state = store.load_state(state["fabric_id"])
     state["run_count"] = int(state.get("run_count", 0)) + 1
     state["last_run_ref"] = repo_relative(run_path)
     store.save_state(state)
@@ -204,12 +225,14 @@ def command_run() -> dict[str, Any]:
         "executor": execution["executor"],
         "trace": execution["trace"],
         "result": execution["result"],
-        "governance": summarize_governance(config["governance_policy"]),
+        "activation": activation,
+        "governance": lifecycle.governance_summary(),
+        "population": lifecycle.summary(),
     }
 
 
 def command_replay(manifest_path: Path) -> dict[str, Any]:
-    state, config, registry, store = _load_current_runtime_context()
+    state, config, registry, store, lifecycle = _load_current_runtime_context()
     manifest_raw = load_json_file(
         manifest_path.resolve(),
         not_found_code="REPLAY_MANIFEST_NOT_FOUND",
@@ -255,12 +278,14 @@ def command_replay(manifest_path: Path) -> dict[str, Any]:
     write_json_atomic(replay_path, replay_record)
     state["last_replay_ref"] = repo_relative(replay_path)
     store.save_state(state)
+    lifecycle_replay = lifecycle.replay_history()
 
     return {
         "command": "fabric replay",
         "fabric_id": state["fabric_id"],
         "workflow_id": workflow_id,
         "replay_match": replay_match,
+        "lifecycle_replay_match": lifecycle_replay["replay_match"],
         "replay_ref": repo_relative(replay_path),
         "trace": execution["trace"],
         "output_digest": execution["output_digest"],
@@ -268,30 +293,55 @@ def command_replay(manifest_path: Path) -> dict[str, Any]:
 
 
 def command_evidence(output_path: Path) -> dict[str, Any]:
-    state, config, registry, store = _load_current_runtime_context()
+    state, config, registry, store, lifecycle = _load_current_runtime_context()
     status_payload = command_status()
+    population = lifecycle.summary()
+    lifecycle_replay = lifecycle.replay_history()
+    earned_pass_tokens = ["AGIF_FABRIC_P3_PASS"]
+    if (
+        population["logical_population"] > population["active_population"]
+        and lifecycle_replay["replay_match"]
+        and population["within_burst_active_cap"]
+        and population["within_runtime_working_set_cap"]
+    ):
+        earned_pass_tokens.append("AGIF_FABRIC_P4_PASS")
     evidence_bundle = {
-        "bundle_version": "agif.fabric.phase3.evidence.v1",
+        "bundle_version": "agif.fabric.phase4.evidence.v1",
         "created_utc": utc_now_iso(),
         "pass_token": "AGIF_FABRIC_P3_PASS",
+        "earned_pass_tokens": earned_pass_tokens,
         "fabric_id": state["fabric_id"],
         "proof_domain": config["proof_domain"],
         "config_ref": state["config_ref"],
         "blueprint_registry_ref": state["blueprint_registry_ref"],
         "registered_blueprints": [item["cell_id"] for item in registry["blueprints"]],
         "status": status_payload,
+        "population": population,
+        "lifecycle_replay": lifecycle_replay,
+        "logical_population_ref": repo_relative(store.logical_population_path(state["fabric_id"])),
+        "runtime_states_ref": repo_relative(store.runtime_states_path(state["fabric_id"])),
+        "lifecycle_history_ref": repo_relative(store.lifecycle_history_path(state["fabric_id"])),
+        "lineage_ledger_ref": repo_relative(store.lineage_ledger_path(state["fabric_id"])),
+        "veto_log_ref": repo_relative(store.veto_log_path(state["fabric_id"])),
     }
     write_json_atomic(output_path.resolve(), evidence_bundle)
     return {
         "command": "fabric evidence",
         "fabric_id": state["fabric_id"],
         "pass": True,
+        "earned_pass_tokens": earned_pass_tokens,
         "evidence_ref": repo_relative(output_path.resolve()),
         "registered_blueprint_count": len(registry["blueprints"]),
     }
 
 
-def _load_current_runtime_context() -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], FabricStateStore]:
+def _load_current_runtime_context() -> tuple[
+    dict[str, Any],
+    dict[str, Any],
+    dict[str, Any],
+    FabricStateStore,
+    FabricLifecycleManager,
+]:
     store = FabricStateStore()
     state = store.load_current_state()
     if state is None:
@@ -300,7 +350,8 @@ def _load_current_runtime_context() -> tuple[dict[str, Any], dict[str, Any], dic
     if not config_ref.is_absolute():
         config_ref = (REPO_ROOT / config_ref).resolve()
     config, _, registry, _ = load_fabric_bootstrap(config_ref)
-    return state, config, registry, store
+    lifecycle = FabricLifecycleManager(store=store, state=state, config=config)
+    return state, config, registry, store, lifecycle
 
 
 def _load_stdin_json() -> dict[str, Any]:

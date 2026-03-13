@@ -1,4 +1,4 @@
-"""Local runtime state storage for the Phase 3 fabric foundation."""
+"""Local runtime state storage for the AGIF fabric runtime."""
 
 from __future__ import annotations
 
@@ -38,6 +38,10 @@ class FabricStateStore:
         (fabric_dir / "runs").mkdir(parents=True, exist_ok=True)
         (fabric_dir / "replays").mkdir(parents=True, exist_ok=True)
         (fabric_dir / "evidence").mkdir(parents=True, exist_ok=True)
+        (fabric_dir / "lifecycle").mkdir(parents=True, exist_ok=True)
+        (fabric_dir / "lifecycle" / "snapshots").mkdir(parents=True, exist_ok=True)
+        (fabric_dir / "governance").mkdir(parents=True, exist_ok=True)
+        (fabric_dir / "needs").mkdir(parents=True, exist_ok=True)
 
         state = {
             "state_version": "agif.fabric.state.v1",
@@ -51,6 +55,18 @@ class FabricStateStore:
             "utility_profile_count": len(registry["utility_profiles"]),
             "active_population_cap": config["active_population_cap"],
             "logical_population_cap": config["logical_population_cap"],
+            "steady_active_population_target": config["active_population_cap"],
+            "burst_active_population_cap": min(
+                int(config["logical_population_cap"]),
+                int(config.get("governance_policy", {}).get("burst_active_population_cap", config["active_population_cap"] * 2)),
+            ),
+            "active_population": 0,
+            "logical_population": 0,
+            "dormant_population": 0,
+            "retired_population": 0,
+            "lineage_count": 0,
+            "lifecycle_event_count": 0,
+            "last_lifecycle_event_ref": None,
             "run_count": 0,
             "last_run_ref": None,
             "last_replay_ref": None,
@@ -107,6 +123,27 @@ class FabricStateStore:
     def replay_path(self, fabric_id: str, replay_id: str) -> Path:
         return self.fabric_dir(fabric_id) / "replays" / f"{replay_id}.json"
 
+    def logical_population_path(self, fabric_id: str) -> Path:
+        return self.fabric_dir(fabric_id) / "lifecycle" / "logical_population.json"
+
+    def runtime_states_path(self, fabric_id: str) -> Path:
+        return self.fabric_dir(fabric_id) / "lifecycle" / "runtime_states.json"
+
+    def lifecycle_history_path(self, fabric_id: str) -> Path:
+        return self.fabric_dir(fabric_id) / "lifecycle" / "history.json"
+
+    def lineage_ledger_path(self, fabric_id: str) -> Path:
+        return self.fabric_dir(fabric_id) / "lifecycle" / "lineage_ledger.json"
+
+    def lifecycle_snapshot_path(self, fabric_id: str, snapshot_name: str) -> Path:
+        return self.fabric_dir(fabric_id) / "lifecycle" / "snapshots" / f"{snapshot_name}.json"
+
+    def veto_log_path(self, fabric_id: str) -> Path:
+        return self.fabric_dir(fabric_id) / "governance" / "veto_log.json"
+
+    def need_signals_path(self, fabric_id: str) -> Path:
+        return self.fabric_dir(fabric_id) / "needs" / "signals.json"
+
     def load_run_record(self, fabric_id: str, workflow_id: str) -> dict[str, Any]:
         record = load_json_file(
             self.run_path(fabric_id, workflow_id),
@@ -117,4 +154,3 @@ class FabricStateStore:
         if not isinstance(record, dict):
             raise FabricError("RUN_RECORD_INVALID", "Run record must be an object.")
         return record
-

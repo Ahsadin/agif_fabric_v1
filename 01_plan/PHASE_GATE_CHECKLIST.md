@@ -40,11 +40,14 @@
 - [x] Base execution tests pass locally.
 
 ## Phase 4
-- [ ] Local memory model exists locally.
-- [ ] Fabric memory model exists locally.
-- [ ] Governance controls exist locally.
-- [ ] Replay, rollback, trust, and quarantine controls exist locally.
-- [ ] Lifecycle controls exist locally.
+- [x] Logical fabric population and active runtime population are stored separately.
+- [x] Dormant blueprint storage exists locally.
+- [x] Governed activation, split, merge, hibernate, reactivate, and retire flows exist locally.
+- [x] Split inheritance rules are enforced locally.
+- [x] Merge veto and conflict-aware consolidation exist locally.
+- [x] Lineage ledger and rollback-safe lifecycle history exist locally.
+- [x] Burst active population reaches `48` and returns automatically to steady `24` after consolidation.
+- [x] Lifecycle replay passes locally.
 
 ## Phase 5
 - [ ] Finance workflow tissue exists locally.

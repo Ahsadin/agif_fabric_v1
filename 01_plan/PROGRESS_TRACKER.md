@@ -9,10 +9,10 @@
 - Placeholder files created early to satisfy the plan do not count as phase completion by themselves.
 
 ## Current Recorded Progress
-- Completed units: `225`
-- Progress now: `225/600`
-- Percent complete: `37.5%`
-- Basis: Phase 0 bootstrap, Phase 1 requirements freeze, Phase 2 architecture freeze, and Phase 3 runner and fabric foundation are complete.
+- Completed units: `305`
+- Progress now: `305/600`
+- Percent complete: `50.8%`
+- Basis: Phase 0 bootstrap, Phase 1 requirements freeze, Phase 2 architecture freeze, Phase 3 runner and fabric foundation, and Phase 4 elastic lifecycle and lineage are complete.
 
 ## Verification Status
 - Locally verified:
@@ -37,9 +37,16 @@
   - deterministic Phase 3 fixtures exist locally
   - `python3 scripts/check_phase3_foundation.py` passes locally
   - `AGIF_FABRIC_P3_PASS` is earned and recorded in `05_testing/PASS_TOKENS.md`
+  - Phase 4 lifecycle runtime exists locally
+  - logical population and active runtime population are stored separately
+  - dormant blueprint storage, activation, split, merge, hibernate, reactivate, and retire paths exist locally
+  - lineage ledger, veto log, and rollback snapshots exist locally
+  - deterministic Phase 4 fixtures exist locally
+  - `python3 scripts/check_phase4_lifecycle.py` passes locally
+  - `AGIF_FABRIC_P4_PASS` is earned and recorded in `05_testing/PASS_TOKENS.md`
 - Assumed only:
   - all later phases
-  - runtime behavior beyond the Phase 3 foundation
+  - runtime behavior beyond the Phase 4 lifecycle runtime
   - benchmark outcomes
   - paper results
 
@@ -50,7 +57,7 @@
 | Phase 1 | 40 | Complete and locally verified |
 | Phase 2 | 80 | Complete and locally verified |
 | Phase 3 | 85 | Complete and locally verified |
-| Phase 4 | 80 | Not started |
+| Phase 4 | 80 | Complete and locally verified |
 | Phase 5 | 95 | Not started |
 | Phase 6 | 65 | Not started |
 | Phase 7 | 60 | Not started |

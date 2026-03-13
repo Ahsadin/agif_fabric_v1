@@ -120,3 +120,34 @@
   - later phase lifecycle behavior
   - later phase governance depth
   - later phase benchmark outcomes
+
+## 2026-03-13 Phase 4
+- Added Phase 4 elastic lifecycle and lineage runtime support:
+  - `intelligence/fabric/lifecycle/`
+  - lifecycle state files under the local runtime state root
+  - governed lineage, veto, need-signal, and rollback snapshot tracking
+- Updated the existing fabric runner and runtime plumbing so the frozen CLI surface now reports and uses:
+  - logical population
+  - active runtime population
+  - steady versus burst active population targets
+  - lineage and lifecycle evidence
+- Added deterministic Phase 4 fixtures, tests, and verification:
+  - `fixtures/document_workflow/phase4/`
+  - `05_testing/test_phase4_lifecycle.py`
+  - `05_testing/PHASE4_LIFECYCLE_EVIDENCE.md`
+  - `scripts/check_phase4_lifecycle.py`
+- Earned the Phase 4 pass token `AGIF_FABRIC_P4_PASS`.
+- Updated the project tracker, checklist, README, pass tokens, and thread records for the Phase 4 close.
+- Locally verified:
+  - dormant logical cells and active runtime cells are stored separately
+  - governed activation, split, merge, hibernate, reactivate, and retire flows work locally
+  - children inherit lineage, role family, trust ancestry, descriptor eligibility, and policy envelope
+  - invalid merge attempts fail closed and record a veto locally
+  - burst active population reaches `48` and returns automatically to steady `24` after consolidation
+  - lifecycle replay matches the committed deterministic history locally
+  - `python3 scripts/check_phase4_lifecycle.py` passes locally
+  - `python3 scripts/check_phase3_foundation.py` still passes locally
+- Assumed only:
+  - Phase 5 reviewed memory depth
+  - long-duration soak behavior
+  - benchmark outcomes beyond the local Phase 4 check

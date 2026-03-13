@@ -1,0 +1,45 @@
+{
+  "fabric_id": "agif-fabric-v1-local",
+  "proof_domain": "document/workflow intelligence",
+  "machine_profile": {
+    "name": "Apple M4 MacBook Air",
+    "ram_gb": 16,
+    "free_disk_gib": 65
+  },
+  "active_population_cap": 24,
+  "logical_population_cap": 128,
+  "memory_caps": {
+    "hot_bytes": 1048576,
+    "warm_bytes": 4194304,
+    "cold_bytes": 16777216
+  },
+  "storage_caps": {
+    "runtime_working_set_gb": 12,
+    "project_footprint_gb": 35
+  },
+  "workspace_policy": {
+    "mode": "bounded_local_workspace_v1"
+  },
+  "governance_policy": {
+    "mode": "phase4_governed_local_v1",
+    "human_boundary": "document/workflow intelligence",
+    "default_governance_approver": "governance:phase4_local_board",
+    "default_tissue_coordinator": "tissue:finance_document_workflow:coordinator",
+    "burst_active_population_cap": 48
+  },
+  "need_signal_policy": {
+    "allowed_signal_kinds": [
+      "overload",
+      "uncertainty",
+      "novelty",
+      "redundancy",
+      "memory_pressure",
+      "trust_risk",
+      "coordination_gap"
+    ]
+  },
+  "blueprint_registry_path": "cells/finance_workflow/blueprint_registry.json",
+  "benchmark_profile": {
+    "name": "phase4_elastic_lifecycle"
+  }
+}

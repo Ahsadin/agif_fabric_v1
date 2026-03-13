@@ -1,0 +1,38 @@
+{
+  "actors": {
+    "proposer": "cell:finance_intake_router",
+    "governance_approver": "governance:phase4_local_board",
+    "tissue_approver": "tissue:finance_document_workflow:coordinator"
+  },
+  "targets": {
+    "steady_active_population": 24,
+    "burst_active_population": 48,
+    "logical_population_cap": 128
+  },
+  "signals": {
+    "split": {
+      "source_type": "tissue",
+      "source_id": "finance_document_workflow",
+      "signal_kind": "overload",
+      "severity": 0.9,
+      "evidence_ref": "fixture:phase4:split",
+      "proposed_action": "split_active_cell",
+      "status": "open",
+      "expires_at_utc": "2026-03-13T01:00:00Z",
+      "resolution_ref": null,
+      "created_utc": "2026-03-13T00:00:00Z"
+    },
+    "merge": {
+      "source_type": "tissue",
+      "source_id": "finance_document_workflow",
+      "signal_kind": "redundancy",
+      "severity": 0.7,
+      "evidence_ref": "fixture:phase4:merge",
+      "proposed_action": "merge_compatible_cells",
+      "status": "open",
+      "expires_at_utc": "2026-03-13T02:00:00Z",
+      "resolution_ref": null,
+      "created_utc": "2026-03-13T00:10:00Z"
+    }
+  }
+}

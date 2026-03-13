@@ -78,10 +78,10 @@
 - [x] Phase 3, Phase 4, and Phase 5 deterministic checks still pass locally after the Phase 6.5 hardening changes.
 
 ## Phase 7
-- [ ] Domain tissues are implemented beyond the current finance workflow seed roles.
-- [ ] The benchmark system is active across the frozen benchmark classes.
-- [ ] Domain tissue tests pass locally.
-- [ ] Benchmark evidence can be generated locally.
+- [x] Domain tissues are implemented beyond the current finance workflow seed roles.
+- [x] The benchmark system is active across the frozen benchmark classes.
+- [x] Domain tissue tests pass locally.
+- [x] Benchmark evidence can be generated locally.
 
 ## Phase 8
 - [ ] Long-run growth stays bounded under repeated local runs.

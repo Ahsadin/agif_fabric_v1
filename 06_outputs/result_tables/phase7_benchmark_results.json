@@ -1,0 +1,660 @@
+{
+  "classes": {
+    "flat_baseline": {
+      "case_results": [
+        {
+          "case_id": "invoice_seed_reference",
+          "correctness_score": 0.875,
+          "descriptor_reuse": {
+            "descriptor_id": null,
+            "eligible": false,
+            "memory_id": null,
+            "used": false
+          },
+          "output_digest": "6d1b679fd7110ee2b9478ba34ee795abde50c14bc3d7928a1337f58154dcdd8e",
+          "result": {
+            "accepted": true,
+            "anomaly_count": 0,
+            "benchmark_class": "flat_baseline",
+            "descriptor_reuse": {
+              "descriptor_id": null,
+              "eligible": false,
+              "memory_id": null,
+              "used": false
+            },
+            "document_class": "vendor_invoice",
+            "document_id": "phase7-doc-001",
+            "extraction_profile": "invoice_extraction",
+            "final_status": "accepted",
+            "governance_action": "not_applicable",
+            "handoff_count": 0,
+            "input_digest": "1d8fc14a6b928268e809334c135f56fc1eb7ff7fefd23e5ba3764e8e4374597b",
+            "normalized_currency": "EUR",
+            "normalized_total": "1200.50",
+            "normalized_vendor": "Northwind Office GmbH",
+            "proof_domain": "document/workflow intelligence",
+            "report_summary": "Flat baseline completed a single bounded pass without real tissues, reviewer hold, or descriptor reuse.",
+            "reviewer_status": "clear",
+            "selected_cells": [],
+            "selected_roles": [],
+            "tissues_used": [],
+            "workflow_name": "finance_document_workflow_phase7"
+          }
+        },
+        {
+          "case_id": "invoice_followup_alias",
+          "correctness_score": 0.5,
+          "descriptor_reuse": {
+            "descriptor_id": null,
+            "eligible": false,
+            "memory_id": null,
+            "used": false
+          },
+          "output_digest": "8a9ebe528d6087161ffb7cae9808200f27c64b3086b0a4d15783ddff213ca8b4",
+          "result": {
+            "accepted": true,
+            "anomaly_count": 1,
+            "benchmark_class": "flat_baseline",
+            "descriptor_reuse": {
+              "descriptor_id": null,
+              "eligible": false,
+              "memory_id": null,
+              "used": false
+            },
+            "document_class": "vendor_invoice",
+            "document_id": "phase7-doc-002",
+            "extraction_profile": "invoice_extraction",
+            "final_status": "accepted",
+            "governance_action": "not_applicable",
+            "handoff_count": 0,
+            "input_digest": "ec35fd33f4d56338b3e81fefe2c975d845fe898f94bebf4a33bba1313ba03db6",
+            "normalized_currency": "",
+            "normalized_total": "761.60",
+            "normalized_vendor": "Northwind Off1ce GmbH",
+            "proof_domain": "document/workflow intelligence",
+            "report_summary": "Flat baseline completed a single bounded pass without real tissues, reviewer hold, or descriptor reuse.",
+            "reviewer_status": "clear_without_review",
+            "selected_cells": [],
+            "selected_roles": [],
+            "tissues_used": [],
+            "workflow_name": "finance_document_workflow_phase7"
+          }
+        },
+        {
+          "case_id": "invoice_anomaly_hold",
+          "correctness_score": 0.625,
+          "descriptor_reuse": {
+            "descriptor_id": null,
+            "eligible": false,
+            "memory_id": null,
+            "used": false
+          },
+          "output_digest": "6909b9ed085514676eb67b41966e326674e162692edfab8f2bdd7cd6e85e6be6",
+          "result": {
+            "accepted": true,
+            "anomaly_count": 2,
+            "benchmark_class": "flat_baseline",
+            "descriptor_reuse": {
+              "descriptor_id": null,
+              "eligible": false,
+              "memory_id": null,
+              "used": false
+            },
+            "document_class": "vendor_invoice",
+            "document_id": "phase7-doc-003",
+            "extraction_profile": "invoice_extraction",
+            "final_status": "accepted",
+            "governance_action": "not_applicable",
+            "handoff_count": 0,
+            "input_digest": "c90ef79aa1408c0bb0be2f59bf1927d7e178576f76dcfe878fdf8f8e5eb277bc",
+            "normalized_currency": "EUR",
+            "normalized_total": "9500.00",
+            "normalized_vendor": "Orbit Travel Claims Ltd",
+            "proof_domain": "document/workflow intelligence",
+            "report_summary": "Flat baseline completed a single bounded pass without real tissues, reviewer hold, or descriptor reuse.",
+            "reviewer_status": "clear_without_review",
+            "selected_cells": [],
+            "selected_roles": [],
+            "tissues_used": [],
+            "workflow_name": "finance_document_workflow_phase7"
+          }
+        }
+      ],
+      "metrics": {
+        "active_logical_population_ratio": 0.0,
+        "bounded_forgetting": 0.0,
+        "descriptor_reuse_rate": 0.0,
+        "governance_success_rate": 0.0,
+        "improvement_from_prior_descriptors": 0.0,
+        "memory_density_gain": 0.0,
+        "replay_determinism": 1.0,
+        "resource_usage": {
+          "estimated_runtime_memory_bytes": 0,
+          "memory_tier_usage_bytes": {
+            "cold": 0,
+            "ephemeral": 0,
+            "hot": 0,
+            "warm": 0
+          }
+        },
+        "split_merge_efficiency": {
+          "detail": "flat baseline has no split or merge path",
+          "measured": false,
+          "value": 0.0
+        },
+        "task_accuracy": 0.666667,
+        "unsafe_action_rate": 0.333333
+      }
+    },
+    "multi_cell_with_bounded_adaptation": {
+      "case_results": [
+        {
+          "case_id": "invoice_seed_reference",
+          "correctness_score": 1.0,
+          "descriptor_reuse": {
+            "descriptor_id": null,
+            "eligible": false,
+            "memory_id": null,
+            "used": false
+          },
+          "output_digest": "d05cb9b716acbaf4e014b1638d4ad64e40bb33d851de98a23d8b7b7f6eaa79d0",
+          "result": {
+            "accepted": true,
+            "anomaly_count": 0,
+            "benchmark_class": "multi_cell_with_bounded_adaptation",
+            "descriptor_reuse": {
+              "descriptor_id": null,
+              "eligible": false,
+              "memory_id": null,
+              "used": false
+            },
+            "document_class": "vendor_invoice",
+            "document_id": "phase7-doc-001",
+            "extraction_profile": "invoice_extraction",
+            "final_status": "accepted",
+            "governance_action": "approved_release",
+            "handoff_count": 5,
+            "input_digest": "1d8fc14a6b928268e809334c135f56fc1eb7ff7fefd23e5ba3764e8e4374597b",
+            "normalized_currency": "EUR",
+            "normalized_total": "1200.50",
+            "normalized_vendor": "Northwind Office GmbH",
+            "proof_domain": "document/workflow intelligence",
+            "report_summary": "multi_cell_with_bounded_adaptation processed phase7-doc-001 as vendor_invoice with governance action approved_release.",
+            "reviewer_status": "clear",
+            "selected_cells": [
+              "finance_anomaly_reviewer",
+              "finance_audit_reporter",
+              "finance_correction_specialist",
+              "finance_document_classifier",
+              "finance_governance_coordinator",
+              "finance_intake_router",
+              "finance_invoice_extractor",
+              "finance_normalizer",
+              "finance_output_formatter",
+              "finance_workspace_guard"
+            ],
+            "selected_roles": [
+              "anomaly_reviewer",
+              "audit_reporter",
+              "correction_specialist",
+              "document_classifier",
+              "field_normalizer",
+              "governance_coordinator",
+              "intake_router",
+              "invoice_extractor",
+              "output_formatter",
+              "workspace_guard"
+            ],
+            "tissues_used": [
+              "finance_anomaly_reviewer_tissue",
+              "finance_extraction_tissue",
+              "finance_intake_routing_tissue",
+              "finance_reporting_output_tissue",
+              "finance_validation_correction_tissue",
+              "finance_workspace_governance_tissue"
+            ],
+            "workflow_name": "finance_document_workflow_phase7"
+          }
+        },
+        {
+          "case_id": "invoice_followup_alias",
+          "correctness_score": 1.0,
+          "descriptor_reuse": {
+            "descriptor_id": "desc_0001",
+            "eligible": true,
+            "memory_id": "mem_0001",
+            "used": true
+          },
+          "output_digest": "d742f165ea1417317983e051e933c814aedbfdd00a26f146a46d4b48772afcd9",
+          "result": {
+            "accepted": true,
+            "anomaly_count": 0,
+            "benchmark_class": "multi_cell_with_bounded_adaptation",
+            "descriptor_reuse": {
+              "descriptor_id": "desc_0001",
+              "eligible": true,
+              "memory_id": "mem_0001",
+              "used": true
+            },
+            "document_class": "vendor_invoice",
+            "document_id": "phase7-doc-002",
+            "extraction_profile": "invoice_extraction",
+            "final_status": "accepted",
+            "governance_action": "approved_release",
+            "handoff_count": 5,
+            "input_digest": "ec35fd33f4d56338b3e81fefe2c975d845fe898f94bebf4a33bba1313ba03db6",
+            "normalized_currency": "EUR",
+            "normalized_total": "761.60",
+            "normalized_vendor": "Northwind Office GmbH",
+            "proof_domain": "document/workflow intelligence",
+            "report_summary": "multi_cell_with_bounded_adaptation processed phase7-doc-002 as vendor_invoice with governance action approved_release.",
+            "reviewer_status": "clear",
+            "selected_cells": [
+              "finance_anomaly_reviewer",
+              "finance_audit_reporter",
+              "finance_correction_specialist",
+              "finance_document_classifier",
+              "finance_governance_coordinator",
+              "finance_intake_router",
+              "finance_invoice_extractor",
+              "finance_normalizer",
+              "finance_output_formatter",
+              "finance_workspace_guard"
+            ],
+            "selected_roles": [
+              "anomaly_reviewer",
+              "audit_reporter",
+              "correction_specialist",
+              "document_classifier",
+              "field_normalizer",
+              "governance_coordinator",
+              "intake_router",
+              "invoice_extractor",
+              "output_formatter",
+              "workspace_guard"
+            ],
+            "tissues_used": [
+              "finance_anomaly_reviewer_tissue",
+              "finance_extraction_tissue",
+              "finance_intake_routing_tissue",
+              "finance_reporting_output_tissue",
+              "finance_validation_correction_tissue",
+              "finance_workspace_governance_tissue"
+            ],
+            "workflow_name": "finance_document_workflow_phase7"
+          }
+        },
+        {
+          "case_id": "invoice_anomaly_hold",
+          "correctness_score": 1.0,
+          "descriptor_reuse": {
+            "descriptor_id": null,
+            "eligible": false,
+            "memory_id": null,
+            "used": false
+          },
+          "output_digest": "5279e695a299d1936f89c87731a2357ccb92da7e329609f19a420f3d811fbf93",
+          "result": {
+            "accepted": false,
+            "anomaly_count": 2,
+            "benchmark_class": "multi_cell_with_bounded_adaptation",
+            "descriptor_reuse": {
+              "descriptor_id": null,
+              "eligible": false,
+              "memory_id": null,
+              "used": false
+            },
+            "document_class": "vendor_invoice",
+            "document_id": "phase7-doc-003",
+            "extraction_profile": "invoice_extraction",
+            "final_status": "hold",
+            "governance_action": "hold_for_review",
+            "handoff_count": 5,
+            "input_digest": "c90ef79aa1408c0bb0be2f59bf1927d7e178576f76dcfe878fdf8f8e5eb277bc",
+            "normalized_currency": "EUR",
+            "normalized_total": "9500.00",
+            "normalized_vendor": "Orbit Travel Claims Ltd",
+            "proof_domain": "document/workflow intelligence",
+            "report_summary": "multi_cell_with_bounded_adaptation processed phase7-doc-003 as vendor_invoice with governance action hold_for_review.",
+            "reviewer_status": "review_required",
+            "selected_cells": [
+              "finance_anomaly_reviewer",
+              "finance_audit_reporter",
+              "finance_correction_specialist",
+              "finance_document_classifier",
+              "finance_governance_coordinator",
+              "finance_intake_router",
+              "finance_invoice_extractor",
+              "finance_normalizer",
+              "finance_output_formatter",
+              "finance_workspace_guard"
+            ],
+            "selected_roles": [
+              "anomaly_reviewer",
+              "audit_reporter",
+              "correction_specialist",
+              "document_classifier",
+              "field_normalizer",
+              "governance_coordinator",
+              "intake_router",
+              "invoice_extractor",
+              "output_formatter",
+              "workspace_guard"
+            ],
+            "tissues_used": [
+              "finance_anomaly_reviewer_tissue",
+              "finance_extraction_tissue",
+              "finance_intake_routing_tissue",
+              "finance_reporting_output_tissue",
+              "finance_validation_correction_tissue",
+              "finance_workspace_governance_tissue"
+            ],
+            "workflow_name": "finance_document_workflow_phase7"
+          }
+        }
+      ],
+      "metrics": {
+        "active_logical_population_ratio": 0.909091,
+        "bounded_forgetting": 0.0,
+        "descriptor_reuse_rate": 1.0,
+        "governance_success_rate": 1.0,
+        "improvement_from_prior_descriptors": 0.625,
+        "memory_density_gain": 0.000897398,
+        "replay_determinism": 1.0,
+        "resource_usage": {
+          "estimated_runtime_memory_bytes": 1507328,
+          "memory_tier_usage_bytes": {
+            "cold": 0,
+            "ephemeral": 13722,
+            "hot": 511,
+            "warm": 3343
+          }
+        },
+        "split_merge_efficiency": {
+          "detail": "placeholder metric uses lifecycle structural counters because Phase 7 did not trigger a benchmarked split or merge event",
+          "measured": false,
+          "value": 0.0
+        },
+        "task_accuracy": 1.0,
+        "unsafe_action_rate": 0.0
+      },
+      "status_refs": {
+        "config_path": "/Users/ahsadin/Documents/Projects/ENF/AGIF/agif_fabric_v1/fixtures/document_workflow/phase7/minimal_fabric_config_with_adaptation.json",
+        "evidence_path": "/var/folders/ps/zc8rzkzd4_q98xc3_5v1x9380000gn/T/tmpyugtwo8g/phase7_evidence.json"
+      }
+    },
+    "multi_cell_without_bounded_adaptation": {
+      "case_results": [
+        {
+          "case_id": "invoice_seed_reference",
+          "correctness_score": 1.0,
+          "descriptor_reuse": {
+            "descriptor_id": null,
+            "eligible": false,
+            "memory_id": null,
+            "used": false
+          },
+          "output_digest": "7ad412ad2a0917ef6383378e4c390639525fe26af9b870b19287b851ade5afa0",
+          "result": {
+            "accepted": true,
+            "anomaly_count": 0,
+            "benchmark_class": "multi_cell_without_bounded_adaptation",
+            "descriptor_reuse": {
+              "descriptor_id": null,
+              "eligible": false,
+              "memory_id": null,
+              "used": false
+            },
+            "document_class": "vendor_invoice",
+            "document_id": "phase7-doc-001",
+            "extraction_profile": "invoice_extraction",
+            "final_status": "accepted",
+            "governance_action": "approved_release",
+            "handoff_count": 5,
+            "input_digest": "1d8fc14a6b928268e809334c135f56fc1eb7ff7fefd23e5ba3764e8e4374597b",
+            "normalized_currency": "EUR",
+            "normalized_total": "1200.50",
+            "normalized_vendor": "Northwind Office GmbH",
+            "proof_domain": "document/workflow intelligence",
+            "report_summary": "multi_cell_without_bounded_adaptation processed phase7-doc-001 as vendor_invoice with governance action approved_release.",
+            "reviewer_status": "clear",
+            "selected_cells": [
+              "finance_anomaly_reviewer",
+              "finance_audit_reporter",
+              "finance_correction_specialist",
+              "finance_document_classifier",
+              "finance_governance_coordinator",
+              "finance_intake_router",
+              "finance_invoice_extractor",
+              "finance_normalizer",
+              "finance_output_formatter",
+              "finance_workspace_guard"
+            ],
+            "selected_roles": [
+              "anomaly_reviewer",
+              "audit_reporter",
+              "correction_specialist",
+              "document_classifier",
+              "field_normalizer",
+              "governance_coordinator",
+              "intake_router",
+              "invoice_extractor",
+              "output_formatter",
+              "workspace_guard"
+            ],
+            "tissues_used": [
+              "finance_anomaly_reviewer_tissue",
+              "finance_extraction_tissue",
+              "finance_intake_routing_tissue",
+              "finance_reporting_output_tissue",
+              "finance_validation_correction_tissue",
+              "finance_workspace_governance_tissue"
+            ],
+            "workflow_name": "finance_document_workflow_phase7"
+          }
+        },
+        {
+          "case_id": "invoice_followup_alias",
+          "correctness_score": 0.375,
+          "descriptor_reuse": {
+            "descriptor_id": null,
+            "eligible": false,
+            "memory_id": null,
+            "used": false
+          },
+          "output_digest": "e15f864d46dbf962f2b632977461a37e23c682b0cb47466e6426dca8eddc55e8",
+          "result": {
+            "accepted": false,
+            "anomaly_count": 1,
+            "benchmark_class": "multi_cell_without_bounded_adaptation",
+            "descriptor_reuse": {
+              "descriptor_id": null,
+              "eligible": false,
+              "memory_id": null,
+              "used": false
+            },
+            "document_class": "vendor_invoice",
+            "document_id": "phase7-doc-002",
+            "extraction_profile": "invoice_extraction",
+            "final_status": "hold",
+            "governance_action": "hold_for_review",
+            "handoff_count": 5,
+            "input_digest": "ec35fd33f4d56338b3e81fefe2c975d845fe898f94bebf4a33bba1313ba03db6",
+            "normalized_currency": "",
+            "normalized_total": "761.60",
+            "normalized_vendor": "Northwind Off1ce GmbH",
+            "proof_domain": "document/workflow intelligence",
+            "report_summary": "multi_cell_without_bounded_adaptation processed phase7-doc-002 as vendor_invoice with governance action hold_for_review.",
+            "reviewer_status": "review_required",
+            "selected_cells": [
+              "finance_anomaly_reviewer",
+              "finance_audit_reporter",
+              "finance_correction_specialist",
+              "finance_document_classifier",
+              "finance_governance_coordinator",
+              "finance_intake_router",
+              "finance_invoice_extractor",
+              "finance_normalizer",
+              "finance_output_formatter",
+              "finance_workspace_guard"
+            ],
+            "selected_roles": [
+              "anomaly_reviewer",
+              "audit_reporter",
+              "correction_specialist",
+              "document_classifier",
+              "field_normalizer",
+              "governance_coordinator",
+              "intake_router",
+              "invoice_extractor",
+              "output_formatter",
+              "workspace_guard"
+            ],
+            "tissues_used": [
+              "finance_anomaly_reviewer_tissue",
+              "finance_extraction_tissue",
+              "finance_intake_routing_tissue",
+              "finance_reporting_output_tissue",
+              "finance_validation_correction_tissue",
+              "finance_workspace_governance_tissue"
+            ],
+            "workflow_name": "finance_document_workflow_phase7"
+          }
+        },
+        {
+          "case_id": "invoice_anomaly_hold",
+          "correctness_score": 1.0,
+          "descriptor_reuse": {
+            "descriptor_id": null,
+            "eligible": false,
+            "memory_id": null,
+            "used": false
+          },
+          "output_digest": "dc6560b53e780302950e359a8e767cb3a6cf581a95966f9722234261dd456075",
+          "result": {
+            "accepted": false,
+            "anomaly_count": 2,
+            "benchmark_class": "multi_cell_without_bounded_adaptation",
+            "descriptor_reuse": {
+              "descriptor_id": null,
+              "eligible": false,
+              "memory_id": null,
+              "used": false
+            },
+            "document_class": "vendor_invoice",
+            "document_id": "phase7-doc-003",
+            "extraction_profile": "invoice_extraction",
+            "final_status": "hold",
+            "governance_action": "hold_for_review",
+            "handoff_count": 5,
+            "input_digest": "c90ef79aa1408c0bb0be2f59bf1927d7e178576f76dcfe878fdf8f8e5eb277bc",
+            "normalized_currency": "EUR",
+            "normalized_total": "9500.00",
+            "normalized_vendor": "Orbit Travel Claims Ltd",
+            "proof_domain": "document/workflow intelligence",
+            "report_summary": "multi_cell_without_bounded_adaptation processed phase7-doc-003 as vendor_invoice with governance action hold_for_review.",
+            "reviewer_status": "review_required",
+            "selected_cells": [
+              "finance_anomaly_reviewer",
+              "finance_audit_reporter",
+              "finance_correction_specialist",
+              "finance_document_classifier",
+              "finance_governance_coordinator",
+              "finance_intake_router",
+              "finance_invoice_extractor",
+              "finance_normalizer",
+              "finance_output_formatter",
+              "finance_workspace_guard"
+            ],
+            "selected_roles": [
+              "anomaly_reviewer",
+              "audit_reporter",
+              "correction_specialist",
+              "document_classifier",
+              "field_normalizer",
+              "governance_coordinator",
+              "intake_router",
+              "invoice_extractor",
+              "output_formatter",
+              "workspace_guard"
+            ],
+            "tissues_used": [
+              "finance_anomaly_reviewer_tissue",
+              "finance_extraction_tissue",
+              "finance_intake_routing_tissue",
+              "finance_reporting_output_tissue",
+              "finance_validation_correction_tissue",
+              "finance_workspace_governance_tissue"
+            ],
+            "workflow_name": "finance_document_workflow_phase7"
+          }
+        }
+      ],
+      "metrics": {
+        "active_logical_population_ratio": 0.909091,
+        "bounded_forgetting": 0.0,
+        "descriptor_reuse_rate": 0.0,
+        "governance_success_rate": 0.666667,
+        "improvement_from_prior_descriptors": 0.0,
+        "memory_density_gain": 0.000938735,
+        "replay_determinism": 1.0,
+        "resource_usage": {
+          "estimated_runtime_memory_bytes": 1507328,
+          "memory_tier_usage_bytes": {
+            "cold": 0,
+            "ephemeral": 13706,
+            "hot": 2046,
+            "warm": 2530
+          }
+        },
+        "split_merge_efficiency": {
+          "detail": "placeholder metric uses lifecycle structural counters because Phase 7 did not trigger a benchmarked split or merge event",
+          "measured": false,
+          "value": 0.0
+        },
+        "task_accuracy": 0.791667,
+        "unsafe_action_rate": 0.0
+      },
+      "status_refs": {
+        "config_path": "/Users/ahsadin/Documents/Projects/ENF/AGIF/agif_fabric_v1/fixtures/document_workflow/phase7/minimal_fabric_config_no_adaptation.json",
+        "evidence_path": "/var/folders/ps/zc8rzkzd4_q98xc3_5v1x9380000gn/T/tmp8yckfpn6/phase7_evidence.json"
+      }
+    }
+  },
+  "comparisons": {
+    "case_rows": [
+      {
+        "case_id": "invoice_seed_reference",
+        "flat_baseline_score": 0.875,
+        "multi_cell_no_adapt_score": 1.0,
+        "multi_cell_with_adapt_score": 1.0,
+        "with_adapt_descriptor_reuse": false
+      },
+      {
+        "case_id": "invoice_followup_alias",
+        "flat_baseline_score": 0.5,
+        "multi_cell_no_adapt_score": 0.375,
+        "multi_cell_with_adapt_score": 1.0,
+        "with_adapt_descriptor_reuse": true
+      },
+      {
+        "case_id": "invoice_anomaly_hold",
+        "flat_baseline_score": 0.625,
+        "multi_cell_no_adapt_score": 1.0,
+        "multi_cell_with_adapt_score": 1.0,
+        "with_adapt_descriptor_reuse": false
+      }
+    ],
+    "descriptor_change_cases": [
+      "invoice_followup_alias"
+    ],
+    "fabric_beats_baseline_cases": [
+      "invoice_seed_reference",
+      "invoice_followup_alias",
+      "invoice_anomaly_hold"
+    ],
+    "usefulness_gate_passed": true
+  },
+  "created_utc": "2026-03-13T08:49:44Z",
+  "suite_id": "phase7_finance_document_benchmark_v1"
+}

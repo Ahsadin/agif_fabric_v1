@@ -1,0 +1,60 @@
+#!/usr/bin/env python3
+"""Deterministic local check for Phase 7 tissues, benchmarks, and regressions."""
+
+from __future__ import annotations
+
+import subprocess
+import sys
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+RESULT_TABLE_DIR = REPO_ROOT / "06_outputs" / "result_tables"
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from intelligence.fabric.benchmarking.phase7 import run_phase7_benchmarks, write_phase7_result_tables
+
+
+def main() -> int:
+    commands = [
+        [
+            sys.executable,
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            str(REPO_ROOT / "05_testing"),
+            "-p",
+            "test_phase7_benchmarks.py",
+        ],
+        [sys.executable, str(REPO_ROOT / "scripts" / "check_phase6_routing_authority.py")],
+        [sys.executable, str(REPO_ROOT / "scripts" / "check_phase5_memory.py")],
+        [sys.executable, str(REPO_ROOT / "scripts" / "check_phase4_lifecycle.py")],
+        [sys.executable, str(REPO_ROOT / "scripts" / "check_phase3_foundation.py")],
+    ]
+    for command in commands:
+        result = subprocess.run(command, cwd=str(REPO_ROOT), check=False)
+        if result.returncode != 0:
+            return result.returncode
+
+    results = run_phase7_benchmarks()
+    write_phase7_result_tables(results, output_dir=RESULT_TABLE_DIR)
+    if not results["comparisons"]["usefulness_gate_passed"]:
+        print("Phase 7 usefulness gate failed.", file=sys.stderr)
+        return 1
+    with_adapt = results["classes"]["multi_cell_with_bounded_adaptation"]["metrics"]
+    if with_adapt["replay_determinism"] != 1.0:
+        print("Phase 7 replay determinism check failed.", file=sys.stderr)
+        return 1
+    if with_adapt["descriptor_reuse_rate"] <= 0.0:
+        print("Phase 7 descriptor reuse check failed.", file=sys.stderr)
+        return 1
+    if with_adapt["bounded_forgetting"] > 0.1:
+        print("Phase 7 bounded forgetting threshold failed.", file=sys.stderr)
+        return 1
+    print("AGIF_FABRIC_P7_PASS")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

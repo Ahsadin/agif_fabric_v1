@@ -24,6 +24,32 @@ CONFIDENCE_BANDS = (
     (0.32, "low"),
 )
 
+STAGE_ROLE_HINTS = {
+    "intake_classification": ("classifier",),
+    "intake_routing": ("router",),
+    "extraction": ("extractor",),
+    "normalization": ("normalizer",),
+    "correction": ("correction",),
+    "anomaly_review": ("anomaly", "reviewer"),
+    "workspace_guard": ("workspace_guard",),
+    "governance_review": ("governance",),
+    "reporting": ("reporter",),
+    "output_formatting": ("formatter", "output"),
+}
+
+STAGE_SELECTION_FLOOR = {
+    "intake_classification": 0.34,
+    "intake_routing": 0.34,
+    "extraction": 0.36,
+    "normalization": 0.34,
+    "correction": 0.34,
+    "anomaly_review": 0.34,
+    "workspace_guard": 0.32,
+    "governance_review": 0.32,
+    "reporting": 0.32,
+    "output_formatting": 0.32,
+}
+
 
 class RoutingEngine:
     """Routes workflow demand across logical cells using Phase 6 context."""
@@ -344,6 +370,221 @@ class RoutingEngine:
             {"schema_version": "agif.fabric.routing_decisions.v1", "entries": []},
         )
         return [deepcopy(item) for item in payload["entries"]]
+
+    def route_tissue_stage(
+        self,
+        *,
+        stage_id: str,
+        tissue_id: str,
+        workflow_id: str,
+        workflow_payload: dict[str, Any],
+        workspace_context: dict[str, Any],
+        need_manager: NeedSignalManager | None = None,
+        candidate_cell_ids: list[str] | None = None,
+    ) -> dict[str, Any]:
+        logical_cells = self._load_logical_cells()
+        runtime_states = self._load_runtime_states()
+        lineage_metrics = self._load_lineage_metrics()
+        routing_memory = self._load_routing_memory()
+        active_signals = [] if need_manager is None else need_manager.active_signals()
+        needs_by_kind = self._group_needs(active_signals)
+        candidate_contexts = self._build_candidate_contexts(
+            logical_cells=logical_cells,
+            runtime_states=runtime_states,
+            lineage_metrics=lineage_metrics,
+        )
+        document_class = str(workspace_context.get("document_class", ""))
+        candidate_scores: list[dict[str, Any]] = []
+        for candidate in candidate_contexts:
+            if tissue_id not in candidate.get("allowed_tissues", []):
+                continue
+            if candidate_cell_ids and candidate["cell_id"] not in candidate_cell_ids:
+                continue
+            stage_fit = self._stage_fit(
+                stage_id=stage_id,
+                candidate=candidate,
+                workflow_payload=workflow_payload,
+                workspace_context=workspace_context,
+            )
+            workspace_fit = self._stage_workspace_fit(
+                stage_id=stage_id,
+                tissue_id=tissue_id,
+                candidate=candidate,
+                workflow_payload=workflow_payload,
+                workspace_context=workspace_context,
+            )
+            current_load = self._current_load(candidate, workflow_id=workflow_id)
+            need_pressure = self._need_support(candidate=candidate, needs_by_kind=needs_by_kind)
+            route_memory_info = self._route_memory_feedback(
+                routing_memory=routing_memory,
+                cell_id=str(candidate["cell_id"]),
+            )
+            utility_trace = self.utility.score_candidate(
+                profile_ref=candidate["utility_profile_ref"],
+                role_fit=stage_fit,
+                descriptor_usefulness=0.0,
+                trust_score=float(candidate["trust_score"]),
+                current_load=current_load,
+                need_pressure=need_pressure,
+                workspace_fit=workspace_fit,
+                activation_cost_ms=int(candidate["activation_cost_ms"]),
+                working_memory_bytes=int(candidate["working_memory_bytes"]),
+                policy_risk=policy_risk_from_envelope(candidate["policy_envelope"], action="route"),
+                novelty_signal=self._novelty_signal(needs_by_kind),
+                historical_feedback=route_memory_info["score"],
+            )
+            total_score = clamp_score(
+                (0.42 * stage_fit)
+                + (0.16 * workspace_fit)
+                + (0.12 * float(candidate["trust_score"]))
+                + (0.1 * need_pressure)
+                + (0.08 * route_memory_info["score"])
+                + (0.04 * float(candidate["lineage_usefulness_score"]))
+                + (0.18 * float(utility_trace["utility_score"]))
+                - (0.12 * current_load)
+            )
+            reasons = [
+                f"stage_fit={clamp_score(stage_fit)}",
+                f"workspace_fit={clamp_score(workspace_fit)}",
+                f"trust={clamp_score(float(candidate['trust_score']))}",
+                f"need_pressure={clamp_score(need_pressure)}",
+                f"load={clamp_score(current_load)}",
+                f"routing_memory={clamp_score(route_memory_info['score'])}",
+                f"utility={clamp_score(float(utility_trace['utility_score']))}",
+            ]
+            if document_class:
+                reasons.append(f"document_class={document_class}")
+            candidate_scores.append(
+                {
+                    "cell_id": candidate["cell_id"],
+                    "lineage_id": candidate["lineage_id"],
+                    "role_name": candidate["role_name"],
+                    "runtime_state": candidate["runtime_state"],
+                    "stage_fit": clamp_score(stage_fit),
+                    "workspace_fit": clamp_score(workspace_fit),
+                    "trust_score": clamp_score(float(candidate["trust_score"])),
+                    "current_load": clamp_score(current_load),
+                    "need_pressure": clamp_score(need_pressure),
+                    "routing_memory": route_memory_info,
+                    "lineage_usefulness_score": clamp_score(float(candidate["lineage_usefulness_score"])),
+                    "descriptor_provenance": 0.0,
+                    "utility": utility_trace,
+                    "total_score": total_score,
+                    "decision_band": utility_band(total_score),
+                    "reasons": reasons,
+                    "rejected_for": self._stage_rejected_for(
+                        stage_fit=stage_fit,
+                        total_score=total_score,
+                        current_load=current_load,
+                    ),
+                }
+            )
+        if not candidate_scores and need_manager is not None:
+            created_utc = utc_now_iso()
+            created_signal = need_manager.record_signal(
+                signal={
+                    "need_signal_id": f"{workflow_id}:{stage_id}:coordination-gap",
+                    "source_type": "tissue",
+                    "source_id": tissue_id,
+                    "signal_kind": "coordination_gap",
+                    "severity": 0.92,
+                    "evidence_ref": f"phase7:{workflow_id}:{stage_id}:no_candidate",
+                    "proposed_action": "reactivate_or_review_tissue_membership",
+                    "status": "open",
+                    "expires_at_utc": created_utc,
+                    "resolution_ref": None,
+                    "created_utc": created_utc,
+                },
+                actor=f"routing:{stage_id}",
+            )
+            active_signals.append(created_signal)
+        ranked = sorted(candidate_scores, key=lambda item: (-float(item["total_score"]), str(item["cell_id"])))
+        decision_id = f"routing_stage_{len(self.load_decisions()) + 1:05d}"
+        top_candidate = None if not ranked else ranked[0]
+        if top_candidate is None:
+            decision = {
+                "decision_id": decision_id,
+                "workflow_id": workflow_id,
+                "workflow_name": str(workflow_payload.get("workflow_name", "document_workflow")),
+                "stage_id": stage_id,
+                "tissue_id": tissue_id,
+                "route_cell_id": None,
+                "selected_cell_id": None,
+                "selected_cells": [],
+                "selection_mode": "abstained",
+                "route_confidence": 0.0,
+                "confidence_band": "abstain",
+                "decision_reason": f"no candidate available for {stage_id}",
+                "candidate_scores": [],
+                "rejected_candidates": [],
+                "need_signal_ids": [item["need_signal_id"] for item in active_signals],
+                "descriptor_refs_used": [],
+                "authority_review_ids": [],
+                "workspace_context": {
+                    "document_class": document_class,
+                    "current_stage": str(workspace_context.get("current_stage", "")),
+                },
+            }
+            self._append_decision(decision)
+            self._record_decision_memory(
+                decision_id=decision_id,
+                route_cell_id=None,
+                selected_cells=[],
+                route_confidence=0.0,
+                confidence_band="abstain",
+                selection_mode="abstained",
+                descriptor_refs_used=[],
+            )
+            return decision
+        second_score = 0.0 if len(ranked) < 2 else float(ranked[1]["total_score"])
+        route_confidence = self._route_confidence(
+            top_route={
+                **top_candidate,
+                "descriptor_provenance": 0.0,
+            },
+            second_route_score=second_score,
+        )
+        selection_mode = "selected"
+        decision_reason = f"selected {top_candidate['cell_id']} for {stage_id}"
+        if float(top_candidate["total_score"]) < STAGE_SELECTION_FLOOR.get(stage_id, 0.32):
+            selection_mode = "abstained"
+            route_confidence = min(route_confidence, 0.31)
+            decision_reason = f"abstained because {top_candidate['cell_id']} stayed below the {stage_id} floor"
+        confidence_band = self._confidence_band(route_confidence)
+        decision = {
+            "decision_id": decision_id,
+            "workflow_id": workflow_id,
+            "workflow_name": str(workflow_payload.get("workflow_name", "document_workflow")),
+            "stage_id": stage_id,
+            "tissue_id": tissue_id,
+            "route_cell_id": None if selection_mode != "selected" else str(top_candidate["cell_id"]),
+            "selected_cell_id": None if selection_mode != "selected" else str(top_candidate["cell_id"]),
+            "selected_cells": [] if selection_mode != "selected" else [str(top_candidate["cell_id"])],
+            "selection_mode": selection_mode,
+            "route_confidence": clamp_score(route_confidence),
+            "confidence_band": confidence_band,
+            "decision_reason": decision_reason,
+            "candidate_scores": ranked,
+            "rejected_candidates": self._summarize_rejections(ranked),
+            "need_signal_ids": [item["need_signal_id"] for item in active_signals],
+            "descriptor_refs_used": [],
+            "authority_review_ids": [],
+            "workspace_context": {
+                "document_class": document_class,
+                "current_stage": str(workspace_context.get("current_stage", "")),
+            },
+        }
+        self._append_decision(decision)
+        self._record_decision_memory(
+            decision_id=decision_id,
+            route_cell_id=decision["route_cell_id"],
+            selected_cells=decision["selected_cells"],
+            route_confidence=decision["route_confidence"],
+            confidence_band=decision["confidence_band"],
+            selection_mode=selection_mode,
+            descriptor_refs_used=[],
+        )
+        return decision
 
     def summary(self) -> dict[str, Any]:
         decisions = self.load_decisions()
@@ -782,6 +1023,81 @@ class RoutingEngine:
             return float(total_raw) >= 500.0
         except ValueError:
             return False
+
+    def _stage_fit(
+        self,
+        *,
+        stage_id: str,
+        candidate: dict[str, Any],
+        workflow_payload: dict[str, Any],
+        workspace_context: dict[str, Any],
+    ) -> float:
+        score = 0.12
+        role_name = str(candidate.get("role_name", "")).lower()
+        cell_id = str(candidate.get("cell_id", "")).lower()
+        for token in STAGE_ROLE_HINTS.get(stage_id, ()):
+            if token in role_name or token in cell_id:
+                score += 0.56
+                break
+        document_class = str(workspace_context.get("document_class", "")).lower()
+        inputs = workflow_payload.get("inputs", {})
+        if not isinstance(inputs, dict):
+            inputs = {}
+        document_type = str(inputs.get("document_type", "")).lower()
+        if stage_id == "extraction":
+            if "invoice" in document_class and "invoice" in role_name:
+                score += 0.22
+            if "receipt" in document_class and "receipt" in role_name:
+                score += 0.22
+            if document_type and document_type in role_name:
+                score += 0.08
+        if stage_id == "governance_review" and "policy" in str(candidate.get("trust_ref", "")):
+            score += 0.08
+        if stage_id == "anomaly_review" and (
+            bool(workspace_context.get("anomalies")) or str(workspace_context.get("reviewer_status", "")) == "review_required"
+        ):
+            score += 0.1
+        return clamp_score(score)
+
+    def _stage_workspace_fit(
+        self,
+        *,
+        stage_id: str,
+        tissue_id: str,
+        candidate: dict[str, Any],
+        workflow_payload: dict[str, Any],
+        workspace_context: dict[str, Any],
+    ) -> float:
+        score = 0.2 if tissue_id in candidate.get("allowed_tissues", []) else 0.0
+        if stage_id in {"intake_routing", "extraction"} and str(workspace_context.get("document_class", "")):
+            score += 0.18
+        if stage_id in {"normalization", "correction"} and workspace_context.get("extracted_fields"):
+            score += 0.2
+        if stage_id == "anomaly_review" and workspace_context.get("normalized_fields"):
+            score += 0.24
+        if stage_id in {"workspace_guard", "governance_review"} and workspace_context.get("handoff_count", 0) >= 3:
+            score += 0.2
+        if stage_id in {"reporting", "output_formatting"} and workspace_context.get("governance_action"):
+            score += 0.24
+        if self._requires_audit(workflow_payload) and stage_id in {"anomaly_review", "reporting"}:
+            score += 0.08
+        return clamp_score(score)
+
+    def _stage_rejected_for(
+        self,
+        *,
+        stage_fit: float,
+        total_score: float,
+        current_load: float,
+    ) -> list[str]:
+        reasons: list[str] = []
+        if stage_fit < 0.28:
+            reasons.append("low_stage_fit")
+        if total_score < 0.28:
+            reasons.append("below_stage_floor")
+        if current_load >= 0.8:
+            reasons.append("high_load")
+        return reasons
 
     def _resolve_routing_signals(
         self,

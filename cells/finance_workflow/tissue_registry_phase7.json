@@ -1,0 +1,65 @@
+{
+  "registry_version": "agif.fabric.tissues.phase7.v1",
+  "workflow_domain": "finance_document_workflow",
+  "tissues": [
+    {
+      "tissue_id": "finance_intake_routing_tissue",
+      "workflow_stage": "intake_routing",
+      "responsibility": "Accept finance documents, classify them, and choose the bounded extraction path.",
+      "member_cells": [
+        "finance_document_classifier",
+        "finance_intake_router"
+      ],
+      "handoff_to": "finance_extraction_tissue"
+    },
+    {
+      "tissue_id": "finance_extraction_tissue",
+      "workflow_stage": "extraction",
+      "responsibility": "Extract bounded finance fields from invoices and receipts.",
+      "member_cells": [
+        "finance_invoice_extractor",
+        "finance_receipt_extractor"
+      ],
+      "handoff_to": "finance_validation_correction_tissue"
+    },
+    {
+      "tissue_id": "finance_validation_correction_tissue",
+      "workflow_stage": "validation_correction",
+      "responsibility": "Normalize fields, apply bounded corrections, and prepare reusable correction memory.",
+      "member_cells": [
+        "finance_normalizer",
+        "finance_correction_specialist"
+      ],
+      "handoff_to": "finance_anomaly_reviewer_tissue"
+    },
+    {
+      "tissue_id": "finance_anomaly_reviewer_tissue",
+      "workflow_stage": "anomaly_review",
+      "responsibility": "Detect bounded anomalies and decide whether reviewer escalation is required.",
+      "member_cells": [
+        "finance_anomaly_reviewer"
+      ],
+      "handoff_to": "finance_workspace_governance_tissue"
+    },
+    {
+      "tissue_id": "finance_workspace_governance_tissue",
+      "workflow_stage": "workspace_governance",
+      "responsibility": "Check workspace completeness and keep governance active before release or hold.",
+      "member_cells": [
+        "finance_workspace_guard",
+        "finance_governance_coordinator"
+      ],
+      "handoff_to": "finance_reporting_output_tissue"
+    },
+    {
+      "tissue_id": "finance_reporting_output_tissue",
+      "workflow_stage": "reporting_output",
+      "responsibility": "Produce the bounded audit summary and final output payload.",
+      "member_cells": [
+        "finance_audit_reporter",
+        "finance_output_formatter"
+      ],
+      "handoff_to": null
+    }
+  ]
+}

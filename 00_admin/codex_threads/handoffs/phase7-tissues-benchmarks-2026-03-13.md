@@ -1,0 +1,29 @@
+# Phase 7 Tissues And Benchmarks Handoff
+
+- Thread ID: `phase7-tissues-benchmarks-2026-03-13`
+- Status: complete
+- Scope: Phase 7 only
+- Progress units: `525/600`
+- Pass token earned: `AGIF_FABRIC_P7_PASS`
+- Local verification:
+  - `python3 scripts/check_phase7_benchmarks.py`
+  - `python3 scripts/check_phase6_routing_authority.py` through the chained Phase 7 check
+  - `python3 scripts/check_phase5_memory.py` through the chained Phase 7 check
+  - `python3 scripts/check_phase4_lifecycle.py` through the chained Phase 7 check
+  - `python3 scripts/check_phase3_foundation.py` through the chained Phase 7 check
+- Key outcome:
+  - real finance tissues now exist with explicit shared-workspace handoffs and bounded stage responsibilities
+  - the finance workflow now runs end to end through the fabric instead of only seed-level routing roles
+  - the frozen benchmark classes now run deterministically against the same finance cases
+  - descriptor reuse now changes a later result on `invoice_followup_alias`
+  - governed coordination now beats the flat baseline on `invoice_anomaly_hold`
+- Output refs:
+  - `05_testing/PHASE7_TISSUES_BENCHMARK_EVIDENCE.md`
+  - `06_outputs/result_tables/phase7_benchmark_results.md`
+  - `06_outputs/result_tables/phase7_benchmark_results.json`
+- Remaining weak:
+  - split/merge efficiency is still a bounded placeholder metric in Phase 7
+  - the deterministic benchmark proof is short-run and does not claim later soak or reproducibility closure
+- Assumed only:
+  - Phase 8 long-run growth and soak behavior
+  - Phase 9 paper and reproducibility deliverables

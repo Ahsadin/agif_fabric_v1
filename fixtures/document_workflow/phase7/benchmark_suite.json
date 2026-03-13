@@ -1,0 +1,53 @@
+{
+  "suite_id": "phase7_finance_document_benchmark_v1",
+  "cases": [
+    {
+      "case_id": "invoice_seed_reference",
+      "payload_path": "case_invoice_seed_reference.json",
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "1200.50",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release",
+      "descriptor_opportunity": false
+    },
+    {
+      "case_id": "invoice_followup_alias",
+      "payload_path": "case_invoice_followup_alias.json",
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "761.60",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release",
+      "descriptor_opportunity": true
+    },
+    {
+      "case_id": "invoice_anomaly_hold",
+      "payload_path": "case_invoice_anomaly_hold.json",
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Orbit Travel Claims Ltd",
+        "normalized_currency": "EUR",
+        "normalized_total": "9500.00",
+        "reviewer_status": "review_required",
+        "governance_action": "hold_for_review",
+        "final_status": "hold"
+      },
+      "expected_governance": "hold_for_review",
+      "descriptor_opportunity": false
+    }
+  ]
+}

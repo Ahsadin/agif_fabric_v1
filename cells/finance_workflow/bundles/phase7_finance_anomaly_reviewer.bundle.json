@@ -1,0 +1,7 @@
+{
+  "bundle_id": "phase7_finance_anomaly_reviewer",
+  "bundle_version": "phase7-domain-v1",
+  "kind": "phase7_finance_tissue_bundle",
+  "role_name": "anomaly_reviewer",
+  "tissue_id": "finance_anomaly_reviewer_tissue"
+}

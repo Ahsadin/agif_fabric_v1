@@ -36,6 +36,7 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Phase 6: complete and locally verified
 - Phase 4.5 + 5.5 hardening: complete and locally verified without changing project units
 - Phase 6.5 hardening: complete and locally verified without changing project units
+- Phase 7: complete and locally verified
 
 ## Phase 3 Foundation
 - Local runner entrypoint: `runner/cell`
@@ -83,6 +84,23 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Phase 6.5 hardening adds route confidence, explicit abstain or escalate paths, recurring-need detection, route success or failure memory, descriptor provenance influence, lineage-aware routing and authority review, and authority veto-pattern memory.
 - Deterministic Phase 6 fixtures now live under `fixtures/document_workflow/phase6/`.
 - Deterministic local Phase 6 check script: `scripts/check_phase6_routing_authority.py`
+
+## Phase 7 Domain Tissues And Benchmarks
+- Real finance tissues now exist through dedicated Phase 7 registries for:
+  - intake and routing
+  - extraction
+  - validation and correction
+  - anomaly and reviewer
+  - workspace and governance
+  - reporting and output
+- The bounded finance workflow now runs end to end through the actual tissue stages and shared workspace with traceable handoffs.
+- The frozen benchmark classes are now locally runnable and comparable:
+  - flat baseline
+  - multi-cell fabric without bounded adaptation
+  - multi-cell fabric with bounded adaptation and descriptor sharing
+- Deterministic Phase 7 fixtures now live under `fixtures/document_workflow/phase7/`.
+- Deterministic local Phase 7 check script: `scripts/check_phase7_benchmarks.py`
+- Current Phase 7 result tables now live under `06_outputs/result_tables/phase7_benchmark_results.md` and `06_outputs/result_tables/phase7_benchmark_results.json`.
 
 ## Phase 2 Freeze Set
 - `03_design/AGIF_V1_ARCHITECTURE.md`
@@ -133,5 +151,6 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Phase 6 verification method: run the deterministic routing and authority check and confirm the Phase 6 pass token and evidence note.
 - Hardening verification method: run the Phase 4 and Phase 5 deterministic checks again and confirm `05_testing/PHASE45_HARDENING_EVIDENCE.md`.
 - Phase 6.5 hardening verification method: run `python3 scripts/check_phase6_routing_authority.py` and confirm `05_testing/PHASE65_HARDENING_EVIDENCE.md`.
+- Phase 7 verification method: run `python3 scripts/check_phase7_benchmarks.py` and confirm `05_testing/PHASE7_TISSUES_BENCHMARK_EVIDENCE.md`.
 - Local verification status is recorded in `01_plan/PROGRESS_TRACKER.md` and `CHANGELOG.md`.
-- Later runtime behavior beyond the Phase 6 governed routing runtime remains assumed only until later phases verify it.
+- Later long-run growth and paper or reproducibility behavior beyond the Phase 7 deterministic benchmark proof remain assumed only until later phases verify them.

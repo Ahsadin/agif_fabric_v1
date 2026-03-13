@@ -17,6 +17,12 @@ from intelligence.fabric.common import (
     utc_now_iso,
     write_json_atomic,
 )
+from intelligence.fabric.domain import (
+    execute_phase7_workflow,
+    is_phase7_profile,
+    phase7_workflow_identity,
+    replay_phase7_workflow,
+)
 from intelligence.fabric.execution.bounded_executor import execute_foundation_workflow
 from intelligence.fabric.governance.authority import AuthorityEngine
 from intelligence.fabric.lifecycle import FabricLifecycleManager
@@ -184,39 +190,71 @@ def command_run() -> dict[str, Any]:
     routing_engine = RoutingEngine(store=store, state=state, config=config, registry=registry)
     memory_manager = FabricMemoryManager(store=store, state=state, config=config)
 
-    execution = execute_foundation_workflow(
-        workflow_payload=workflow_payload,
-        blueprints=registry["blueprints"],
-        proof_domain=config["proof_domain"],
-    )
-    workflow_id = execution["workflow_id"]
-    routing_decision = routing_engine.route_workflow(
-        workflow_id=workflow_id,
-        workflow_payload=workflow_payload,
-        need_manager=need_manager,
-        authority_engine=authority_engine,
-        memory_manager=memory_manager,
-    )
-    activation = lifecycle.activate_for_workflow(
-        cell_ids=list(routing_decision["selected_cells"]),
-        workflow_id=workflow_id,
-        authority_engine=authority_engine,
-    )
-    workspace_snapshot = build_workspace_snapshot(
-        workflow_id=workflow_id,
-        workflow_payload=workflow_payload,
-        selected_blueprints=[
-            {
-                "cell_id": blueprint["cell_id"],
-                "role_name": blueprint["role_name"],
-                "role_family": blueprint["role_family"],
-            }
-            for blueprint in registry["blueprints"]
-            if blueprint["cell_id"] in routing_decision["selected_cells"]
-        ],
-    )
-    workspace_path = store.workspace_path(state["fabric_id"], workflow_id)
-    write_json_atomic(workspace_path, workspace_snapshot)
+    if is_phase7_profile(config):
+        workflow_id, _ = phase7_workflow_identity(workflow_payload)
+        workspace_path = store.workspace_path(state["fabric_id"], workflow_id)
+        execution = execute_phase7_workflow(
+            workflow_payload=workflow_payload,
+            config=config,
+            registry=registry,
+            lifecycle=lifecycle,
+            memory_manager=memory_manager,
+            need_manager=need_manager,
+            authority_engine=authority_engine,
+            routing_engine=routing_engine,
+            workspace_ref=repo_relative(workspace_path),
+        )
+        write_json_atomic(workspace_path, execution["workspace_snapshot"])
+        routing_decision = {
+            "decision_id": execution["phase7"]["authority_review_ids"][0]
+            if execution["phase7"]["authority_review_ids"]
+            else "phase7:multi_stage",
+            "selected_cells": list(execution["result"]["selected_cells"]),
+            "selection_mode": "selected",
+            "route_confidence": 0.84 if execution["result"]["final_status"] == "accepted" else 0.78,
+            "benchmark_class": execution["phase7"]["benchmark_class"],
+            "stage_decision_refs": [item["decision_ref"] for item in execution["trace"]],
+        }
+        activation = {
+            "workflow_id": workflow_id,
+            "activated_cells": list(execution["result"]["selected_cells"]),
+            "reused_cells": [],
+            "population": lifecycle.summary(),
+        }
+    else:
+        execution = execute_foundation_workflow(
+            workflow_payload=workflow_payload,
+            blueprints=registry["blueprints"],
+            proof_domain=config["proof_domain"],
+        )
+        workflow_id = execution["workflow_id"]
+        routing_decision = routing_engine.route_workflow(
+            workflow_id=workflow_id,
+            workflow_payload=workflow_payload,
+            need_manager=need_manager,
+            authority_engine=authority_engine,
+            memory_manager=memory_manager,
+        )
+        activation = lifecycle.activate_for_workflow(
+            cell_ids=list(routing_decision["selected_cells"]),
+            workflow_id=workflow_id,
+            authority_engine=authority_engine,
+        )
+        workspace_snapshot = build_workspace_snapshot(
+            workflow_id=workflow_id,
+            workflow_payload=workflow_payload,
+            selected_blueprints=[
+                {
+                    "cell_id": blueprint["cell_id"],
+                    "role_name": blueprint["role_name"],
+                    "role_family": blueprint["role_family"],
+                }
+                for blueprint in registry["blueprints"]
+                if blueprint["cell_id"] in routing_decision["selected_cells"]
+            ],
+        )
+        workspace_path = store.workspace_path(state["fabric_id"], workflow_id)
+        write_json_atomic(workspace_path, workspace_snapshot)
 
     run_record = {
         "workflow_id": workflow_id,
@@ -251,15 +289,26 @@ def command_run() -> dict[str, Any]:
         routing_decision=routing_decision,
         authority_engine=authority_engine,
     )
-    routing_engine.record_outcome(
-        decision_id=str(routing_decision["decision_id"]),
-        outcome_kind=_routing_outcome_kind(routing_decision=routing_decision, memory_result=memory_result),
-        effectiveness_score=_routing_effectiveness_score(routing_decision=routing_decision, memory_result=memory_result),
-        detail=f"selection_mode={routing_decision['selection_mode']}; memory_decision={memory_result['decision']}",
-    )
+    if is_phase7_profile(config):
+        phase7_outcome_kind = "success" if execution["result"]["final_status"] in {"accepted", "hold"} else "failure"
+        phase7_effectiveness = 0.88 if execution["result"]["final_status"] == "accepted" else 0.78
+        for trace_entry in execution["trace"]:
+            routing_engine.record_outcome(
+                decision_id=str(trace_entry["decision_ref"]),
+                outcome_kind=phase7_outcome_kind,
+                effectiveness_score=phase7_effectiveness,
+                detail=f"stage={trace_entry['stage_id']}; final_status={execution['result']['final_status']}",
+            )
+    else:
+        routing_engine.record_outcome(
+            decision_id=str(routing_decision["decision_id"]),
+            outcome_kind=_routing_outcome_kind(routing_decision=routing_decision, memory_result=memory_result),
+            effectiveness_score=_routing_effectiveness_score(routing_decision=routing_decision, memory_result=memory_result),
+            detail=f"selection_mode={routing_decision['selection_mode']}; memory_decision={memory_result['decision']}",
+        )
     episodic_store.append_event(
         {
-            "event_kind": "phase6_run",
+            "event_kind": "phase7_run" if is_phase7_profile(config) else "phase6_run",
             "workflow_id": workflow_id,
             "run_ref": repo_relative(run_path),
             "memory_candidate_id": memory_result["candidate_id"],
@@ -275,6 +324,7 @@ def command_run() -> dict[str, Any]:
         "proof_domain": state["proof_domain"],
         "workspace_ref": repo_relative(workspace_path),
         "run_ref": repo_relative(run_path),
+        "output_digest": execution["output_digest"],
         "executor": execution["executor"],
         "trace": execution["trace"],
         "result": execution["result"],
@@ -311,13 +361,23 @@ def command_replay(manifest_path: Path) -> dict[str, Any]:
     if not isinstance(workflow_payload, dict):
         raise FabricError("INPUT_INVALID_JSON", "Replay workflow payload must be an object.")
 
-    execution = execute_foundation_workflow(
-        workflow_payload=workflow_payload,
-        blueprints=registry["blueprints"],
-        proof_domain=config["proof_domain"],
-    )
-    workflow_id = execution["workflow_id"]
-    prior_run = store.load_run_record(state["fabric_id"], workflow_id)
+    if is_phase7_profile(config):
+        workflow_id, _ = phase7_workflow_identity(workflow_payload)
+        prior_run = store.load_run_record(state["fabric_id"], workflow_id)
+        replay_context = dict(prior_run.get("execution", {}).get("phase7", {}).get("replay_context", {}))
+        execution = replay_phase7_workflow(
+            workflow_payload=workflow_payload,
+            proof_domain=config["proof_domain"],
+            replay_context=replay_context,
+        )
+    else:
+        execution = execute_foundation_workflow(
+            workflow_payload=workflow_payload,
+            blueprints=registry["blueprints"],
+            proof_domain=config["proof_domain"],
+        )
+        workflow_id = execution["workflow_id"]
+        prior_run = store.load_run_record(state["fabric_id"], workflow_id)
     replay_match = prior_run.get("execution", {}).get("output_digest") == execution["output_digest"]
 
     replay_record = {

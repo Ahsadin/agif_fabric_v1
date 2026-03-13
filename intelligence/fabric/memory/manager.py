@@ -705,6 +705,19 @@ class FabricMemoryManager:
             {"schema_version": "agif.fabric.memory.promoted.v1", "active": {}, "archived": {}},
         )
 
+    def record_descriptor_reuse(self, *, memory_ids: list[str]) -> None:
+        promoted = self.load_promoted_memories()
+        changed = False
+        for memory_id in memory_ids:
+            record = promoted["active"].get(memory_id)
+            if record is None:
+                continue
+            record["reuse_count"] = int(record.get("reuse_count", 0)) + 1
+            record["usefulness_hits"] = int(record.get("usefulness_hits", 0)) + 1
+            changed = True
+        if changed:
+            write_json_atomic(self.store.promoted_memory_path(self.fabric_id), promoted)
+
     def replay_decisions(self) -> dict[str, Any]:
         replay_store = self._load_or_initialize(
             self.store.memory_replay_store_path(self.fabric_id),

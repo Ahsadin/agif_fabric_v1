@@ -9,10 +9,10 @@
 - Placeholder files created early to satisfy the plan do not count as phase completion by themselves.
 
 ## Current Recorded Progress
-- Completed units: `465`
-- Progress now: `465/600`
-- Percent complete: `77.5%`
-- Basis: Phase 0 bootstrap, Phase 1 requirements freeze, Phase 2 architecture freeze, Phase 3 runner and fabric foundation, Phase 4 elastic lifecycle and lineage, Phase 5 reviewed memory, quantized consolidation, and bounded growth, and Phase 6 need signals, routing, utility, and authority are complete.
+- Completed units: `525`
+- Progress now: `525/600`
+- Percent complete: `87.5%`
+- Basis: Phase 0 bootstrap, Phase 1 requirements freeze, Phase 2 architecture freeze, Phase 3 runner and fabric foundation, Phase 4 elastic lifecycle and lineage, Phase 5 reviewed memory, quantized consolidation, and bounded growth, Phase 6 need signals, routing, utility, and authority, and Phase 7 domain tissues and benchmark system are complete.
 
 ## 2026-03-13 Hardening Note
 - A Phase 4.5 + 5.5 hardening pass was completed locally.
@@ -70,10 +70,16 @@
   - authority approvals and vetoes are recorded locally for higher-risk actions
   - `python3 scripts/check_phase6_routing_authority.py` passes locally
   - `AGIF_FABRIC_P6_PASS` is earned and recorded in `05_testing/PASS_TOKENS.md`
+  - Phase 7 finance domain tissues exist locally with explicit handoffs and shared workspace traces
+  - the three frozen benchmark classes now run locally against the same deterministic Phase 7 suite
+  - descriptor reuse changes a later deterministic result locally
+  - governed coordination changes at least one deterministic result relative to the flat baseline locally
+  - `python3 scripts/check_phase7_benchmarks.py` passes locally
+  - `AGIF_FABRIC_P7_PASS` is earned and recorded in `05_testing/PASS_TOKENS.md`
 - Assumed only:
-  - all later phases
-  - runtime behavior beyond the Phase 6 governed routing runtime
-  - benchmark outcomes
+  - Phase 8 and Phase 9
+  - long-run soak behavior beyond the deterministic Phase 7 suite
+  - benchmark outcomes beyond the committed Phase 7 finance cases
   - paper results
 
 ## Phase Status
@@ -86,6 +92,6 @@
 | Phase 4 | 80 | Complete and locally verified |
 | Phase 5 | 95 | Complete and locally verified |
 | Phase 6 | 65 | Complete and locally verified |
-| Phase 7 | 60 | Not started |
+| Phase 7 | 60 | Complete and locally verified |
 | Phase 8 | 45 | Not started |
 | Phase 9 | 30 | Not started |

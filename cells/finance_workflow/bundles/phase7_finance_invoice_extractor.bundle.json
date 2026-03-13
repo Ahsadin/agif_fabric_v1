@@ -1,0 +1,7 @@
+{
+  "bundle_id": "phase7_finance_invoice_extractor",
+  "bundle_version": "phase7-domain-v1",
+  "kind": "phase7_finance_tissue_bundle",
+  "role_name": "invoice_extractor",
+  "tissue_id": "finance_extraction_tissue"
+}

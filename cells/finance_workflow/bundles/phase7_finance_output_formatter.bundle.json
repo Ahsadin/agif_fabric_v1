@@ -1,0 +1,7 @@
+{
+  "bundle_id": "phase7_finance_output_formatter",
+  "bundle_version": "phase7-domain-v1",
+  "kind": "phase7_finance_tissue_bundle",
+  "role_name": "output_formatter",
+  "tissue_id": "finance_reporting_output_tissue"
+}

@@ -1,5 +1,46 @@
 # Changelog
 
+## 2026-03-13 Phase 7
+- Added real Phase 7 finance domain assets:
+  - `cells/finance_workflow/blueprint_registry_phase7.json`
+  - `cells/finance_workflow/tissue_registry_phase7.json`
+  - Phase 7 finance bundle files under `cells/finance_workflow/bundles/`
+  - deterministic Phase 7 configs and cases under `fixtures/document_workflow/phase7/`
+- Added the Phase 7 runtime path:
+  - `intelligence/fabric/domain/finance.py`
+  - `intelligence/fabric/benchmarking/phase7.py`
+  - stage-aware routing, richer workspace helpers, and bounded correction-memory reuse support inside the existing fabric runtime
+  - Phase 7 CLI dispatch through `runner/cell fabric run` for Phase 7 benchmark profiles without changing the frozen command names
+- Added deterministic Phase 7 verification and outputs:
+  - `05_testing/test_phase7_benchmarks.py`
+  - `scripts/check_phase7_benchmarks.py`
+  - `05_testing/PHASE7_TISSUES_BENCHMARK_EVIDENCE.md`
+  - `06_outputs/result_tables/phase7_benchmark_results.md`
+  - `06_outputs/result_tables/phase7_benchmark_results.json`
+- Updated the source-of-truth and tracking records for the Phase 7 close:
+  - `DECISIONS.md`
+  - `PROJECT_README.md`
+  - `01_plan/PROGRESS_TRACKER.md`
+  - `01_plan/PHASE_GATE_CHECKLIST.md`
+  - `05_testing/PASS_TOKENS.md`
+  - `00_admin/CODEX_THREAD_MAP.md`
+  - `00_admin/codex_threads/handoffs/phase7-tissues-benchmarks-2026-03-13.md`
+- Earned the Phase 7 pass token `AGIF_FABRIC_P7_PASS`.
+- Locally verified:
+  - `python3 scripts/check_phase7_benchmarks.py` passes locally
+  - `python3 scripts/check_phase6_routing_authority.py` passes locally through the chained Phase 7 check
+  - `python3 scripts/check_phase5_memory.py` passes locally through the chained Phase 7 check
+  - `python3 scripts/check_phase4_lifecycle.py` passes locally through the chained Phase 7 check
+  - `python3 scripts/check_phase3_foundation.py` passes locally through the chained Phase 7 check
+  - real domain tissues now exist and are used in the finance workflow path locally
+  - the frozen benchmark classes now produce deterministic comparative results locally
+  - descriptor reuse changes the `invoice_followup_alias` result locally
+  - governed coordination beats the flat baseline on `invoice_anomaly_hold` locally
+- Assumed only:
+  - Phase 8 soak and long-run growth behavior
+  - Phase 9 paper and reproducibility deliverables
+  - larger benchmark populations beyond the committed Phase 7 suite
+
 ## 2026-03-13 Phase 6.5 Hardening
 - Hardened the existing Phase 6 decision layer without changing the frozen Phase 2 interface fields or CLI command names:
   - `intelligence/fabric/needs/engine.py`

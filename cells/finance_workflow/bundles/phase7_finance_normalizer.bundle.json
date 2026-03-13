@@ -1,0 +1,7 @@
+{
+  "bundle_id": "phase7_finance_normalizer",
+  "bundle_version": "phase7-domain-v1",
+  "kind": "phase7_finance_tissue_bundle",
+  "role_name": "field_normalizer",
+  "tissue_id": "finance_validation_correction_tissue"
+}

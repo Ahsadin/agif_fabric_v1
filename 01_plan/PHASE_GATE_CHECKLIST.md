@@ -50,31 +50,36 @@
 - [x] Lifecycle replay passes locally.
 
 ## Phase 5
-- [ ] Finance workflow tissue exists locally.
-- [ ] Proof fixtures run end to end.
-- [ ] Runtime stays within machine budget.
-- [ ] Tissue tests pass locally.
+- [x] Hot, warm, and cold retained memory tiers exist locally.
+- [x] Raw logs are stored ephemerally and are not auto-promoted into long-term memory.
+- [x] Reviewed memory supports reject, defer, promote, compress, and retire locally.
+- [x] Reviewed promotion decisions use the frozen `MemoryPromotionDecision` shape.
+- [x] Quantized consolidation, deduplication, supersession, bounded replay, and memory GC work locally.
+- [x] Referenced cold payloads are protected and unreferenced cold payloads can be retired safely.
+- [x] `memory_pressure` is recorded as a first-class need signal and triggers consolidation locally.
+- [x] Phase 5 fixtures, tests, and evidence pass locally.
 
 ## Phase 6
-- [ ] Benchmark contract is active.
-- [ ] Evidence capture is repeatable.
-- [ ] Result tables can be reproduced locally.
-- [ ] Evidence manifests exist.
+- [ ] Need signals drive routing and authority review beyond the current lifecycle and memory cases.
+- [ ] Utility scoring is active in runtime decisions beyond the current bounded proof paths.
+- [ ] Routing logic uses reviewed descriptors under explicit authority checks.
+- [ ] Authority evaluation covers the planned Phase 6 depth locally.
 
 ## Phase 7
-- [ ] Research paper draft exists.
-- [ ] Reproducibility package exists.
-- [ ] Local rerun reproduces reported evidence.
+- [ ] Domain tissues are implemented beyond the current finance workflow seed roles.
+- [ ] The benchmark system is active across the frozen benchmark classes.
+- [ ] Domain tissue tests pass locally.
+- [ ] Benchmark evidence can be generated locally.
 
 ## Phase 8
-- [ ] Soak testing policy is active.
-- [ ] Replay and rollback checks pass locally.
-- [ ] Quarantine controls pass locally.
+- [ ] Long-run growth stays bounded under repeated local runs.
+- [ ] Soak tests pass locally under the written soak policy.
+- [ ] Evidence capture remains repeatable across long-run tests.
 - [ ] Runtime working set stays at or below `12 GB`.
 - [ ] Total project and evidence footprint stays at or below `35 GB`.
 
 ## Phase 9
-- [ ] Local AGIF v1 runs end to end.
-- [ ] Final evidence index is complete.
-- [ ] Finish line deliverables are present.
+- [ ] Paper draft exists with a claims matrix tied to the frozen thresholds.
+- [ ] Reproducibility package exists and reruns locally.
+- [ ] Finish line deliverables are present in this workspace.
 - [ ] Public release packaging remains out of scope.

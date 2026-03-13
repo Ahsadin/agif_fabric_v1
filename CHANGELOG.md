@@ -151,3 +151,45 @@
   - Phase 5 reviewed memory depth
   - long-duration soak behavior
   - benchmark outcomes beyond the local Phase 4 check
+
+## 2026-03-13 Phase 5
+- Added Phase 5 reviewed memory runtime support:
+  - `intelligence/fabric/memory/manager.py`
+  - explicit hot, warm, cold, and ephemeral memory paths under the local fabric state root
+  - reviewed promotion decisions, quantized consolidation, deduplication, supersession, bounded replay, and memory GC
+- Updated the existing fabric runner and runtime plumbing so `runner/cell fabric init`, `run`, `replay`, and `evidence` now:
+  - keep raw logs ephemeral
+  - require reviewed promotion before retention
+  - compress or quantize retained memory
+  - emit a first-class `memory_pressure` signal before uncontrolled growth
+  - bound replay artifacts and memory replay entries
+- Added deterministic Phase 5 fixtures, tests, and verification:
+  - `fixtures/document_workflow/phase5/`
+  - `05_testing/test_phase5_memory.py`
+  - `05_testing/PHASE5_MEMORY_EVIDENCE.md`
+  - `scripts/check_phase5_memory.py`
+- Realigned the later-phase headings in `01_plan/PHASE_GATE_CHECKLIST.md` to the locked master plan:
+  - Phase 5 = reviewed memory, quantized consolidation, bounded growth
+  - Phase 6 = need signals, routing, utility, authority
+  - Phase 7 = domain tissues and benchmark system
+  - Phase 8 = long-run growth, soak tests, evidence capture
+  - Phase 9 = paper, claims matrix, reproducibility
+- Earned the Phase 5 pass token `AGIF_FABRIC_P5_PASS`.
+- Updated the project tracker, checklist, README, pass tokens, and thread records for the Phase 5 close.
+- Locally verified:
+  - hot, warm, and cold retained memory tiers exist locally and are used under the local fabric state root
+  - raw logs are stored ephemerally and are not promoted directly into long-term memory
+  - reviewed memory decisions use the frozen `MemoryPromotionDecision` shape
+  - good candidates can be promoted and bad candidates can be rejected locally
+  - defer, compress, retire, deduplication, supersession, and GC paths work locally
+  - referenced cold payloads are protected from GC and unreferenced cold payloads are removed safely after retirement
+  - memory pressure emits a `memory_pressure` signal and triggers consolidation locally
+  - replay artifacts stay bounded locally
+  - repeated runs remain within the committed Phase 5 memory caps locally
+  - `python3 scripts/check_phase5_memory.py` passes locally
+  - `python3 scripts/check_phase4_lifecycle.py` still passes locally after the Phase 5 changes
+  - `python3 scripts/check_phase3_foundation.py` still passes locally after the Phase 5 changes
+- Assumed only:
+  - Phase 6 routing, utility, and authority depth
+  - long-duration soak behavior beyond the deterministic local Phase 5 test
+  - benchmark outcomes beyond the local Phase 5 check

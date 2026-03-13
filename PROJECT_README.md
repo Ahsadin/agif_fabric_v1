@@ -32,6 +32,7 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Phase 2: complete in writing and locally verified
 - Phase 3: complete and locally verified
 - Phase 4: complete and locally verified
+- Phase 5: complete and locally verified
 
 ## Phase 3 Foundation
 - Local runner entrypoint: `runner/cell`
@@ -54,6 +55,17 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
   - automatic return from burst to steady after consolidation
 - Deterministic Phase 4 fixtures now live under `fixtures/document_workflow/phase4/`.
 - Deterministic local Phase 4 check script: `scripts/check_phase4_lifecycle.py`
+
+## Phase 5 Reviewed Memory Runtime
+- Reviewed memory now uses explicit hot, warm, cold, and ephemeral stores under the local fabric state root.
+- Hot memory now tracks active workspace refs, current task refs, live runtime state refs, and short review buffers.
+- Warm memory now holds recent trusted descriptors and promoted summaries.
+- Cold memory now holds quantized long-term state and archived reproducibility traces.
+- Raw logs remain in the separate ephemeral store and are never promoted directly into long-term memory.
+- Reviewed promotion now records frozen `MemoryPromotionDecision` objects for reject, defer, promote, compress, and retire paths.
+- Deduplication, supersession, bounded replay, garbage collection, and memory-pressure consolidation now exist locally.
+- Deterministic Phase 5 fixtures now live under `fixtures/document_workflow/phase5/`.
+- Deterministic local Phase 5 check script: `scripts/check_phase5_memory.py`
 
 ## Phase 2 Freeze Set
 - `03_design/AGIF_V1_ARCHITECTURE.md`
@@ -100,5 +112,6 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Phase 2 verification method: confirm the six design freeze docs exist and that the gate checklist and progress tracker record the freeze consistently.
 - Phase 3 verification method: run the deterministic runner foundation check and confirm the Phase 3 pass token and evidence note.
 - Phase 4 verification method: run the deterministic lifecycle and lineage check and confirm the Phase 4 pass token and evidence note.
+- Phase 5 verification method: run the deterministic reviewed-memory check and confirm the Phase 5 pass token and evidence note.
 - Local verification status is recorded in `01_plan/PROGRESS_TRACKER.md` and `CHANGELOG.md`.
-- Later runtime behavior beyond the Phase 4 lifecycle runtime remains assumed only until later phases verify it.
+- Later runtime behavior beyond the Phase 5 reviewed memory runtime remains assumed only until later phases verify it.

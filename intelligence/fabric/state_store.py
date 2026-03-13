@@ -42,6 +42,11 @@ class FabricStateStore:
         (fabric_dir / "lifecycle" / "snapshots").mkdir(parents=True, exist_ok=True)
         (fabric_dir / "governance").mkdir(parents=True, exist_ok=True)
         (fabric_dir / "needs").mkdir(parents=True, exist_ok=True)
+        (fabric_dir / "memory").mkdir(parents=True, exist_ok=True)
+        (fabric_dir / "memory" / "hot" / "payloads").mkdir(parents=True, exist_ok=True)
+        (fabric_dir / "memory" / "warm" / "payloads").mkdir(parents=True, exist_ok=True)
+        (fabric_dir / "memory" / "cold" / "payloads").mkdir(parents=True, exist_ok=True)
+        (fabric_dir / "memory" / "ephemeral" / "raw_logs").mkdir(parents=True, exist_ok=True)
 
         state = {
             "state_version": "agif.fabric.state.v1",
@@ -143,6 +148,39 @@ class FabricStateStore:
 
     def need_signals_path(self, fabric_id: str) -> Path:
         return self.fabric_dir(fabric_id) / "needs" / "signals.json"
+
+    def memory_dir(self, fabric_id: str) -> Path:
+        return self.fabric_dir(fabric_id) / "memory"
+
+    def hot_memory_index_path(self, fabric_id: str) -> Path:
+        return self.memory_dir(fabric_id) / "hot_index.json"
+
+    def raw_log_index_path(self, fabric_id: str) -> Path:
+        return self.memory_dir(fabric_id) / "raw_logs.json"
+
+    def raw_log_payload_path(self, fabric_id: str, log_id: str) -> Path:
+        return self.memory_dir(fabric_id) / "ephemeral" / "raw_logs" / f"{log_id}.json"
+
+    def memory_candidates_path(self, fabric_id: str) -> Path:
+        return self.memory_dir(fabric_id) / "candidates.json"
+
+    def memory_decisions_path(self, fabric_id: str) -> Path:
+        return self.memory_dir(fabric_id) / "decisions.json"
+
+    def descriptor_store_path(self, fabric_id: str) -> Path:
+        return self.memory_dir(fabric_id) / "descriptors.json"
+
+    def promoted_memory_path(self, fabric_id: str) -> Path:
+        return self.memory_dir(fabric_id) / "promoted.json"
+
+    def memory_replay_store_path(self, fabric_id: str) -> Path:
+        return self.memory_dir(fabric_id) / "replay_store.json"
+
+    def memory_gc_log_path(self, fabric_id: str) -> Path:
+        return self.memory_dir(fabric_id) / "gc_log.json"
+
+    def memory_tier_payload_path(self, fabric_id: str, tier: str, payload_name: str) -> Path:
+        return self.memory_dir(fabric_id) / tier / "payloads" / f"{payload_name}.json"
 
     def load_run_record(self, fabric_id: str, workflow_id: str) -> dict[str, Any]:
         record = load_json_file(

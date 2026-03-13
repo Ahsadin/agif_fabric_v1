@@ -21,6 +21,7 @@ from intelligence.fabric.execution.bounded_executor import execute_foundation_wo
 from intelligence.fabric.lifecycle import FabricLifecycleManager
 from intelligence.fabric.metrics.reporting import build_status_metrics
 from intelligence.fabric.memory.episodic_store import EpisodicStore
+from intelligence.fabric.memory.manager import FabricMemoryManager
 from intelligence.fabric.memory.suggestions_store import SuggestionsStore
 from intelligence.fabric.needs.engine import score_foundation_needs
 from intelligence.fabric.registry.loader import load_fabric_bootstrap
@@ -104,6 +105,7 @@ def command_init(config_path: Path) -> dict[str, Any]:
         registry=registry,
         initialized_utc=state["initialized_utc"],
     )
+    FabricMemoryManager(store=store, state=state, config=config).refresh_hot_memory()
     return {
         "command": "fabric init",
         "fabric_id": config["fabric_id"],
@@ -202,18 +204,27 @@ def command_run() -> dict[str, Any]:
     lifecycle.set_active_task_refs(cell_ids=list(execution["result"]["selected_cells"]), workflow_ref=None)
 
     episodic_store = EpisodicStore(store.fabric_dir(state["fabric_id"]) / "episodic_events.json")
-    episodic_store.append_event(
-        {
-            "event_kind": "phase3_run",
-            "workflow_id": workflow_id,
-            "run_ref": repo_relative(run_path),
-        }
-    )
-
     state = store.load_state(state["fabric_id"])
     state["run_count"] = int(state.get("run_count", 0)) + 1
     state["last_run_ref"] = repo_relative(run_path)
     store.save_state(state)
+    memory_manager = FabricMemoryManager(store=store, state=state, config=config)
+    memory_result = memory_manager.record_run(
+        workflow_payload=workflow_payload,
+        execution=execution,
+        run_ref=repo_relative(run_path),
+        workspace_ref=repo_relative(workspace_path),
+        lifecycle_manager=lifecycle,
+    )
+    episodic_store.append_event(
+        {
+            "event_kind": "phase5_run",
+            "workflow_id": workflow_id,
+            "run_ref": repo_relative(run_path),
+            "memory_candidate_id": memory_result["candidate_id"],
+            "memory_decision_ref": memory_result["decision_ref"],
+        }
+    )
 
     return {
         "command": "fabric run",
@@ -278,6 +289,11 @@ def command_replay(manifest_path: Path) -> dict[str, Any]:
     write_json_atomic(replay_path, replay_record)
     state["last_replay_ref"] = repo_relative(replay_path)
     store.save_state(state)
+    _bound_replay_outputs(
+        store=store,
+        fabric_id=state["fabric_id"],
+        max_files=max(1, int(config.get("memory_caps", {}).get("replay_files", 8))),
+    )
     lifecycle_replay = lifecycle.replay_history()
 
     return {
@@ -297,6 +313,9 @@ def command_evidence(output_path: Path) -> dict[str, Any]:
     status_payload = command_status()
     population = lifecycle.summary()
     lifecycle_replay = lifecycle.replay_history()
+    memory_manager = FabricMemoryManager(store=store, state=state, config=config)
+    memory_summary = memory_manager.summary()
+    memory_replay = memory_manager.replay_decisions()
     earned_pass_tokens = ["AGIF_FABRIC_P3_PASS"]
     if (
         population["logical_population"] > population["active_population"]
@@ -305,8 +324,18 @@ def command_evidence(output_path: Path) -> dict[str, Any]:
         and population["within_runtime_working_set_cap"]
     ):
         earned_pass_tokens.append("AGIF_FABRIC_P4_PASS")
+    if (
+        lifecycle_replay["replay_match"]
+        and population["within_runtime_working_set_cap"]
+        and all(bool(value) for value in memory_summary["within_caps"].values())
+        and memory_summary["raw_log_promoted_count"] == 0
+        and memory_summary["cold_reference_integrity"]
+        and memory_summary["bounded_replay_store"]
+        and memory_replay["replay_match"]
+    ):
+        earned_pass_tokens.append("AGIF_FABRIC_P5_PASS")
     evidence_bundle = {
-        "bundle_version": "agif.fabric.phase4.evidence.v1",
+        "bundle_version": "agif.fabric.phase5.evidence.v1",
         "created_utc": utc_now_iso(),
         "pass_token": "AGIF_FABRIC_P3_PASS",
         "earned_pass_tokens": earned_pass_tokens,
@@ -318,11 +347,21 @@ def command_evidence(output_path: Path) -> dict[str, Any]:
         "status": status_payload,
         "population": population,
         "lifecycle_replay": lifecycle_replay,
+        "memory": memory_summary,
+        "memory_replay": memory_replay,
         "logical_population_ref": repo_relative(store.logical_population_path(state["fabric_id"])),
         "runtime_states_ref": repo_relative(store.runtime_states_path(state["fabric_id"])),
         "lifecycle_history_ref": repo_relative(store.lifecycle_history_path(state["fabric_id"])),
         "lineage_ledger_ref": repo_relative(store.lineage_ledger_path(state["fabric_id"])),
         "veto_log_ref": repo_relative(store.veto_log_path(state["fabric_id"])),
+        "hot_memory_index_ref": repo_relative(store.hot_memory_index_path(state["fabric_id"])),
+        "raw_log_index_ref": repo_relative(store.raw_log_index_path(state["fabric_id"])),
+        "memory_candidates_ref": repo_relative(store.memory_candidates_path(state["fabric_id"])),
+        "memory_decisions_ref": repo_relative(store.memory_decisions_path(state["fabric_id"])),
+        "descriptor_store_ref": repo_relative(store.descriptor_store_path(state["fabric_id"])),
+        "promoted_memory_ref": repo_relative(store.promoted_memory_path(state["fabric_id"])),
+        "memory_replay_store_ref": repo_relative(store.memory_replay_store_path(state["fabric_id"])),
+        "memory_gc_log_ref": repo_relative(store.memory_gc_log_path(state["fabric_id"])),
     }
     write_json_atomic(output_path.resolve(), evidence_bundle)
     return {
@@ -372,3 +411,16 @@ def _load_stdin_json() -> dict[str, Any]:
 
 def _json_line(payload: dict[str, Any]) -> str:
     return json.dumps(payload, sort_keys=True, separators=(",", ":")) + "\n"
+
+
+def _bound_replay_outputs(*, store: FabricStateStore, fabric_id: str, max_files: int) -> None:
+    replay_dir = store.fabric_dir(fabric_id) / "replays"
+    paths = sorted(
+        replay_dir.glob("*.json"),
+        key=lambda path: path.stat().st_mtime_ns,
+    )
+    overflow = len(paths) - max_files
+    if overflow <= 0:
+        return
+    for path in paths[:overflow]:
+        path.unlink()

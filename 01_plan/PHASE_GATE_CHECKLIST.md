@@ -67,10 +67,10 @@
 - [x] Phase 5 fixtures, tests, and evidence pass locally.
 
 ## Phase 6
-- [ ] Need signals drive routing and authority review beyond the current lifecycle and memory cases.
-- [ ] Utility scoring is active in runtime decisions beyond the current bounded proof paths.
-- [ ] Routing logic uses reviewed descriptors under explicit authority checks.
-- [ ] Authority evaluation covers the planned Phase 6 depth locally.
+- [x] Need signals drive routing and authority review beyond the current lifecycle and memory cases.
+- [x] Utility scoring is active in runtime decisions beyond the current bounded proof paths.
+- [x] Routing logic uses reviewed descriptors under explicit authority checks.
+- [x] Authority evaluation covers the planned Phase 6 depth locally.
 
 ## Phase 7
 - [ ] Domain tissues are implemented beyond the current finance workflow seed roles.

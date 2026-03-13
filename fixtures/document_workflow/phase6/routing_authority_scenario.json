@@ -1,0 +1,45 @@
+{
+  "actors": {
+    "proposer": "cell:finance_intake_router",
+    "governance_approver": "governance:phase6_local_board",
+    "tissue_approver": "tissue:finance_document_workflow:coordinator"
+  },
+  "signals": {
+    "split": {
+      "source_type": "tissue",
+      "source_id": "finance_document_workflow",
+      "signal_kind": "overload",
+      "severity": 0.92,
+      "evidence_ref": "fixture:phase6:split",
+      "proposed_action": "split_active_cell",
+      "status": "open",
+      "expires_at_utc": "2026-03-13T01:00:00Z",
+      "resolution_ref": null,
+      "created_utc": "2026-03-13T00:00:00Z"
+    },
+    "trust_risk": {
+      "source_type": "tissue",
+      "source_id": "finance_document_workflow",
+      "signal_kind": "trust_risk",
+      "severity": 0.84,
+      "evidence_ref": "fixture:phase6:trust_risk",
+      "proposed_action": "quarantine_or_veto_low_trust_path",
+      "status": "open",
+      "expires_at_utc": "2026-03-13T01:05:00Z",
+      "resolution_ref": null,
+      "created_utc": "2026-03-13T00:05:00Z"
+    },
+    "expired_coordination": {
+      "source_type": "fabric",
+      "source_id": "agif-fabric-v1-local",
+      "signal_kind": "coordination_gap",
+      "severity": 0.7,
+      "evidence_ref": "fixture:phase6:expired_gap",
+      "proposed_action": "reactivate_or_split_router",
+      "status": "open",
+      "expires_at_utc": "2026-03-13T00:10:00Z",
+      "resolution_ref": null,
+      "created_utc": "2026-03-13T00:00:00Z"
+    }
+  }
+}

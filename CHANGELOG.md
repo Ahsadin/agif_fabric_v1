@@ -218,6 +218,40 @@
   - `DECISIONS.md`
   - `PROJECT_README.md`
   - `01_plan/PROGRESS_TRACKER.md`
+
+## 2026-03-13 Phase 6
+- Added Phase 6 need-signal, routing, utility, and authority runtime support:
+  - `intelligence/fabric/needs/engine.py`
+  - `intelligence/fabric/utility.py`
+  - `intelligence/fabric/routing.py`
+  - `intelligence/fabric/governance/authority.py`
+  - updated `intelligence/fabric/lifecycle/engine.py`
+  - updated `intelligence/fabric/memory/manager.py`
+  - updated `intelligence/fabric/cli.py`
+  - updated `intelligence/fabric/state_store.py`
+- Need signals now support generation, severity normalization, expiry handling, status transitions, and traceable resolution beyond the earlier lifecycle and memory proof paths.
+- Routing now uses reviewed descriptors, trust, load, workspace context, need pressure, and utility scoring to make deterministic runtime choices.
+- Authority now records approvals and vetoes for higher-risk descriptor use, memory influence, reactivation, split, merge, and quarantine actions.
+- Added deterministic Phase 6 fixtures, tests, and verification:
+  - `fixtures/document_workflow/phase6/`
+  - `05_testing/test_phase6_routing_authority.py`
+  - `05_testing/PHASE6_ROUTING_AUTHORITY_EVIDENCE.md`
+  - `scripts/check_phase6_routing_authority.py`
+- Earned the Phase 6 pass token `AGIF_FABRIC_P6_PASS`.
+- Updated the project tracker, checklist, README, pass tokens, and thread records for the Phase 6 close.
+- Locally verified:
+  - `python3 scripts/check_phase6_routing_authority.py` passes locally
+  - need signals drive routing and authority review beyond the earlier lifecycle and memory proof paths
+  - utility scoring changes deterministic runtime choice and structural attractiveness locally
+  - routing reasons, descriptor use, and utility traces are recorded deterministically
+  - authority approvals and vetoes are recorded locally for higher-risk actions
+  - a governed decision can be traced from need signal to utility evaluation to authority review to final action
+  - `python3 scripts/check_phase5_memory.py` still passes locally
+  - `python3 scripts/check_phase4_lifecycle.py` still passes locally
+  - `python3 scripts/check_phase3_foundation.py` still passes locally
+- Assumed only:
+  - Phase 7 tissue expansion and benchmark-system behavior
+  - long-duration soak behavior beyond the deterministic local proof
   - `01_plan/PHASE_GATE_CHECKLIST.md`
   - `05_testing/PASS_TOKENS.md`
   - `00_admin/CODEX_THREAD_MAP.md`

@@ -33,6 +33,7 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Phase 3: complete and locally verified
 - Phase 4: complete and locally verified
 - Phase 5: complete and locally verified
+- Phase 6: complete and locally verified
 - Phase 4.5 + 5.5 hardening: complete and locally verified without changing project units
 
 ## Phase 3 Foundation
@@ -72,6 +73,14 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Memory summary now reports reuse, supersession, duplicate compression gain, stale retirement rate, and retention priorities.
 - Deterministic Phase 5 fixtures now live under `fixtures/document_workflow/phase5/`.
 - Deterministic local Phase 5 check script: `scripts/check_phase5_memory.py`
+
+## Phase 6 Routing And Authority Runtime
+- Need signals now support runtime generation, severity normalization, expiry handling, status transitions, and traceable resolution beyond the earlier lifecycle and memory proof paths.
+- Routing now evaluates multiple candidates with role fit, reviewed descriptor usefulness, trust, current load, need pressure, workspace context, and utility scoring.
+- Authority now records approvals and vetoes for higher-risk descriptor use, memory-driven runtime influence, risky reactivation, split, merge, and quarantine escalation.
+- Runtime summaries now expose active need signals, routing decisions, utility traces, descriptor use, approvals, vetoes, and authority outcomes.
+- Deterministic Phase 6 fixtures now live under `fixtures/document_workflow/phase6/`.
+- Deterministic local Phase 6 check script: `scripts/check_phase6_routing_authority.py`
 
 ## Phase 2 Freeze Set
 - `03_design/AGIF_V1_ARCHITECTURE.md`
@@ -119,6 +128,7 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Phase 3 verification method: run the deterministic runner foundation check and confirm the Phase 3 pass token and evidence note.
 - Phase 4 verification method: run the deterministic lifecycle and lineage check and confirm the Phase 4 pass token and evidence note.
 - Phase 5 verification method: run the deterministic reviewed-memory check and confirm the Phase 5 pass token and evidence note.
+- Phase 6 verification method: run the deterministic routing and authority check and confirm the Phase 6 pass token and evidence note.
 - Hardening verification method: run the Phase 4 and Phase 5 deterministic checks again and confirm `05_testing/PHASE45_HARDENING_EVIDENCE.md`.
 - Local verification status is recorded in `01_plan/PROGRESS_TRACKER.md` and `CHANGELOG.md`.
-- Later runtime behavior beyond the Phase 5 reviewed memory runtime remains assumed only until later phases verify it.
+- Later runtime behavior beyond the Phase 6 governed routing runtime remains assumed only until later phases verify it.

@@ -14,13 +14,16 @@ from intelligence.fabric.common import (
     utc_now_iso,
     write_json_atomic,
 )
+from intelligence.fabric.governance.authority import AuthorityEngine
 from intelligence.fabric.governance.policy import (
     ensure_governance_actor,
     ensure_need_signal,
     ensure_tissue_actor,
     summarize_governance,
 )
+from intelligence.fabric.needs.engine import NeedSignalManager
 from intelligence.fabric.state_store import FabricStateStore
+from intelligence.fabric.utility import UtilityScorer, clamp_score, policy_risk_from_envelope, trust_score_from_ref
 
 
 RUNTIME_CONSUMING_STATES = {"active", "split_pending", "consolidating", "quarantined"}
@@ -45,11 +48,13 @@ class FabricLifecycleManager:
         store: FabricStateStore,
         state: dict[str, Any],
         config: dict[str, Any],
+        utility_profiles: dict[str, dict[str, Any]] | None = None,
     ):
         self.store = store
         self.state = dict(state)
         self.config = config
         self.fabric_id = str(state["fabric_id"])
+        self.utility = UtilityScorer(utility_profiles)
 
     @property
     def steady_active_target(self) -> int:
@@ -264,6 +269,7 @@ class FabricLifecycleManager:
         workflow_ref: str | None = None,
         allow_burst: bool = False,
         need_signal: dict[str, Any] | None = None,
+        authority_engine: AuthorityEngine | None = None,
     ) -> dict[str, Any]:
         logical, runtime, history, ledger = self._load_runtime_bundle()
         logical_record = self._require_cell(logical, cell_id)
@@ -304,6 +310,43 @@ class FabricLifecycleManager:
         )
         if need_signal is not None:
             self.register_need_signal(signal=need_signal)
+        utility_evaluation = self.utility.evaluate_runtime_choice(
+            profile_ref=logical_record["blueprint"].get("utility_profile_ref"),
+            runtime_state=current_state,
+            demand_score=0.9 if workflow_ref else 0.6,
+            current_load=0.1,
+            need_pressure=0.9 if need_signal is not None else 0.2,
+            trust_score=self._record_trust_score(logical_record),
+            policy_risk=policy_risk_from_envelope(logical_record["policy_envelope"], action="route"),
+            activation_cost_ms=int(logical_record["blueprint"]["activation_cost_ms"]),
+            working_memory_bytes=int(logical_record["blueprint"]["working_memory_bytes"]),
+        )
+        authority_review = None
+        if authority_engine is not None and (use_burst or str((need_signal or {}).get("signal_kind")) == "trust_risk"):
+            authority_review = authority_engine.evaluate_action(
+                action="reactivate",
+                proposer=proposer,
+                need_signal=need_signal,
+                utility_evaluation=utility_evaluation,
+                policy_envelope=logical_record["policy_envelope"],
+                trust_state={
+                    "trust_ref": logical_record["blueprint"]["trust_profile"].get("baseline"),
+                    "trust_score": self._record_trust_score(logical_record),
+                },
+                rollback_ref="lifecycle:snapshot_pre_activation",
+                related_cells=[cell_id],
+                metadata={"workflow_ref": workflow_ref, "allow_burst": use_burst},
+                approver=governance_approver if use_burst else None,
+            )
+            if not authority_review["approved"]:
+                self._raise_veto(
+                    action="activate",
+                    code="AUTHORITY_REACTIVATION_VETO",
+                    message=f"Authority rejected activation for {cell_id}.",
+                    proposer=proposer,
+                    related_cells=[cell_id],
+                    reason=reason,
+                )
 
         updated_logical = deepcopy(logical_record)
         updated_logical["lifecycle_state"] = ACTIVE_STATE
@@ -365,11 +408,15 @@ class FabricLifecycleManager:
                 "workflow_ref": workflow_ref,
                 "allow_burst": use_burst,
                 "need_signal_id": None if need_signal is None else need_signal["need_signal_id"],
+                "authority_review_id": None if authority_review is None else authority_review["review_id"],
+                "utility_evaluation": utility_evaluation,
                 "usefulness_reason": "reactivate from compact dormant state"
                 if logical_record.get("dormancy_profile")
                 else "activate admitted into live runtime",
             },
         )
+        if authority_engine is not None and authority_review is not None:
+            authority_engine.finalize_review(authority_review["review_id"], action_ref=event["event_id"], rollback_ref=event["rollback_ref"])
         if int(logical_record["activation_count"]) > 0 and logical_record.get("dormancy_profile"):
             self._record_structural_usefulness(
                 lineage_id=logical_record["lineage_id"],
@@ -385,7 +432,13 @@ class FabricLifecycleManager:
             "active_population": self.summary()["active_population"],
         }
 
-    def activate_for_workflow(self, *, cell_ids: list[str], workflow_id: str) -> dict[str, Any]:
+    def activate_for_workflow(
+        self,
+        *,
+        cell_ids: list[str],
+        workflow_id: str,
+        authority_engine: AuthorityEngine | None = None,
+    ) -> dict[str, Any]:
         activated: list[str] = []
         reused: list[str] = []
         for cell_id in cell_ids:
@@ -398,6 +451,7 @@ class FabricLifecycleManager:
                     proposer="fabric:workflow",
                     reason=f"workflow demand activation for {workflow_id}",
                     workflow_ref=workflow_id,
+                    authority_engine=authority_engine,
                 )
                 activated.append(cell_id)
         self.set_active_task_refs(cell_ids=cell_ids, workflow_ref=workflow_id)
@@ -425,6 +479,89 @@ class FabricLifecycleManager:
             write_json_atomic(self.store.runtime_states_path(self.fabric_id), runtime)
             self.summary()
 
+    def apply_routing_context(
+        self,
+        *,
+        cell_ids: list[str],
+        workspace_ref: str,
+        descriptor_refs: list[str],
+        need_signal_ids: list[str],
+    ) -> None:
+        runtime = self._load_or_initialize(
+            self.store.runtime_states_path(self.fabric_id),
+            {"schema_version": "agif.fabric.runtime_states.v1", "states": {}},
+        )
+        changed = False
+        for cell_id in cell_ids:
+            record = runtime["states"].get(cell_id)
+            if record is None or record["runtime_state"] not in RUNTIME_CONSUMING_STATES:
+                continue
+            subscriptions = sorted(set(record.get("workspace_subscriptions", []) + [workspace_ref]))
+            descriptors = sorted(set(record.get("loaded_descriptor_refs", []) + list(descriptor_refs)))
+            needs = sorted(set(record.get("current_need_signals", []) + list(need_signal_ids)))
+            if subscriptions != record.get("workspace_subscriptions", []):
+                record["workspace_subscriptions"] = subscriptions
+                changed = True
+            if descriptors != record.get("loaded_descriptor_refs", []):
+                record["loaded_descriptor_refs"] = descriptors
+                changed = True
+            if needs != record.get("current_need_signals", []):
+                record["current_need_signals"] = needs
+                changed = True
+        if changed:
+            write_json_atomic(self.store.runtime_states_path(self.fabric_id), runtime)
+            self.summary()
+
+    def evaluate_runtime_choices(self) -> dict[str, Any]:
+        logical = self._load_or_initialize(
+            self.store.logical_population_path(self.fabric_id),
+            {"schema_version": "agif.fabric.logical_population.v1", "cells": {}},
+        )
+        runtime = self._load_or_initialize(
+            self.store.runtime_states_path(self.fabric_id),
+            {"schema_version": "agif.fabric.runtime_states.v1", "states": {}},
+        )
+        evaluations: list[dict[str, Any]] = []
+        for cell_id, record in sorted(logical["cells"].items()):
+            runtime_record = runtime["states"].get(cell_id, {})
+            runtime_state = str(runtime_record.get("runtime_state", record.get("lifecycle_state", DORMANT_STATE)))
+            need_pressure = self._need_pressure_for_runtime(runtime_record)
+            current_load = 0.85 if runtime_state == ACTIVE_STATE and runtime_record.get("active_task_ref") else 0.05
+            if runtime_state == ACTIVE_STATE:
+                demand_score = 0.78 if runtime_record.get("active_task_ref") else 0.12
+            elif runtime_state == DORMANT_STATE:
+                demand_score = 0.22 + (0.9 * need_pressure)
+            else:
+                demand_score = 0.0
+            evaluation = self.utility.evaluate_runtime_choice(
+                profile_ref=record["blueprint"].get("utility_profile_ref"),
+                runtime_state=runtime_state,
+                demand_score=demand_score,
+                current_load=current_load,
+                need_pressure=need_pressure,
+                trust_score=self._record_trust_score(record),
+                policy_risk=policy_risk_from_envelope(record["policy_envelope"], action="route"),
+                activation_cost_ms=int(record["blueprint"]["activation_cost_ms"]),
+                working_memory_bytes=int(record["blueprint"]["working_memory_bytes"]),
+            )
+            evaluations.append(
+                {
+                    "cell_id": cell_id,
+                    "runtime_state": runtime_state,
+                    **evaluation,
+                }
+            )
+        return {
+            "evaluations": evaluations,
+            "counts": {
+                "stay_active": len([item for item in evaluations if item["recommended_action"] == "stay_active"]),
+                "hibernate": len([item for item in evaluations if item["recommended_action"] == "hibernate"]),
+                "reactivate": len([item for item in evaluations if item["recommended_action"] == "reactivate"]),
+                "stay_dormant": len([item for item in evaluations if item["recommended_action"] == "stay_dormant"]),
+                "hold_quarantine": len([item for item in evaluations if item["recommended_action"] == "hold_quarantine"]),
+            },
+        }
+
     def split_cell(
         self,
         *,
@@ -434,6 +571,7 @@ class FabricLifecycleManager:
         governance_approver: str | None,
         need_signal: dict[str, Any],
         reason: str,
+        authority_engine: AuthorityEngine | None = None,
     ) -> dict[str, Any]:
         logical, runtime, history, ledger = self._load_runtime_bundle()
         parent_record = self._require_cell(logical, parent_cell_id)
@@ -475,6 +613,32 @@ class FabricLifecycleManager:
                 related_cells=[parent_cell_id],
                 reason=reason,
             )
+        authority_review = None
+        if authority_engine is not None:
+            authority_review = authority_engine.evaluate_action(
+                action="split_follow_through",
+                proposer=proposer,
+                need_signal=signal,
+                utility_evaluation=split_assessment["utility_evaluation"],
+                policy_envelope=parent_record["policy_envelope"],
+                trust_state={
+                    "trust_ref": parent_record["blueprint"]["trust_profile"].get("baseline"),
+                    "trust_score": self._record_trust_score(parent_record),
+                },
+                rollback_ref="lifecycle:snapshot_pre_split",
+                related_cells=[parent_cell_id],
+                metadata={"requested_children": len(child_role_names)},
+                approver=governance_actor,
+            )
+            if not authority_review["approved"]:
+                self._raise_veto(
+                    action="split",
+                    code="AUTHORITY_SPLIT_VETO",
+                    message=f"Authority rejected split for {parent_cell_id}.",
+                    proposer=proposer,
+                    related_cells=[parent_cell_id],
+                    reason=reason,
+                )
 
         current_logical_population = len(logical["cells"])
         if current_logical_population + len(child_role_names) > int(self.config["logical_population_cap"]):
@@ -540,6 +704,8 @@ class FabricLifecycleManager:
                 "kind": "split_pending",
                 "need_signal_id": signal["need_signal_id"],
                 "requested_children": len(child_role_names),
+                "authority_review_id": None if authority_review is None else authority_review["review_id"],
+                "utility_evaluation": split_assessment["utility_evaluation"],
                 "usefulness_reason": split_assessment["usefulness_reason"],
                 "usefulness_score": split_assessment["usefulness_score"],
             },
@@ -647,10 +813,20 @@ class FabricLifecycleManager:
                 "need_signal_id": signal["need_signal_id"],
                 "child_ids": child_ids,
                 "child_role_names": child_role_names,
+                "authority_review_id": None if authority_review is None else authority_review["review_id"],
+                "utility_evaluation": split_assessment["utility_evaluation"],
                 "usefulness_reason": split_assessment["usefulness_reason"],
                 "usefulness_score": split_assessment["usefulness_score"],
             },
         )
+        NeedSignalManager(store=self.store, state=self.state, config=self.config).resolve_signal(
+            need_signal_id=str(signal["need_signal_id"]),
+            resolution_ref=event["event_id"],
+            status="resolved",
+            actor="lifecycle:split",
+        )
+        if authority_engine is not None and authority_review is not None:
+            authority_engine.finalize_review(authority_review["review_id"], action_ref=event["event_id"], rollback_ref=event["rollback_ref"])
         self._record_structural_usefulness(
             lineage_id=parent_record["lineage_id"],
             cell_id=parent_cell_id,
@@ -677,6 +853,7 @@ class FabricLifecycleManager:
         governance_approver: str | None,
         need_signal: dict[str, Any],
         reason: str,
+        authority_engine: AuthorityEngine | None = None,
     ) -> dict[str, Any]:
         logical, runtime, history, ledger = self._load_runtime_bundle()
         survivor = self._require_cell(logical, survivor_cell_id)
@@ -731,6 +908,32 @@ class FabricLifecycleManager:
         tissue_actor = ensure_tissue_actor(tissue_approver, self.config["governance_policy"], survivor["blueprint"]["allowed_tissues"])
         governance_actor = ensure_governance_actor(governance_approver, self.config["governance_policy"])
         self.register_need_signal(signal=signal)
+        authority_review = None
+        if authority_engine is not None:
+            authority_review = authority_engine.evaluate_action(
+                action="merge_follow_through",
+                proposer=proposer,
+                need_signal=signal,
+                utility_evaluation=merge_assessment["utility_evaluation"],
+                policy_envelope=survivor["policy_envelope"],
+                trust_state={
+                    "trust_ref": survivor["blueprint"]["trust_profile"].get("baseline"),
+                    "trust_score": min(self._record_trust_score(survivor), self._record_trust_score(merged)),
+                },
+                rollback_ref="lifecycle:snapshot_pre_merge",
+                related_cells=[survivor_cell_id, merged_cell_id],
+                metadata={"survivor_cell_id": survivor_cell_id, "merged_cell_id": merged_cell_id},
+                approver=governance_actor,
+            )
+            if not authority_review["approved"]:
+                self._raise_veto(
+                    action="merge",
+                    code="AUTHORITY_MERGE_VETO",
+                    message=f"Authority rejected merge for {survivor_cell_id} and {merged_cell_id}.",
+                    proposer=proposer,
+                    related_cells=[survivor_cell_id, merged_cell_id],
+                    reason=reason,
+                )
 
         for cell_id, record in ((survivor_cell_id, survivor), (merged_cell_id, merged)):
             updated_logical = deepcopy(record)
@@ -772,6 +975,8 @@ class FabricLifecycleManager:
                     "kind": "merge_consolidating",
                     "need_signal_id": signal["need_signal_id"],
                     "partner_cell_id": merged_cell_id if cell_id == survivor_cell_id else survivor_cell_id,
+                    "authority_review_id": None if authority_review is None else authority_review["review_id"],
+                    "utility_evaluation": merge_assessment["utility_evaluation"],
                     "usefulness_reason": merge_assessment["usefulness_reason"],
                     "usefulness_score": merge_assessment["usefulness_score"],
                 },
@@ -828,6 +1033,8 @@ class FabricLifecycleManager:
                 "kind": "merge_survivor",
                 "need_signal_id": signal["need_signal_id"],
                 "merged_cell_id": merged_cell_id,
+                "authority_review_id": None if authority_review is None else authority_review["review_id"],
+                "utility_evaluation": merge_assessment["utility_evaluation"],
                 "usefulness_reason": merge_assessment["usefulness_reason"],
                 "usefulness_score": merge_assessment["usefulness_score"],
             },
@@ -884,6 +1091,14 @@ class FabricLifecycleManager:
             reason=f"retire merged source after consolidation into {survivor_cell_id}",
             normalize_after=False,
         )
+        NeedSignalManager(store=self.store, state=self.state, config=self.config).resolve_signal(
+            need_signal_id=str(signal["need_signal_id"]),
+            resolution_ref=result["event_id"],
+            status="resolved",
+            actor="lifecycle:merge",
+        )
+        if authority_engine is not None and authority_review is not None:
+            authority_engine.finalize_review(authority_review["review_id"], action_ref=result["event_id"], rollback_ref=result["event_id"])
         self._record_structural_usefulness(
             lineage_id=survivor["lineage_id"],
             cell_id=survivor_cell_id,
@@ -901,6 +1116,117 @@ class FabricLifecycleManager:
             "survivor_cell_id": survivor_cell_id,
             "retired_cell_id": merged_cell_id,
             "retire_event_id": result["event_id"],
+            "population": self.summary(),
+        }
+
+    def quarantine_cell(
+        self,
+        *,
+        cell_id: str,
+        proposer: str,
+        governance_approver: str | None,
+        need_signal: dict[str, Any],
+        reason: str,
+        authority_engine: AuthorityEngine | None = None,
+    ) -> dict[str, Any]:
+        logical, runtime, history, ledger = self._load_runtime_bundle()
+        logical_record = self._require_cell(logical, cell_id)
+        runtime_record = self._require_runtime_cell(runtime, cell_id)
+        if runtime_record["runtime_state"] != ACTIVE_STATE:
+            raise FabricError("LIFECYCLE_INVALID", f"Quarantine escalation requires an active cell: {cell_id}.")
+        governance_actor = ensure_governance_actor(governance_approver, self.config["governance_policy"])
+        signal = ensure_need_signal(need_signal, action="quarantine")
+        self.register_need_signal(signal=signal)
+        utility_evaluation = self.utility.score_structural_action(
+            action="merge",
+            profile_ref=logical_record["blueprint"].get("utility_profile_ref"),
+            need_severity=float(signal["severity"]),
+            trust_score=self._record_trust_score(logical_record),
+            policy_risk=policy_risk_from_envelope(logical_record["policy_envelope"], action="route"),
+            resource_cost=0.2,
+            contextual_gain=0.8,
+        )
+        authority_review = None
+        if authority_engine is not None:
+            authority_review = authority_engine.evaluate_action(
+                action="quarantine_escalation",
+                proposer=proposer,
+                need_signal=signal,
+                utility_evaluation=utility_evaluation,
+                policy_envelope=logical_record["policy_envelope"],
+                trust_state={
+                    "trust_ref": logical_record["blueprint"]["trust_profile"].get("baseline"),
+                    "trust_score": self._record_trust_score(logical_record),
+                },
+                rollback_ref="lifecycle:snapshot_pre_quarantine",
+                related_cells=[cell_id],
+                metadata={"reason": reason},
+                approver=governance_actor,
+            )
+            if not authority_review["approved"]:
+                self._raise_veto(
+                    action="quarantine",
+                    code="AUTHORITY_QUARANTINE_VETO",
+                    message=f"Authority rejected quarantine escalation for {cell_id}.",
+                    proposer=proposer,
+                    related_cells=[cell_id],
+                    reason=reason,
+                )
+        event = self._record_transition(
+            logical=logical,
+            runtime=runtime,
+            history=history,
+            ledger=ledger,
+            transition="active_to_quarantined",
+            cell_id=cell_id,
+            lineage_id=logical_record["lineage_id"],
+            proposer=proposer,
+            approver=governance_actor,
+            reason=reason,
+            created_utc=utc_now_iso(),
+            logical_after={
+                cell_id: {
+                    **deepcopy(logical_record),
+                    "lifecycle_state": "quarantined",
+                }
+            },
+            runtime_after={
+                cell_id: {
+                    **deepcopy(runtime_record),
+                    "runtime_state": "quarantined",
+                    "current_need_signals": self._append_unique(runtime_record["current_need_signals"], signal["need_signal_id"]),
+                }
+            },
+            lineage_entries=[
+                self._build_lineage_entry(
+                    ledger=ledger,
+                    lineage_id=logical_record["lineage_id"],
+                    cell_id=cell_id,
+                    action="quarantine",
+                    event_id="pending",
+                    parent_cell_id=logical_record["parent_cell_id"],
+                    note=reason,
+                )
+            ],
+            details={
+                "kind": "quarantine_escalation",
+                "need_signal_id": signal["need_signal_id"],
+                "authority_review_id": None if authority_review is None else authority_review["review_id"],
+                "utility_evaluation": utility_evaluation,
+            },
+        )
+        NeedSignalManager(store=self.store, state=self.state, config=self.config).resolve_signal(
+            need_signal_id=str(signal["need_signal_id"]),
+            resolution_ref=event["event_id"],
+            status="resolved",
+            actor="lifecycle:quarantine",
+        )
+        if authority_engine is not None and authority_review is not None:
+            authority_engine.finalize_review(authority_review["review_id"], action_ref=event["event_id"], rollback_ref=event["rollback_ref"])
+        return {
+            "event_id": event["event_id"],
+            "cell_id": cell_id,
+            "runtime_state": "quarantined",
             "population": self.summary(),
         }
 
@@ -1158,21 +1484,10 @@ class FabricLifecycleManager:
         }
 
     def register_need_signal(self, *, signal: dict[str, Any]) -> dict[str, Any]:
-        normalized = ensure_need_signal(signal, action="record")
-        signals = self._load_or_initialize(
-            self.store.need_signals_path(self.fabric_id),
-            {"schema_version": "agif.fabric.need_signals.v1", "signals": {}},
-        )
-        signals["signals"][normalized["need_signal_id"]] = normalized
-        write_json_atomic(self.store.need_signals_path(self.fabric_id), signals)
-        return normalized
+        return NeedSignalManager(store=self.store, state=self.state, config=self.config).record_signal(signal=signal, actor="lifecycle")
 
     def load_need_signals(self) -> list[dict[str, Any]]:
-        signals = self._load_or_initialize(
-            self.store.need_signals_path(self.fabric_id),
-            {"schema_version": "agif.fabric.need_signals.v1", "signals": {}},
-        )
-        return [deepcopy(item) for _, item in sorted(signals["signals"].items())]
+        return NeedSignalManager(store=self.store, state=self.state, config=self.config).load_signals()
 
     def load_veto_log(self) -> list[dict[str, Any]]:
         vetoes = self._load_or_initialize(
@@ -1355,17 +1670,31 @@ class FabricLifecycleManager:
     ) -> dict[str, Any]:
         signal_kind = str(signal.get("signal_kind", ""))
         severity = self._safe_float(signal.get("severity"))
+        utility_evaluation = self.utility.score_structural_action(
+            action="split",
+            profile_ref=parent_record["blueprint"].get("utility_profile_ref"),
+            need_severity=severity,
+            trust_score=self._record_trust_score(parent_record),
+            policy_risk=policy_risk_from_envelope(parent_record["policy_envelope"], action="route"),
+            resource_cost=clamp_score(
+                (int(parent_record["blueprint"]["activation_cost_ms"]) / 120.0)
+                + (int(parent_record["blueprint"]["working_memory_bytes"]) / 262144.0)
+            ),
+            contextual_gain=0.72 if signal_kind in SPLIT_SIGNAL_KINDS else 0.2,
+        )
         if signal_kind not in SPLIT_SIGNAL_KINDS:
             return {
                 "allowed": False,
                 "code": "SPLIT_LOW_UTILITY",
                 "message": f"Split for {parent_record['cell_id']} requires overload, novelty, or coordination pressure.",
+                "utility_evaluation": utility_evaluation,
             }
         if severity < SPLIT_SEVERITY_FLOOR:
             return {
                 "allowed": False,
                 "code": "SPLIT_WEAK_PRESSURE",
                 "message": f"Split for {parent_record['cell_id']} was rejected because the pressure signal is too weak.",
+                "utility_evaluation": utility_evaluation,
             }
         guardrails = parent_record.get("lifecycle_guardrails") or {}
         if int(guardrails.get("split_cooldown_until", 0)) > len(history["entries"]):
@@ -1373,6 +1702,14 @@ class FabricLifecycleManager:
                 "allowed": False,
                 "code": "LIFECYCLE_COOLDOWN",
                 "message": f"Split for {parent_record['cell_id']} is still in cooldown after a recent structural change.",
+                "utility_evaluation": utility_evaluation,
+            }
+        if not bool(utility_evaluation["attractive"]):
+            return {
+                "allowed": False,
+                "code": "SPLIT_LOW_UTILITY",
+                "message": f"Split for {parent_record['cell_id']} was rejected because utility stayed below the split threshold.",
+                "utility_evaluation": utility_evaluation,
             }
         usefulness_reason = {
             "overload": "split relieves sustained overload on the active branch",
@@ -1385,6 +1722,7 @@ class FabricLifecycleManager:
             "message": usefulness_reason,
             "usefulness_reason": usefulness_reason,
             "usefulness_score": round(max(severity, 0.8 if signal_kind == "novelty" else severity), 3),
+            "utility_evaluation": utility_evaluation,
         }
 
     def _assess_merge_request(
@@ -1397,17 +1735,37 @@ class FabricLifecycleManager:
     ) -> dict[str, Any]:
         signal_kind = str(signal.get("signal_kind", ""))
         severity = self._safe_float(signal.get("severity"))
+        utility_evaluation = self.utility.score_structural_action(
+            action="merge",
+            profile_ref=survivor["blueprint"].get("utility_profile_ref"),
+            need_severity=severity,
+            trust_score=min(self._record_trust_score(survivor), self._record_trust_score(merged)),
+            policy_risk=max(
+                policy_risk_from_envelope(survivor["policy_envelope"], action="route"),
+                policy_risk_from_envelope(merged["policy_envelope"], action="route"),
+            ),
+            resource_cost=clamp_score(
+                (
+                    int(survivor["blueprint"]["working_memory_bytes"])
+                    + int(merged["blueprint"]["working_memory_bytes"])
+                )
+                / 524288.0
+            ),
+            contextual_gain=0.76 if signal_kind in MERGE_SIGNAL_KINDS else 0.2,
+        )
         if signal_kind not in MERGE_SIGNAL_KINDS:
             return {
                 "allowed": False,
                 "code": "MERGE_LOW_UTILITY",
                 "message": f"Merge for {survivor['cell_id']} and {merged['cell_id']} requires a redundancy signal.",
+                "utility_evaluation": utility_evaluation,
             }
         if severity < MERGE_SEVERITY_FLOOR:
             return {
                 "allowed": False,
                 "code": "MERGE_WEAK_PRESSURE",
                 "message": f"Merge for {survivor['cell_id']} and {merged['cell_id']} was rejected because redundancy pressure is weak.",
+                "utility_evaluation": utility_evaluation,
             }
         for record in (survivor, merged):
             guardrails = record.get("lifecycle_guardrails") or {}
@@ -1416,12 +1774,14 @@ class FabricLifecycleManager:
                     "allowed": False,
                     "code": "LIFECYCLE_COOLDOWN",
                     "message": f"Merge for {survivor['cell_id']} and {merged['cell_id']} is still in cooldown after a recent structural change.",
+                    "utility_evaluation": utility_evaluation,
                 }
         if survivor["source_blueprint_cell_id"] != merged["source_blueprint_cell_id"] or survivor["source_role_name"] != merged["source_role_name"]:
             return {
                 "allowed": False,
                 "code": "MERGE_SPECIALIZATION_RISK",
                 "message": f"Merge for {survivor['cell_id']} and {merged['cell_id']} would destroy useful specialization ancestry.",
+                "utility_evaluation": utility_evaluation,
             }
         usefulness_gap = abs(
             int(survivor.get("activation_count", 0)) - int(merged.get("activation_count", 0))
@@ -1431,6 +1791,14 @@ class FabricLifecycleManager:
                 "allowed": False,
                 "code": "MERGE_SPECIALIZATION_RISK",
                 "message": f"Merge for {survivor['cell_id']} and {merged['cell_id']} would collapse unevenly proven branches.",
+                "utility_evaluation": utility_evaluation,
+            }
+        if not bool(utility_evaluation["attractive"]):
+            return {
+                "allowed": False,
+                "code": "MERGE_LOW_UTILITY",
+                "message": f"Merge for {survivor['cell_id']} and {merged['cell_id']} was rejected because utility stayed below the merge threshold.",
+                "utility_evaluation": utility_evaluation,
             }
         usefulness_reason = "merge removes real redundancy while keeping the surviving branch replay-safe"
         return {
@@ -1439,6 +1807,7 @@ class FabricLifecycleManager:
             "message": usefulness_reason,
             "usefulness_reason": usefulness_reason,
             "usefulness_score": round(max(0.7, severity), 3),
+            "utility_evaluation": utility_evaluation,
         }
 
     def _build_dormancy_profile(self, *, logical_record: dict[str, Any], runtime_record: dict[str, Any]) -> dict[str, Any]:
@@ -1542,6 +1911,17 @@ class FabricLifecycleManager:
             return float(value)
         except (TypeError, ValueError):
             return 0.0
+
+    def _record_trust_score(self, record: dict[str, Any]) -> float:
+        trust_profile = record.get("blueprint", {}).get("trust_profile", {})
+        baseline = str(trust_profile.get("baseline", "bounded_local_v1"))
+        return trust_score_from_ref(baseline)
+
+    def _need_pressure_for_runtime(self, runtime_record: dict[str, Any]) -> float:
+        signals = runtime_record.get("current_need_signals", [])
+        if not isinstance(signals, list) or len(signals) == 0:
+            return 0.0
+        return clamp_score(min(1.0, 0.22 * len(signals)))
 
     def _load_runtime_bundle(self) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
         logical = self._load_or_initialize(
@@ -1884,7 +2264,6 @@ class FabricLifecycleManager:
                 "cell_id": record["cell_id"],
                 "lineage_id": record["lineage_id"],
                 "runtime_state": record["runtime_state"],
-                "current_need_signals": list(record["current_need_signals"]),
                 "last_transition_ref": record["last_transition_ref"],
             }
             for cell_id, record in sorted(runtime_states.items())

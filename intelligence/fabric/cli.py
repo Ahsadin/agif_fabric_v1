@@ -18,13 +18,15 @@ from intelligence.fabric.common import (
     write_json_atomic,
 )
 from intelligence.fabric.execution.bounded_executor import execute_foundation_workflow
+from intelligence.fabric.governance.authority import AuthorityEngine
 from intelligence.fabric.lifecycle import FabricLifecycleManager
 from intelligence.fabric.metrics.reporting import build_status_metrics
 from intelligence.fabric.memory.episodic_store import EpisodicStore
 from intelligence.fabric.memory.manager import FabricMemoryManager
 from intelligence.fabric.memory.suggestions_store import SuggestionsStore
-from intelligence.fabric.needs.engine import score_foundation_needs
+from intelligence.fabric.needs.engine import NeedSignalManager, score_foundation_needs
 from intelligence.fabric.registry.loader import load_fabric_bootstrap
+from intelligence.fabric.routing import RoutingEngine
 from intelligence.fabric.state_store import FabricStateStore
 from intelligence.fabric.workspace.store import build_workspace_snapshot
 
@@ -130,11 +132,15 @@ def command_status() -> dict[str, Any]:
             "state_root": repo_relative(store.root),
         }
 
-    config, _, _, _ = load_fabric_bootstrap((REPO_ROOT / str(state["config_ref"])).resolve())
-    lifecycle = FabricLifecycleManager(store=store, state=state, config=config)
+    config, _, registry, _ = load_fabric_bootstrap((REPO_ROOT / str(state["config_ref"])).resolve())
+    lifecycle = FabricLifecycleManager(store=store, state=state, config=config, utility_profiles=registry["utility_profiles"])
     population = lifecycle.summary()
     state = store.load_state(state["fabric_id"])
     metrics = build_status_metrics(state)
+    need_manager = NeedSignalManager(store=store, state=state, config=config)
+    authority_engine = AuthorityEngine(store=store, state=state, config=config)
+    routing_engine = RoutingEngine(store=store, state=state, config=config, registry=registry)
+    memory_manager = FabricMemoryManager(store=store, state=state, config=config)
     needs = score_foundation_needs(
         fabric_id=state["fabric_id"],
         registered_blueprints=int(state["registered_blueprint_count"]),
@@ -158,6 +164,13 @@ def command_status() -> dict[str, Any]:
         "active_suggestions": suggestions_store.count_active(),
         "governance": lifecycle.governance_summary(),
         "population": population,
+        "phase6": {
+            "need_summary": need_manager.summary(),
+            "routing_summary": routing_engine.summary(),
+            "authority_summary": authority_engine.summary(),
+            "utility_summary": lifecycle.evaluate_runtime_choices(),
+            "memory_summary": memory_manager.summary(),
+        },
         "last_run_ref": state.get("last_run_ref"),
         "last_replay_ref": state.get("last_replay_ref"),
     }
@@ -166,6 +179,10 @@ def command_status() -> dict[str, Any]:
 def command_run() -> dict[str, Any]:
     workflow_payload = _load_stdin_json()
     state, config, registry, store, lifecycle = _load_current_runtime_context()
+    need_manager = NeedSignalManager(store=store, state=state, config=config)
+    authority_engine = AuthorityEngine(store=store, state=state, config=config)
+    routing_engine = RoutingEngine(store=store, state=state, config=config, registry=registry)
+    memory_manager = FabricMemoryManager(store=store, state=state, config=config)
 
     execution = execute_foundation_workflow(
         workflow_payload=workflow_payload,
@@ -173,9 +190,17 @@ def command_run() -> dict[str, Any]:
         proof_domain=config["proof_domain"],
     )
     workflow_id = execution["workflow_id"]
-    activation = lifecycle.activate_for_workflow(
-        cell_ids=list(execution["result"]["selected_cells"]),
+    routing_decision = routing_engine.route_workflow(
         workflow_id=workflow_id,
+        workflow_payload=workflow_payload,
+        need_manager=need_manager,
+        authority_engine=authority_engine,
+        memory_manager=memory_manager,
+    )
+    activation = lifecycle.activate_for_workflow(
+        cell_ids=list(routing_decision["selected_cells"]),
+        workflow_id=workflow_id,
+        authority_engine=authority_engine,
     )
     workspace_snapshot = build_workspace_snapshot(
         workflow_id=workflow_id,
@@ -187,6 +212,7 @@ def command_run() -> dict[str, Any]:
                 "role_family": blueprint["role_family"],
             }
             for blueprint in registry["blueprints"]
+            if blueprint["cell_id"] in routing_decision["selected_cells"]
         ],
     )
     workspace_path = store.workspace_path(state["fabric_id"], workflow_id)
@@ -198,31 +224,41 @@ def command_run() -> dict[str, Any]:
         "input_digest": canonical_json_hash(workflow_payload),
         "workspace_ref": repo_relative(workspace_path),
         "execution": execution,
+        "routing": routing_decision,
     }
     run_path = store.run_path(state["fabric_id"], workflow_id)
     write_json_atomic(run_path, run_record)
-    lifecycle.set_active_task_refs(cell_ids=list(execution["result"]["selected_cells"]), workflow_ref=None)
+    lifecycle.set_active_task_refs(cell_ids=list(routing_decision["selected_cells"]), workflow_ref=workflow_id)
+    if str(config.get("benchmark_profile", {}).get("name", "")).startswith("phase6"):
+        lifecycle.apply_routing_context(
+            cell_ids=list(routing_decision["selected_cells"]),
+            workspace_ref=repo_relative(workspace_path),
+            descriptor_refs=list(routing_decision.get("descriptor_refs_used", [])),
+            need_signal_ids=list(routing_decision.get("need_signal_ids", [])),
+        )
 
     episodic_store = EpisodicStore(store.fabric_dir(state["fabric_id"]) / "episodic_events.json")
     state = store.load_state(state["fabric_id"])
     state["run_count"] = int(state.get("run_count", 0)) + 1
     state["last_run_ref"] = repo_relative(run_path)
     store.save_state(state)
-    memory_manager = FabricMemoryManager(store=store, state=state, config=config)
     memory_result = memory_manager.record_run(
         workflow_payload=workflow_payload,
         execution=execution,
         run_ref=repo_relative(run_path),
         workspace_ref=repo_relative(workspace_path),
         lifecycle_manager=lifecycle,
+        routing_decision=routing_decision,
+        authority_engine=authority_engine,
     )
     episodic_store.append_event(
         {
-            "event_kind": "phase5_run",
+            "event_kind": "phase6_run",
             "workflow_id": workflow_id,
             "run_ref": repo_relative(run_path),
             "memory_candidate_id": memory_result["candidate_id"],
             "memory_decision_ref": memory_result["decision_ref"],
+            "routing_decision_ref": routing_decision["decision_id"],
         }
     )
 
@@ -236,6 +272,7 @@ def command_run() -> dict[str, Any]:
         "executor": execution["executor"],
         "trace": execution["trace"],
         "result": execution["result"],
+        "routing": routing_decision,
         "activation": activation,
         "governance": lifecycle.governance_summary(),
         "population": lifecycle.summary(),
@@ -316,6 +353,15 @@ def command_evidence(output_path: Path) -> dict[str, Any]:
     memory_manager = FabricMemoryManager(store=store, state=state, config=config)
     memory_summary = memory_manager.summary()
     memory_replay = memory_manager.replay_decisions()
+    need_manager = NeedSignalManager(store=store, state=state, config=config)
+    authority_engine = AuthorityEngine(store=store, state=state, config=config)
+    routing_engine = RoutingEngine(store=store, state=state, config=config, registry=registry)
+    phase6 = {
+        "need_summary": need_manager.summary(),
+        "routing_summary": routing_engine.summary(),
+        "authority_summary": authority_engine.summary(),
+        "utility_summary": lifecycle.evaluate_runtime_choices(),
+    }
     earned_pass_tokens = ["AGIF_FABRIC_P3_PASS"]
     if (
         population["logical_population"] > population["active_population"]
@@ -334,8 +380,20 @@ def command_evidence(output_path: Path) -> dict[str, Any]:
         and memory_replay["replay_match"]
     ):
         earned_pass_tokens.append("AGIF_FABRIC_P5_PASS")
+    if (
+        "AGIF_FABRIC_P5_PASS" in earned_pass_tokens
+        and phase6["need_summary"]["active_signal_count"] >= 0
+        and phase6["need_summary"]["traceable_resolution_count"] >= 1
+        and phase6["need_summary"]["expired_signal_count"] >= 1
+        and phase6["routing_summary"]["decision_count"] >= 1
+        and phase6["routing_summary"]["deterministic_reason_count"] >= 1
+        and phase6["authority_summary"]["review_count"] >= 1
+        and phase6["authority_summary"]["approved_count"] >= 1
+        and phase6["authority_summary"]["veto_count"] >= 1
+    ):
+        earned_pass_tokens.append("AGIF_FABRIC_P6_PASS")
     evidence_bundle = {
-        "bundle_version": "agif.fabric.phase5.evidence.v1",
+        "bundle_version": "agif.fabric.phase6.evidence.v1",
         "created_utc": utc_now_iso(),
         "pass_token": "AGIF_FABRIC_P3_PASS",
         "earned_pass_tokens": earned_pass_tokens,
@@ -349,11 +407,15 @@ def command_evidence(output_path: Path) -> dict[str, Any]:
         "lifecycle_replay": lifecycle_replay,
         "memory": memory_summary,
         "memory_replay": memory_replay,
+        "phase6": phase6,
         "logical_population_ref": repo_relative(store.logical_population_path(state["fabric_id"])),
         "runtime_states_ref": repo_relative(store.runtime_states_path(state["fabric_id"])),
         "lifecycle_history_ref": repo_relative(store.lifecycle_history_path(state["fabric_id"])),
         "lineage_ledger_ref": repo_relative(store.lineage_ledger_path(state["fabric_id"])),
         "veto_log_ref": repo_relative(store.veto_log_path(state["fabric_id"])),
+        "need_history_ref": repo_relative(store.need_history_path(state["fabric_id"])),
+        "routing_decisions_ref": repo_relative(store.routing_decisions_path(state["fabric_id"])),
+        "authority_reviews_ref": repo_relative(store.authority_reviews_path(state["fabric_id"])),
         "hot_memory_index_ref": repo_relative(store.hot_memory_index_path(state["fabric_id"])),
         "raw_log_index_ref": repo_relative(store.raw_log_index_path(state["fabric_id"])),
         "memory_candidates_ref": repo_relative(store.memory_candidates_path(state["fabric_id"])),
@@ -389,7 +451,7 @@ def _load_current_runtime_context() -> tuple[
     if not config_ref.is_absolute():
         config_ref = (REPO_ROOT / config_ref).resolve()
     config, _, registry, _ = load_fabric_bootstrap(config_ref)
-    lifecycle = FabricLifecycleManager(store=store, state=state, config=config)
+    lifecycle = FabricLifecycleManager(store=store, state=state, config=config, utility_profiles=registry["utility_profiles"])
     return state, config, registry, store, lifecycle
 
 

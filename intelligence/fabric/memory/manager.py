@@ -134,6 +134,8 @@ class FabricMemoryManager:
         run_ref: str,
         workspace_ref: str,
         lifecycle_manager: Any | None = None,
+        routing_decision: dict[str, Any] | None = None,
+        authority_engine: Any | None = None,
     ) -> dict[str, Any]:
         raw_log = self.record_raw_log(
             workflow_payload=workflow_payload,
@@ -147,6 +149,7 @@ class FabricMemoryManager:
             run_ref=run_ref,
             workspace_ref=workspace_ref,
             raw_log_ref=raw_log["payload_ref"],
+            selected_cells_override=None if routing_decision is None else list(routing_decision.get("selected_cells", [])),
         )
         default_review = self._default_review_decision(candidate["candidate_id"])
         review = self.review_candidate(
@@ -157,6 +160,7 @@ class FabricMemoryManager:
             retention_tier=default_review["retention_tier"],
             reason=default_review["reason"],
             lifecycle_manager=lifecycle_manager,
+            authority_engine=authority_engine,
         )
         consolidation = self.consolidate_if_needed(
             lifecycle_manager=lifecycle_manager,
@@ -224,8 +228,13 @@ class FabricMemoryManager:
         run_ref: str,
         workspace_ref: str,
         raw_log_ref: str,
+        selected_cells_override: list[str] | None = None,
     ) -> dict[str, Any]:
-        selected_cells = list(execution.get("result", {}).get("selected_cells", []))
+        selected_cells = (
+            list(selected_cells_override)
+            if selected_cells_override is not None and len(selected_cells_override) > 0
+            else list(execution.get("result", {}).get("selected_cells", []))
+        )
         producer_cell_id = "finance_intake_router" if "finance_intake_router" in selected_cells else (
             selected_cells[0] if selected_cells else "fabric:memory_curator"
         )
@@ -328,6 +337,7 @@ class FabricMemoryManager:
         retention_tier: str | None = None,
         reason: str,
         lifecycle_manager: Any | None = None,
+        authority_engine: Any | None = None,
     ) -> dict[str, Any]:
         normalized_decision = ensure_non_empty_string(decision, "MemoryPromotionDecision.decision", code="MEMORY_INVALID")
         if normalized_decision not in ALLOWED_DECISIONS:
@@ -342,6 +352,37 @@ class FabricMemoryManager:
 
         chosen_tier = retention_tier or ("hot" if normalized_decision in {"reject", "defer"} else "warm")
         chosen_mode = compression_mode or self._default_compression_mode(normalized_decision, chosen_tier)
+        authority_review = None
+        if authority_engine is not None and normalized_decision in {"promote", "compress"}:
+            authority_review = authority_engine.evaluate_action(
+                action="memory_runtime_influence",
+                proposer=reviewer_id,
+                need_signal=None,
+                utility_evaluation={
+                    "utility_score": float(candidate.get("value_score", 0.0)),
+                    "threshold": 0.55 if str(candidate.get("memory_class")) == "routing_useful_memory" else 0.38,
+                },
+                policy_envelope={
+                    "allowed_actions": ["route"] if str(candidate.get("memory_class")) == "routing_useful_memory" else ["summarize"],
+                    "human_boundary": self.config.get("governance_policy", {}).get("human_boundary", "document/workflow intelligence"),
+                },
+                trust_state={
+                    "trust_ref": candidate.get("trust_ref"),
+                    "trust_score": float(candidate.get("review_scores", {}).get("trust_score", self._trust_score(str(candidate.get("trust_ref", ""))))),
+                },
+                rollback_ref=f"memory:review:{candidate_id}",
+                related_cells=[str(candidate.get("producer_cell_id"))],
+                metadata={
+                    "decision": normalized_decision,
+                    "memory_class": candidate.get("memory_class"),
+                    "candidate_id": candidate_id,
+                },
+            )
+            if not authority_review["approved"]:
+                normalized_decision = "defer"
+                chosen_tier = "hot"
+                chosen_mode = "review_buffer_v1"
+                reason = f"{reason}; authority kept runtime influence provisional"
         decision_record = self._build_decision(
             candidate_id=candidate_id,
             reviewer_id=reviewer_id,
@@ -413,6 +454,8 @@ class FabricMemoryManager:
                 "created_utc": decision_record["created_utc"],
             }
         )
+        if authority_engine is not None and authority_review is not None:
+            authority_engine.finalize_review(authority_review["review_id"], action_ref=decision_ref, rollback_ref=decision_ref)
         self.refresh_hot_memory()
         return {
             "candidate_id": candidate_id,

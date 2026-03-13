@@ -1,0 +1,178 @@
+{
+  "registry_version": "agif.fabric.blueprints.v1",
+  "proof_domain": "document/workflow intelligence",
+  "utility_profiles": {
+    "finance_default": {
+      "reward_weight": 1.0,
+      "novelty_weight": 0.4,
+      "resource_cost_weight": 0.3,
+      "trust_penalty_weight": 0.6,
+      "policy_penalty_weight": 0.8,
+      "split_threshold": 0.9,
+      "merge_threshold": 0.35,
+      "hibernate_threshold": 0.2,
+      "reactivate_threshold": 0.55
+    },
+    "finance_priority": {
+      "reward_weight": 1.1,
+      "novelty_weight": 0.6,
+      "resource_cost_weight": 0.22,
+      "trust_penalty_weight": 0.72,
+      "policy_penalty_weight": 0.8,
+      "split_threshold": 0.82,
+      "merge_threshold": 0.35,
+      "hibernate_threshold": 0.18,
+      "reactivate_threshold": 0.48
+    }
+  },
+  "blueprints": [
+    {
+      "cell_id": "finance_audit_reporter",
+      "bundle_ref": "cells/finance_workflow/bundles/finance_audit_reporter.bundle.json",
+      "role_family": "finance_document_workflow",
+      "role_name": "audit_reporter",
+      "descriptor_kinds": [
+        "audit_summary",
+        "evidence_bundle"
+      ],
+      "split_policy": {
+        "allowed": true,
+        "max_children": 2
+      },
+      "merge_policy": {
+        "allowed": true,
+        "mode": "conflict_aware_consolidation"
+      },
+      "trust_profile": {
+        "baseline": "bounded_local_v1"
+      },
+      "policy_envelope": {
+        "allowed_actions": [
+          "summarize",
+          "report"
+        ],
+        "human_boundary": "document/workflow intelligence"
+      },
+      "activation_cost_ms": 20,
+      "working_memory_bytes": 131072,
+      "idle_memory_bytes": 32768,
+      "descriptor_cache_bytes": 65536,
+      "memory_tier": "warm",
+      "utility_profile_ref": "finance_default",
+      "allowed_tissues": [
+        "finance_document_workflow"
+      ]
+    },
+    {
+      "cell_id": "finance_intake_router",
+      "bundle_ref": "cells/finance_workflow/bundles/finance_intake_router.bundle.json",
+      "role_family": "finance_document_workflow",
+      "role_name": "intake_router",
+      "descriptor_kinds": [
+        "workflow_intake",
+        "routing_summary"
+      ],
+      "split_policy": {
+        "allowed": true,
+        "max_children": 2
+      },
+      "merge_policy": {
+        "allowed": true,
+        "mode": "conflict_aware_consolidation"
+      },
+      "trust_profile": {
+        "baseline": "bounded_local_v1"
+      },
+      "policy_envelope": {
+        "allowed_actions": [
+          "route",
+          "summarize"
+        ],
+        "human_boundary": "document/workflow intelligence"
+      },
+      "activation_cost_ms": 25,
+      "working_memory_bytes": 131072,
+      "idle_memory_bytes": 32768,
+      "descriptor_cache_bytes": 65536,
+      "memory_tier": "warm",
+      "utility_profile_ref": "finance_default",
+      "allowed_tissues": [
+        "finance_document_workflow"
+      ]
+    },
+    {
+      "cell_id": "finance_low_trust_router",
+      "bundle_ref": "cells/finance_workflow/bundles/finance_intake_router.bundle.json",
+      "role_family": "finance_document_workflow",
+      "role_name": "intake_router_experimental",
+      "descriptor_kinds": [
+        "workflow_intake",
+        "routing_summary"
+      ],
+      "split_policy": {
+        "allowed": true,
+        "max_children": 2
+      },
+      "merge_policy": {
+        "allowed": true,
+        "mode": "conflict_aware_consolidation"
+      },
+      "trust_profile": {
+        "baseline": "experimental_low_v1"
+      },
+      "policy_envelope": {
+        "allowed_actions": [
+          "route",
+          "summarize"
+        ],
+        "human_boundary": "document/workflow intelligence"
+      },
+      "activation_cost_ms": 12,
+      "working_memory_bytes": 98304,
+      "idle_memory_bytes": 32768,
+      "descriptor_cache_bytes": 49152,
+      "memory_tier": "warm",
+      "utility_profile_ref": "finance_priority",
+      "allowed_tissues": [
+        "finance_document_workflow"
+      ]
+    },
+    {
+      "cell_id": "finance_priority_router",
+      "bundle_ref": "cells/finance_workflow/bundles/finance_intake_router.bundle.json",
+      "role_family": "finance_document_workflow",
+      "role_name": "intake_router_priority",
+      "descriptor_kinds": [
+        "workflow_intake",
+        "routing_summary"
+      ],
+      "split_policy": {
+        "allowed": true,
+        "max_children": 2
+      },
+      "merge_policy": {
+        "allowed": true,
+        "mode": "conflict_aware_consolidation"
+      },
+      "trust_profile": {
+        "baseline": "bounded_local_v1"
+      },
+      "policy_envelope": {
+        "allowed_actions": [
+          "route",
+          "summarize"
+        ],
+        "human_boundary": "document/workflow intelligence"
+      },
+      "activation_cost_ms": 18,
+      "working_memory_bytes": 114688,
+      "idle_memory_bytes": 32768,
+      "descriptor_cache_bytes": 49152,
+      "memory_tier": "warm",
+      "utility_profile_ref": "finance_priority",
+      "allowed_tissues": [
+        "finance_document_workflow"
+      ]
+    }
+  ]
+}

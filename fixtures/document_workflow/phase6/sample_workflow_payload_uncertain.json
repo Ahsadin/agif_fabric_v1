@@ -1,0 +1,8 @@
+{
+  "workflow_name": "finance_document_intake",
+  "document_id": "doc-phase6-uncertain",
+  "inputs": {
+    "currency": "EUR",
+    "vendor_name": "Uncertain Vendor GmbH"
+  }
+}

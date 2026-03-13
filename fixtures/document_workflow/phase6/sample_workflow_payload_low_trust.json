@@ -1,0 +1,11 @@
+{
+  "workflow_name": "finance_document_intake",
+  "document_id": "doc-phase6-low-trust",
+  "priority_mode": true,
+  "inputs": {
+    "currency": "EUR",
+    "document_type": "invoice",
+    "total": "188.00",
+    "vendor_name": "Experimental Vendor GmbH"
+  }
+}

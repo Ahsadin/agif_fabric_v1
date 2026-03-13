@@ -9,10 +9,10 @@
 - Placeholder files created early to satisfy the plan do not count as phase completion by themselves.
 
 ## Current Recorded Progress
-- Completed units: `400`
-- Progress now: `400/600`
-- Percent complete: `66.7%`
-- Basis: Phase 0 bootstrap, Phase 1 requirements freeze, Phase 2 architecture freeze, Phase 3 runner and fabric foundation, Phase 4 elastic lifecycle and lineage, and Phase 5 reviewed memory, quantized consolidation, and bounded growth are complete.
+- Completed units: `465`
+- Progress now: `465/600`
+- Percent complete: `77.5%`
+- Basis: Phase 0 bootstrap, Phase 1 requirements freeze, Phase 2 architecture freeze, Phase 3 runner and fabric foundation, Phase 4 elastic lifecycle and lineage, Phase 5 reviewed memory, quantized consolidation, and bounded growth, and Phase 6 need signals, routing, utility, and authority are complete.
 
 ## 2026-03-13 Hardening Note
 - A Phase 4.5 + 5.5 hardening pass was completed locally.
@@ -58,9 +58,16 @@
   - deterministic Phase 5 fixtures exist locally
   - `python3 scripts/check_phase5_memory.py` passes locally
   - `AGIF_FABRIC_P5_PASS` is earned and recorded in `05_testing/PASS_TOKENS.md`
+  - Phase 6 need signals, routing, utility, and authority runtime exists locally
+  - deterministic Phase 6 fixtures exist locally
+  - need signals now expire, resolve, and remain traceable locally
+  - routing now uses reviewed descriptors, trust, load, workspace context, and utility locally
+  - authority approvals and vetoes are recorded locally for higher-risk actions
+  - `python3 scripts/check_phase6_routing_authority.py` passes locally
+  - `AGIF_FABRIC_P6_PASS` is earned and recorded in `05_testing/PASS_TOKENS.md`
 - Assumed only:
   - all later phases
-  - runtime behavior beyond the Phase 5 reviewed memory runtime
+  - runtime behavior beyond the Phase 6 governed routing runtime
   - benchmark outcomes
   - paper results
 
@@ -73,7 +80,7 @@
 | Phase 3 | 85 | Complete and locally verified |
 | Phase 4 | 80 | Complete and locally verified |
 | Phase 5 | 95 | Complete and locally verified |
-| Phase 6 | 65 | Not started |
+| Phase 6 | 65 | Complete and locally verified |
 | Phase 7 | 60 | Not started |
 | Phase 8 | 45 | Not started |
 | Phase 9 | 30 | Not started |

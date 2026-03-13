@@ -42,6 +42,7 @@ class FabricStateStore:
         (fabric_dir / "lifecycle" / "snapshots").mkdir(parents=True, exist_ok=True)
         (fabric_dir / "governance").mkdir(parents=True, exist_ok=True)
         (fabric_dir / "needs").mkdir(parents=True, exist_ok=True)
+        (fabric_dir / "routing").mkdir(parents=True, exist_ok=True)
         (fabric_dir / "memory").mkdir(parents=True, exist_ok=True)
         (fabric_dir / "memory" / "hot" / "payloads").mkdir(parents=True, exist_ok=True)
         (fabric_dir / "memory" / "warm" / "payloads").mkdir(parents=True, exist_ok=True)
@@ -151,6 +152,15 @@ class FabricStateStore:
 
     def need_signals_path(self, fabric_id: str) -> Path:
         return self.fabric_dir(fabric_id) / "needs" / "signals.json"
+
+    def need_history_path(self, fabric_id: str) -> Path:
+        return self.fabric_dir(fabric_id) / "needs" / "history.json"
+
+    def routing_decisions_path(self, fabric_id: str) -> Path:
+        return self.fabric_dir(fabric_id) / "routing" / "decisions.json"
+
+    def authority_reviews_path(self, fabric_id: str) -> Path:
+        return self.fabric_dir(fabric_id) / "governance" / "authority_reviews.json"
 
     def memory_dir(self, fabric_id: str) -> Path:
         return self.fabric_dir(fabric_id) / "memory"

@@ -156,11 +156,20 @@ class FabricStateStore:
     def need_history_path(self, fabric_id: str) -> Path:
         return self.fabric_dir(fabric_id) / "needs" / "history.json"
 
+    def need_resolution_path(self, fabric_id: str) -> Path:
+        return self.fabric_dir(fabric_id) / "needs" / "resolutions.json"
+
     def routing_decisions_path(self, fabric_id: str) -> Path:
         return self.fabric_dir(fabric_id) / "routing" / "decisions.json"
 
+    def routing_memory_path(self, fabric_id: str) -> Path:
+        return self.fabric_dir(fabric_id) / "routing" / "memory.json"
+
     def authority_reviews_path(self, fabric_id: str) -> Path:
         return self.fabric_dir(fabric_id) / "governance" / "authority_reviews.json"
+
+    def authority_patterns_path(self, fabric_id: str) -> Path:
+        return self.fabric_dir(fabric_id) / "governance" / "authority_patterns.json"
 
     def memory_dir(self, fabric_id: str) -> Path:
         return self.fabric_dir(fabric_id) / "memory"

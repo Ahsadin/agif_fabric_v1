@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Deterministic local check for Phase 6 routing, utility, need signals, and authority."""
+"""Deterministic local check for Phase 6 and Phase 6.5 routing, utility, need signals, and authority."""
 
 from __future__ import annotations
 

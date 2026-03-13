@@ -17,7 +17,12 @@
 ## 2026-03-13 Hardening Note
 - A Phase 4.5 + 5.5 hardening pass was completed locally.
 - This pass improved lifecycle quality and memory quality inside already-closed Phases 4 and 5.
-- The progress units remain `400/600` because the locked plan does not award extra units for hardening inside a closed phase.
+- The progress units remain `465/600` because the locked plan does not award extra units for hardening inside a closed phase.
+
+## 2026-03-13 Phase 6.5 Hardening Note
+- A Phase 6.5 hardening pass was completed locally.
+- This pass improved routing confidence, need-resolution quality, route-memory feedback, lineage-aware routing, and authority outcome memory inside already-closed Phase 6.
+- The progress units remain `465/600` because the locked plan does not award extra units for hardening inside a closed phase.
 
 ## Verification Status
 - Locally verified:

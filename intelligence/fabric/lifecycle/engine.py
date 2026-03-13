@@ -320,6 +320,7 @@ class FabricLifecycleManager:
             policy_risk=policy_risk_from_envelope(logical_record["policy_envelope"], action="route"),
             activation_cost_ms=int(logical_record["blueprint"]["activation_cost_ms"]),
             working_memory_bytes=int(logical_record["blueprint"]["working_memory_bytes"]),
+            historical_feedback=self._lineage_usefulness_score(logical_record["lineage_id"]),
         )
         authority_review = None
         if authority_engine is not None and (use_burst or str((need_signal or {}).get("signal_kind")) == "trust_risk"):
@@ -335,7 +336,13 @@ class FabricLifecycleManager:
                 },
                 rollback_ref="lifecycle:snapshot_pre_activation",
                 related_cells=[cell_id],
-                metadata={"workflow_ref": workflow_ref, "allow_burst": use_burst},
+                metadata={
+                    "workflow_ref": workflow_ref,
+                    "allow_burst": use_burst,
+                    "lineage_id": logical_record["lineage_id"],
+                    "lineage_usefulness_score": self._lineage_usefulness_score(logical_record["lineage_id"]),
+                    "lineage_last_reason": self._lineage_last_reason(logical_record["lineage_id"]),
+                },
                 approver=governance_approver if use_burst else None,
             )
             if not authority_review["approved"]:
@@ -543,6 +550,7 @@ class FabricLifecycleManager:
                 policy_risk=policy_risk_from_envelope(record["policy_envelope"], action="route"),
                 activation_cost_ms=int(record["blueprint"]["activation_cost_ms"]),
                 working_memory_bytes=int(record["blueprint"]["working_memory_bytes"]),
+                historical_feedback=self._lineage_usefulness_score(record["lineage_id"]),
             )
             evaluations.append(
                 {
@@ -627,7 +635,12 @@ class FabricLifecycleManager:
                 },
                 rollback_ref="lifecycle:snapshot_pre_split",
                 related_cells=[parent_cell_id],
-                metadata={"requested_children": len(child_role_names)},
+                metadata={
+                    "requested_children": len(child_role_names),
+                    "lineage_id": parent_record["lineage_id"],
+                    "lineage_usefulness_score": self._lineage_usefulness_score(parent_record["lineage_id"]),
+                    "lineage_last_reason": self._lineage_last_reason(parent_record["lineage_id"]),
+                },
                 approver=governance_actor,
             )
             if not authority_review["approved"]:
@@ -922,7 +935,16 @@ class FabricLifecycleManager:
                 },
                 rollback_ref="lifecycle:snapshot_pre_merge",
                 related_cells=[survivor_cell_id, merged_cell_id],
-                metadata={"survivor_cell_id": survivor_cell_id, "merged_cell_id": merged_cell_id},
+                metadata={
+                    "survivor_cell_id": survivor_cell_id,
+                    "merged_cell_id": merged_cell_id,
+                    "lineage_id": survivor["lineage_id"],
+                    "lineage_usefulness_score": min(
+                        self._lineage_usefulness_score(survivor["lineage_id"]),
+                        self._lineage_usefulness_score(merged["lineage_id"]),
+                    ),
+                    "lineage_last_reason": self._lineage_last_reason(survivor["lineage_id"]),
+                },
                 approver=governance_actor,
             )
             if not authority_review["approved"]:
@@ -1145,6 +1167,7 @@ class FabricLifecycleManager:
             policy_risk=policy_risk_from_envelope(logical_record["policy_envelope"], action="route"),
             resource_cost=0.2,
             contextual_gain=0.8,
+            historical_feedback=self._lineage_usefulness_score(logical_record["lineage_id"]),
         )
         authority_review = None
         if authority_engine is not None:
@@ -1160,7 +1183,12 @@ class FabricLifecycleManager:
                 },
                 rollback_ref="lifecycle:snapshot_pre_quarantine",
                 related_cells=[cell_id],
-                metadata={"reason": reason},
+                metadata={
+                    "reason": reason,
+                    "lineage_id": logical_record["lineage_id"],
+                    "lineage_usefulness_score": self._lineage_usefulness_score(logical_record["lineage_id"]),
+                    "lineage_last_reason": self._lineage_last_reason(logical_record["lineage_id"]),
+                },
                 approver=governance_actor,
             )
             if not authority_review["approved"]:
@@ -1681,6 +1709,7 @@ class FabricLifecycleManager:
                 + (int(parent_record["blueprint"]["working_memory_bytes"]) / 262144.0)
             ),
             contextual_gain=0.72 if signal_kind in SPLIT_SIGNAL_KINDS else 0.2,
+            historical_feedback=self._lineage_usefulness_score(parent_record["lineage_id"]),
         )
         if signal_kind not in SPLIT_SIGNAL_KINDS:
             return {
@@ -1752,6 +1781,10 @@ class FabricLifecycleManager:
                 / 524288.0
             ),
             contextual_gain=0.76 if signal_kind in MERGE_SIGNAL_KINDS else 0.2,
+            historical_feedback=min(
+                self._lineage_usefulness_score(survivor["lineage_id"]),
+                self._lineage_usefulness_score(merged["lineage_id"]),
+            ),
         )
         if signal_kind not in MERGE_SIGNAL_KINDS:
             return {
@@ -1916,6 +1949,23 @@ class FabricLifecycleManager:
         trust_profile = record.get("blueprint", {}).get("trust_profile", {})
         baseline = str(trust_profile.get("baseline", "bounded_local_v1"))
         return trust_score_from_ref(baseline)
+
+    def _lineage_usefulness_score(self, lineage_id: str) -> float:
+        metrics = self._load_or_initialize(
+            self.store.lifecycle_metrics_path(self.fabric_id),
+            self._default_lifecycle_metrics(),
+        )
+        lineage_metrics = metrics["lineages"].get(lineage_id, self._default_lineage_metrics(lineage_id))
+        return clamp_score(float(lineage_metrics.get("usefulness_score", 0.0)))
+
+    def _lineage_last_reason(self, lineage_id: str) -> str | None:
+        metrics = self._load_or_initialize(
+            self.store.lifecycle_metrics_path(self.fabric_id),
+            self._default_lifecycle_metrics(),
+        )
+        lineage_metrics = metrics["lineages"].get(lineage_id, self._default_lineage_metrics(lineage_id))
+        reason = lineage_metrics.get("last_usefulness_reason")
+        return None if reason in {None, ""} else str(reason)
 
     def _need_pressure_for_runtime(self, runtime_record: dict[str, Any]) -> float:
         signals = runtime_record.get("current_need_signals", [])

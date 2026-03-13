@@ -18,9 +18,23 @@ DEFAULT_UTILITY_PROFILE = {
     "reactivate_threshold": 0.55,
 }
 
+UTILITY_BANDS = (
+    (0.75, "attractive"),
+    (0.5, "acceptable"),
+    (0.25, "weak"),
+)
+
 
 def clamp_score(value: float) -> float:
     return round(min(1.0, max(0.0, float(value))), 6)
+
+
+def utility_band(score: float) -> str:
+    normalized = clamp_score(score)
+    for threshold, label in UTILITY_BANDS:
+        if normalized >= threshold:
+            return label
+    return "abstain"
 
 
 def trust_score_from_ref(trust_ref: str) -> float:
@@ -76,6 +90,7 @@ class UtilityScorer:
         working_memory_bytes: int,
         policy_risk: float,
         novelty_signal: float = 0.0,
+        historical_feedback: float = 0.0,
     ) -> dict[str, Any]:
         profile = self.resolve_profile(profile_ref)
         resource_cost = clamp_score(
@@ -92,6 +107,7 @@ class UtilityScorer:
             - (profile["trust_penalty_weight"] * (1.0 - trust_score))
             - (profile["policy_penalty_weight"] * policy_risk)
             - (0.18 * current_load)
+            + (0.14 * clamp_score(historical_feedback))
         )
         return {
             "profile_ref": profile_ref or "default",
@@ -105,7 +121,9 @@ class UtilityScorer:
             "trust_score": clamp_score(trust_score),
             "policy_risk": clamp_score(policy_risk),
             "current_load": clamp_score(current_load),
+            "historical_feedback": clamp_score(historical_feedback),
             "utility_score": score,
+            "utility_band": utility_band(score),
         }
 
     def score_structural_action(
@@ -118,6 +136,7 @@ class UtilityScorer:
         policy_risk: float,
         resource_cost: float,
         contextual_gain: float,
+        historical_feedback: float = 0.0,
     ) -> dict[str, Any]:
         profile = self.resolve_profile(profile_ref)
         base_signal = clamp_score((0.58 * need_severity) + (0.42 * contextual_gain))
@@ -128,6 +147,7 @@ class UtilityScorer:
             - (0.15 * resource_cost)
             - (0.1 * (1.0 - trust_score))
             - (0.08 * policy_risk)
+            + (0.1 * clamp_score(historical_feedback))
         )
         if action == "split":
             threshold = profile["split_threshold"]
@@ -148,9 +168,11 @@ class UtilityScorer:
             "resource_cost": clamp_score(resource_cost),
             "trust_score": clamp_score(trust_score),
             "policy_risk": clamp_score(policy_risk),
+            "historical_feedback": clamp_score(historical_feedback),
             "utility_score": score,
             "threshold": round(float(threshold), 6),
             "attractive": attractive,
+            "utility_band": utility_band(score),
         }
 
     def evaluate_runtime_choice(
@@ -165,6 +187,7 @@ class UtilityScorer:
         policy_risk: float,
         activation_cost_ms: int,
         working_memory_bytes: int,
+        historical_feedback: float = 0.0,
     ) -> dict[str, Any]:
         scored = self.score_candidate(
             profile_ref=profile_ref,
@@ -178,6 +201,7 @@ class UtilityScorer:
             working_memory_bytes=working_memory_bytes,
             policy_risk=policy_risk,
             novelty_signal=max(0.0, need_pressure),
+            historical_feedback=historical_feedback,
         )
         profile = scored["profile"]
         utility_score = float(scored["utility_score"])
@@ -199,4 +223,5 @@ class UtilityScorer:
             "demand_score": clamp_score(demand_score),
             "recommended_action": recommended,
             "threshold": round(threshold, 6),
+            "utility_band": utility_band(utility_score),
         }

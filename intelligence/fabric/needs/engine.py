@@ -145,6 +145,10 @@ class NeedSignalManager:
             self.store.need_history_path(self.fabric_id),
             {"schema_version": "agif.fabric.need_history.v1", "entries": []},
         )
+        self._load_or_initialize(
+            self.store.need_resolution_path(self.fabric_id),
+            {"schema_version": "agif.fabric.need_resolutions.v1", "entries": {}},
+        )
 
     def record_signal(self, *, signal: dict[str, Any], actor: str = "fabric:need_manager") -> dict[str, Any]:
         normalized = self._normalize_signal(signal)
@@ -156,8 +160,22 @@ class NeedSignalManager:
             self.store.need_history_path(self.fabric_id),
             {"schema_version": "agif.fabric.need_history.v1", "entries": []},
         )
+        resolutions = self._load_or_initialize(
+            self.store.need_resolution_path(self.fabric_id),
+            {"schema_version": "agif.fabric.need_resolutions.v1", "entries": {}},
+        )
         event = "created" if normalized["need_signal_id"] not in signals["signals"] else "updated"
         signals["signals"][normalized["need_signal_id"]] = normalized
+        self._touch_resolution_entry(
+            resolutions=resolutions,
+            signal=normalized,
+            status=str(normalized["status"]),
+            quality="open" if str(normalized["status"]) in ACTIVE_SIGNAL_STATUSES else str(normalized["status"]),
+            effectiveness_score=None,
+            resolution_ref=normalized["resolution_ref"],
+            actor=actor,
+            notes=f"signal {event}",
+        )
         self._append_history(
             history,
             need_signal_id=normalized["need_signal_id"],
@@ -169,6 +187,7 @@ class NeedSignalManager:
         )
         write_json_atomic(self.store.need_signals_path(self.fabric_id), signals)
         write_json_atomic(self.store.need_history_path(self.fabric_id), history)
+        write_json_atomic(self.store.need_resolution_path(self.fabric_id), resolutions)
         return deepcopy(normalized)
 
     def record_generated_signals(
@@ -310,6 +329,10 @@ class NeedSignalManager:
             self.store.need_history_path(self.fabric_id),
             {"schema_version": "agif.fabric.need_history.v1", "entries": []},
         )
+        resolutions = self._load_or_initialize(
+            self.store.need_resolution_path(self.fabric_id),
+            {"schema_version": "agif.fabric.need_resolutions.v1", "entries": {}},
+        )
         changed = False
         timestamp = now_utc or utc_now_iso()
         for record in signals["signals"].values():
@@ -328,10 +351,21 @@ class NeedSignalManager:
                     resolution_ref=record["resolution_ref"],
                     detail="expired before resolution",
                 )
+                self._touch_resolution_entry(
+                    resolutions=resolutions,
+                    signal=record,
+                    status="expired",
+                    quality="expired",
+                    effectiveness_score=0.0,
+                    resolution_ref=record["resolution_ref"],
+                    actor="fabric:need_manager",
+                    notes="expired before resolution",
+                )
                 changed = True
         if changed:
             write_json_atomic(self.store.need_signals_path(self.fabric_id), signals)
             write_json_atomic(self.store.need_history_path(self.fabric_id), history)
+            write_json_atomic(self.store.need_resolution_path(self.fabric_id), resolutions)
         return self.load_signals()
 
     def resolve_signal(
@@ -341,6 +375,9 @@ class NeedSignalManager:
         resolution_ref: str,
         status: str = "resolved",
         actor: str = "fabric:need_manager",
+        effectiveness_score: float | None = None,
+        quality: str | None = None,
+        notes: str | None = None,
     ) -> dict[str, Any]:
         signals = self._load_or_initialize(
             self.store.need_signals_path(self.fabric_id),
@@ -350,12 +387,24 @@ class NeedSignalManager:
             self.store.need_history_path(self.fabric_id),
             {"schema_version": "agif.fabric.need_history.v1", "entries": []},
         )
+        resolutions = self._load_or_initialize(
+            self.store.need_resolution_path(self.fabric_id),
+            {"schema_version": "agif.fabric.need_resolutions.v1", "entries": {}},
+        )
         record = deepcopy(signals["signals"].get(need_signal_id))
         if record is None:
             return {"updated": False, "need_signal_id": need_signal_id}
         record["status"] = status
         record["resolution_ref"] = resolution_ref
         signals["signals"][need_signal_id] = record
+        effective_quality = self._resolve_quality(
+            resolutions=resolutions,
+            signal=record,
+            status=status,
+            quality=quality,
+            effectiveness_score=effectiveness_score,
+        )
+        detail = notes or f"resolution recorded ({effective_quality})"
         self._append_history(
             history,
             need_signal_id=need_signal_id,
@@ -363,10 +412,21 @@ class NeedSignalManager:
             status=status,
             actor=actor,
             resolution_ref=resolution_ref,
-            detail="resolution recorded",
+            detail=detail,
+        )
+        self._touch_resolution_entry(
+            resolutions=resolutions,
+            signal=record,
+            status=status,
+            quality=effective_quality,
+            effectiveness_score=effectiveness_score,
+            resolution_ref=resolution_ref,
+            actor=actor,
+            notes=detail,
         )
         write_json_atomic(self.store.need_signals_path(self.fabric_id), signals)
         write_json_atomic(self.store.need_history_path(self.fabric_id), history)
+        write_json_atomic(self.store.need_resolution_path(self.fabric_id), resolutions)
         return {**record, "updated": True}
 
     def load_signals(self) -> list[dict[str, Any]]:
@@ -383,6 +443,13 @@ class NeedSignalManager:
         )
         return [deepcopy(item) for item in payload["entries"]]
 
+    def load_resolutions(self) -> dict[str, dict[str, Any]]:
+        payload = self._load_or_initialize(
+            self.store.need_resolution_path(self.fabric_id),
+            {"schema_version": "agif.fabric.need_resolutions.v1", "entries": {}},
+        )
+        return {key: deepcopy(value) for key, value in payload["entries"].items()}
+
     def active_signals(self, *, now_utc: str | None = None) -> list[dict[str, Any]]:
         self.expire_signals(now_utc=now_utc)
         return [item for item in self.load_signals() if item["status"] in ACTIVE_SIGNAL_STATUSES]
@@ -390,6 +457,7 @@ class NeedSignalManager:
     def summary(self, *, now_utc: str | None = None) -> dict[str, Any]:
         signals = self.load_signals() if now_utc is None else self.expire_signals(now_utc=now_utc)
         history = self.load_history()
+        resolutions = self.load_resolutions()
         active = [item for item in signals if item["status"] in ACTIVE_SIGNAL_STATUSES]
         by_kind: dict[str, dict[str, int]] = {}
         for item in signals:
@@ -403,15 +471,43 @@ class NeedSignalManager:
                 kind_bucket["expired"] += 1
             else:
                 kind_bucket["other"] += 1
+        recurring_signatures = self._recurring_signatures(resolutions)
+        resolved_well_count = len(
+            [item for item in resolutions.values() if str(item.get("resolution_quality")) == "resolved_well"]
+        )
+        resolved_weakly_count = len(
+            [item for item in resolutions.values() if str(item.get("resolution_quality")) == "resolved_weakly"]
+        )
+        recurring_unresolved_count = len(
+            [
+                item
+                for item in resolutions.values()
+                if int(item.get("recurrence_count", 0)) > 0
+                and str(item.get("resolution_quality")) in {"expired", "resolved_weakly", "unresolved_recurring", "vetoed"}
+            ]
+        )
+        effectiveness_scores = [
+            float(item["effectiveness_score"])
+            for item in resolutions.values()
+            if isinstance(item.get("effectiveness_score"), (float, int))
+        ]
         return {
             "signal_count": len(signals),
             "active_signal_count": len(active),
             "resolved_signal_count": len([item for item in signals if item["status"] == "resolved"]),
             "expired_signal_count": len([item for item in signals if item["status"] == "expired"]),
             "traceable_resolution_count": len([item for item in signals if item.get("resolution_ref")]),
+            "resolved_well_count": resolved_well_count,
+            "resolved_weakly_count": resolved_weakly_count,
+            "recurring_unresolved_count": recurring_unresolved_count,
+            "average_effectiveness_score": 0.0
+            if len(effectiveness_scores) == 0
+            else round(sum(effectiveness_scores) / float(len(effectiveness_scores)), 6),
             "history_entry_count": len(history),
             "active_signals": active,
             "by_kind": by_kind,
+            "resolution_outcomes": resolutions,
+            "recurring_signatures": recurring_signatures,
             "latest_signal_ref": None if len(signals) == 0 else signals[-1]["need_signal_id"],
         }
 
@@ -469,6 +565,138 @@ class NeedSignalManager:
                 "created_utc": utc_now_iso(),
             }
         )
+
+    def _touch_resolution_entry(
+        self,
+        *,
+        resolutions: dict[str, Any],
+        signal: dict[str, Any],
+        status: str,
+        quality: str,
+        effectiveness_score: float | None,
+        resolution_ref: str | None,
+        actor: str,
+        notes: str,
+    ) -> None:
+        entries = resolutions["entries"]
+        signature = self._resolution_signature(signal)
+        recurrence_count = self._matching_resolution_count(entries, signature=signature, excluding=str(signal["need_signal_id"]))
+        current = deepcopy(entries.get(str(signal["need_signal_id"])))
+        prior_unresolved = 0 if current is None else int(current.get("unresolved_count", 0))
+        unresolved_increment = 1 if quality in {"expired", "resolved_weakly", "unresolved_recurring", "vetoed"} else 0
+        entries[str(signal["need_signal_id"])] = {
+            "need_signal_id": str(signal["need_signal_id"]),
+            "signal_kind": str(signal["signal_kind"]),
+            "signature": signature,
+            "current_status": status,
+            "resolution_quality": quality,
+            "effectiveness_score": None if effectiveness_score is None else clamp_score(effectiveness_score),
+            "recurrence_count": recurrence_count,
+            "unresolved_count": prior_unresolved + unresolved_increment,
+            "resolution_ref": resolution_ref,
+            "last_actor": actor,
+            "notes": notes,
+            "created_utc": str(signal["created_utc"]),
+            "updated_utc": utc_now_iso(),
+        }
+
+    def _resolve_quality(
+        self,
+        *,
+        resolutions: dict[str, Any],
+        signal: dict[str, Any],
+        status: str,
+        quality: str | None,
+        effectiveness_score: float | None,
+    ) -> str:
+        if quality:
+            return quality
+        if status == "expired":
+            return "expired"
+        if status == "resolved":
+            score = 0.0 if effectiveness_score is None else clamp_score(effectiveness_score)
+            return "resolved_well" if score >= 0.75 else "resolved_weakly"
+        if status == "reviewed":
+            signature = self._resolution_signature(signal)
+            prior_matches = self._matching_resolution_count(
+                resolutions["entries"],
+                signature=signature,
+                excluding=str(signal["need_signal_id"]),
+                unresolved_only=True,
+            )
+            return "unresolved_recurring" if prior_matches >= 1 else "reviewed_pending"
+        if status == "vetoed":
+            signature = self._resolution_signature(signal)
+            prior_matches = self._matching_resolution_count(
+                resolutions["entries"],
+                signature=signature,
+                excluding=str(signal["need_signal_id"]),
+                unresolved_only=True,
+            )
+            return "unresolved_recurring" if prior_matches >= 1 else "vetoed"
+        return status
+
+    def _resolution_signature(self, signal: dict[str, Any]) -> str:
+        return "|".join(
+            [
+                str(signal.get("signal_kind", "")),
+                str(signal.get("source_type", "")),
+                str(signal.get("source_id", "")),
+                str(signal.get("proposed_action", "")),
+            ]
+        )
+
+    def _matching_resolution_count(
+        self,
+        entries: dict[str, Any],
+        *,
+        signature: str,
+        excluding: str,
+        unresolved_only: bool = False,
+    ) -> int:
+        total = 0
+        for need_signal_id, record in entries.items():
+            if need_signal_id == excluding or str(record.get("signature")) != signature:
+                continue
+            if unresolved_only and str(record.get("resolution_quality")) not in {
+                "expired",
+                "resolved_weakly",
+                "unresolved_recurring",
+                "vetoed",
+            }:
+                continue
+            total += 1
+        return total
+
+    def _recurring_signatures(self, resolutions: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
+        grouped: dict[str, dict[str, Any]] = {}
+        for record in resolutions.values():
+            signature = str(record.get("signature", ""))
+            if signature == "":
+                continue
+            bucket = grouped.setdefault(
+                signature,
+                {
+                    "signature": signature,
+                    "signal_kind": record.get("signal_kind"),
+                    "signal_count": 0,
+                    "unresolved_count": 0,
+                    "last_need_signal_id": None,
+                    "last_quality": None,
+                },
+            )
+            bucket["signal_count"] += 1
+            if str(record.get("resolution_quality")) in {"expired", "resolved_weakly", "unresolved_recurring", "vetoed"}:
+                bucket["unresolved_count"] += 1
+            bucket["last_need_signal_id"] = record.get("need_signal_id")
+            bucket["last_quality"] = record.get("resolution_quality")
+        recurring = [
+            item
+            for item in grouped.values()
+            if int(item["signal_count"]) >= 2 and int(item["unresolved_count"]) >= 1
+        ]
+        recurring.sort(key=lambda item: (-int(item["unresolved_count"]), str(item["signature"])))
+        return recurring
 
     def _future_utc(self, base_utc: str, *, seconds: int) -> str:
         return (self._parse_utc(base_utc) + timedelta(seconds=seconds)).replace(microsecond=0).isoformat().replace("+00:00", "Z")

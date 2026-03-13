@@ -1,5 +1,36 @@
 # Changelog
 
+## 2026-03-13 Phase 6.5 Hardening
+- Hardened the existing Phase 6 decision layer without changing the frozen Phase 2 interface fields or CLI command names:
+  - `intelligence/fabric/needs/engine.py`
+  - `intelligence/fabric/utility.py`
+  - `intelligence/fabric/routing.py`
+  - `intelligence/fabric/governance/authority.py`
+  - `intelligence/fabric/lifecycle/engine.py`
+  - `intelligence/fabric/state_store.py`
+  - `intelligence/fabric/cli.py`
+- Need handling now records separate resolution-quality memory, effectiveness scores, recurring unresolved pressure, and explicit recurring signatures while keeping the frozen `NeedSignal` shape unchanged.
+- Routing now records explicit route confidence, confidence bands, abstain or escalate paths, route-memory history, descriptor provenance influence, lineage usefulness influence, and deterministic rejection reasons.
+- Authority now records trust-band history, proposer and action veto patterns, weak-lineage review pressure, and more explanatory decision notes.
+- Added stronger deterministic Phase 6.5 tests and verification:
+  - `05_testing/test_phase6_routing_authority.py`
+  - `scripts/check_phase6_routing_authority.py`
+  - `05_testing/PHASE65_HARDENING_EVIDENCE.md`
+- Updated evidence output to expose the new routing-memory, need-resolution, and authority-pattern stores.
+- Updated project records and admin tracking for the Phase 6.5 hardening thread without changing the completed project units.
+- Locally verified:
+  - `python3 scripts/check_phase6_routing_authority.py` passes locally with the new hardening checks
+  - `python3 scripts/check_phase5_memory.py` still passes locally through the chained Phase 6 check
+  - `python3 scripts/check_phase4_lifecycle.py` still passes locally through the chained Phase 6 check
+  - `python3 scripts/check_phase3_foundation.py` still passes locally through the chained Phase 6 check
+  - routing now abstains deterministically when all candidates are weak or busy instead of forcing a weak route
+  - recurring need pressure is now detectable locally
+  - routing failure memory and authority veto history now change later decisions locally
+- Assumed only:
+  - Phase 7 tissue expansion
+  - benchmark behavior beyond the deterministic local checks
+  - long-duration soak behavior beyond the current proof
+
 ## 2026-03-12
 - Created the standalone AGIF v1 project bootstrap in `/Users/ahsadin/Documents/Projects/ENF/AGIF/agif_fabric_v1`.
 - Added the required root source-of-truth files:

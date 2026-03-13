@@ -71,6 +71,11 @@
 - [x] Utility scoring is active in runtime decisions beyond the current bounded proof paths.
 - [x] Routing logic uses reviewed descriptors under explicit authority checks.
 - [x] Authority evaluation covers the planned Phase 6 depth locally.
+- [x] Routing records explicit confidence, low-confidence abstain or escalate paths, and deterministic rejection reasons locally.
+- [x] Need handling records resolution quality, effectiveness, expiry, and recurring unresolved pressure locally.
+- [x] Routing history, descriptor provenance, and lineage usefulness influence later routing locally.
+- [x] Authority history, trust-band review pressure, and weak-lineage review pressure influence later governance locally.
+- [x] Phase 3, Phase 4, and Phase 5 deterministic checks still pass locally after the Phase 6.5 hardening changes.
 
 ## Phase 7
 - [ ] Domain tissues are implemented beyond the current finance workflow seed roles.

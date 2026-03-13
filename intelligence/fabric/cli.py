@@ -251,6 +251,12 @@ def command_run() -> dict[str, Any]:
         routing_decision=routing_decision,
         authority_engine=authority_engine,
     )
+    routing_engine.record_outcome(
+        decision_id=str(routing_decision["decision_id"]),
+        outcome_kind=_routing_outcome_kind(routing_decision=routing_decision, memory_result=memory_result),
+        effectiveness_score=_routing_effectiveness_score(routing_decision=routing_decision, memory_result=memory_result),
+        detail=f"selection_mode={routing_decision['selection_mode']}; memory_decision={memory_result['decision']}",
+    )
     episodic_store.append_event(
         {
             "event_kind": "phase6_run",
@@ -414,8 +420,11 @@ def command_evidence(output_path: Path) -> dict[str, Any]:
         "lineage_ledger_ref": repo_relative(store.lineage_ledger_path(state["fabric_id"])),
         "veto_log_ref": repo_relative(store.veto_log_path(state["fabric_id"])),
         "need_history_ref": repo_relative(store.need_history_path(state["fabric_id"])),
+        "need_resolution_ref": repo_relative(store.need_resolution_path(state["fabric_id"])),
         "routing_decisions_ref": repo_relative(store.routing_decisions_path(state["fabric_id"])),
+        "routing_memory_ref": repo_relative(store.routing_memory_path(state["fabric_id"])),
         "authority_reviews_ref": repo_relative(store.authority_reviews_path(state["fabric_id"])),
+        "authority_patterns_ref": repo_relative(store.authority_patterns_path(state["fabric_id"])),
         "hot_memory_index_ref": repo_relative(store.hot_memory_index_path(state["fabric_id"])),
         "raw_log_index_ref": repo_relative(store.raw_log_index_path(state["fabric_id"])),
         "memory_candidates_ref": repo_relative(store.memory_candidates_path(state["fabric_id"])),
@@ -453,6 +462,26 @@ def _load_current_runtime_context() -> tuple[
     config, _, registry, _ = load_fabric_bootstrap(config_ref)
     lifecycle = FabricLifecycleManager(store=store, state=state, config=config, utility_profiles=registry["utility_profiles"])
     return state, config, registry, store, lifecycle
+
+
+def _routing_outcome_kind(*, routing_decision: dict[str, Any], memory_result: dict[str, Any]) -> str:
+    if str(routing_decision.get("selection_mode")) != "selected":
+        return "failure"
+    if str(memory_result.get("decision")) in {"promote", "compress"} and float(routing_decision.get("route_confidence", 0.0)) >= 0.68:
+        return "success"
+    return "weak_success"
+
+
+def _routing_effectiveness_score(*, routing_decision: dict[str, Any], memory_result: dict[str, Any]) -> float:
+    confidence = float(routing_decision.get("route_confidence", 0.0))
+    decision = str(memory_result.get("decision", ""))
+    if decision in {"promote", "compress"}:
+        bonus = 0.12
+    elif decision == "defer":
+        bonus = 0.03
+    else:
+        bonus = -0.08
+    return max(0.0, min(1.0, round(confidence + bonus, 6)))
 
 
 def _load_stdin_json() -> dict[str, Any]:

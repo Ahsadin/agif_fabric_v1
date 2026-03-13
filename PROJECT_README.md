@@ -35,6 +35,7 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Phase 5: complete and locally verified
 - Phase 6: complete and locally verified
 - Phase 4.5 + 5.5 hardening: complete and locally verified without changing project units
+- Phase 6.5 hardening: complete and locally verified without changing project units
 
 ## Phase 3 Foundation
 - Local runner entrypoint: `runner/cell`
@@ -79,6 +80,7 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Routing now evaluates multiple candidates with role fit, reviewed descriptor usefulness, trust, current load, need pressure, workspace context, and utility scoring.
 - Authority now records approvals and vetoes for higher-risk descriptor use, memory-driven runtime influence, risky reactivation, split, merge, and quarantine escalation.
 - Runtime summaries now expose active need signals, routing decisions, utility traces, descriptor use, approvals, vetoes, and authority outcomes.
+- Phase 6.5 hardening adds route confidence, explicit abstain or escalate paths, recurring-need detection, route success or failure memory, descriptor provenance influence, lineage-aware routing and authority review, and authority veto-pattern memory.
 - Deterministic Phase 6 fixtures now live under `fixtures/document_workflow/phase6/`.
 - Deterministic local Phase 6 check script: `scripts/check_phase6_routing_authority.py`
 
@@ -130,5 +132,6 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Phase 5 verification method: run the deterministic reviewed-memory check and confirm the Phase 5 pass token and evidence note.
 - Phase 6 verification method: run the deterministic routing and authority check and confirm the Phase 6 pass token and evidence note.
 - Hardening verification method: run the Phase 4 and Phase 5 deterministic checks again and confirm `05_testing/PHASE45_HARDENING_EVIDENCE.md`.
+- Phase 6.5 hardening verification method: run `python3 scripts/check_phase6_routing_authority.py` and confirm `05_testing/PHASE65_HARDENING_EVIDENCE.md`.
 - Local verification status is recorded in `01_plan/PROGRESS_TRACKER.md` and `CHANGELOG.md`.
 - Later runtime behavior beyond the Phase 6 governed routing runtime remains assumed only until later phases verify it.

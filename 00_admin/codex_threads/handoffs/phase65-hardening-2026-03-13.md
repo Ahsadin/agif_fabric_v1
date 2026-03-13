@@ -1,0 +1,23 @@
+# Phase 6.5 Hardening Handoff
+
+- Thread ID: `phase65-hardening-2026-03-13`
+- Status: complete
+- Scope: Phase 6.5 hardening only
+- Progress units: `465/600`
+- Pass token re-verified: `AGIF_FABRIC_P6_PASS`
+- Local verification:
+  - `python3 scripts/check_phase6_routing_authority.py`
+  - `python3 scripts/check_phase5_memory.py` through the chained Phase 6 check
+  - `python3 scripts/check_phase4_lifecycle.py` through the chained Phase 6 check
+  - `python3 scripts/check_phase3_foundation.py` through the chained Phase 6 check
+- Key outcome:
+  - routing now records confidence, abstains on weak candidates, and learns from bounded route outcomes
+  - need handling now records effectiveness, resolution quality, expiry, and recurring unresolved pressure
+  - authority now remembers proposer, trust-band, and lineage review problems and can strengthen later veto decisions
+  - the evidence bundle now exposes need-resolution, routing-memory, and authority-pattern refs
+- Remaining weak:
+  - outcome feedback is still bounded and local, not a long-run benchmark learning loop
+  - authority history is still local runtime memory, not a later tissue-scale governance system
+- Assumed only:
+  - Phase 7 domain tissue expansion
+  - benchmark behavior beyond the deterministic local proof

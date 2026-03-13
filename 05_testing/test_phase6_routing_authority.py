@@ -153,6 +153,19 @@ class Phase6RoutingAuthorityTest(unittest.TestCase):
         manifest_path.write_text(json.dumps({"workflow_payload_path": str(payload_path)}, indent=2) + "\n", encoding="utf-8")
         return manifest_path
 
+    def selected_router(self, decision: dict) -> str | None:
+        for cell_id in decision["selected_cells"]:
+            if "router" in cell_id:
+                return cell_id
+        return None
+
+    def update_runtime_states(self, updates: dict[str, dict[str, object]]) -> None:
+        runtime_path = self.state_root / "agif-fabric-v1-local" / "lifecycle" / "runtime_states.json"
+        runtime_payload = json.loads(runtime_path.read_text(encoding="utf-8"))
+        for cell_id, patch in updates.items():
+            runtime_payload["states"][cell_id].update(patch)
+        runtime_path.write_text(json.dumps(runtime_payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
     def test_need_signal_generation_expiry_and_resolution(self) -> None:
         self.run_cli(["fabric", "init", str(CONFIG_PATH)])
         _, _, _, _, _, memory, need_manager, authority_engine, routing = self.init_runtime()
@@ -191,7 +204,9 @@ class Phase6RoutingAuthorityTest(unittest.TestCase):
             payload_path=STANDARD_PAYLOAD_PATH,
         )
         before_scores = {item["cell_id"]: item for item in before["candidate_scores"]}
-        baseline_router = next(cell_id for cell_id in before["selected_cells"] if "router" in cell_id)
+        baseline_router = self.selected_router(before)
+        self.assertEqual(before["selection_mode"], "selected")
+        self.assertIn(before["confidence_band"], {"moderate", "strong"})
 
         self.promote_routing_memory(
             memory=memory,
@@ -209,10 +224,11 @@ class Phase6RoutingAuthorityTest(unittest.TestCase):
             payload_path=STANDARD_PAYLOAD_PATH,
         )
         after_scores = {item["cell_id"]: item for item in after["candidate_scores"]}
-        chosen_router = next(cell_id for cell_id in after["selected_cells"] if "router" in cell_id)
+        chosen_router = self.selected_router(after)
 
         self.assertEqual(baseline_router, "finance_intake_router")
         self.assertEqual(chosen_router, "finance_priority_router")
+        self.assertIn(after["confidence_band"], {"moderate", "strong"})
         self.assertGreater(
             after_scores["finance_priority_router"]["descriptor_usefulness"],
             before_scores["finance_priority_router"]["descriptor_usefulness"],
@@ -221,18 +237,90 @@ class Phase6RoutingAuthorityTest(unittest.TestCase):
             after_scores["finance_priority_router"]["total_score"],
             after_scores["finance_low_trust_router"]["total_score"],
         )
+        self.assertGreater(
+            after_scores["finance_priority_router"]["descriptor_provenance"],
+            after_scores["finance_low_trust_router"]["descriptor_provenance"],
+        )
 
-        runtime_path = self.state_root / "agif-fabric-v1-local" / "lifecycle" / "runtime_states.json"
-        runtime_payload = json.loads(runtime_path.read_text(encoding="utf-8"))
-        runtime_payload["states"]["finance_low_trust_router"]["runtime_state"] = "active"
-        runtime_payload["states"]["finance_low_trust_router"]["active_task_ref"] = None
-        runtime_payload["states"]["finance_priority_router"]["current_need_signals"] = ["need-reactivate-001", "need-reactivate-002"]
-        runtime_path.write_text(json.dumps(runtime_payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        self.update_runtime_states(
+            {
+                "finance_low_trust_router": {"runtime_state": "active", "active_task_ref": None},
+                "finance_priority_router": {"current_need_signals": ["need-reactivate-001", "need-reactivate-002"]},
+            }
+        )
 
         choices = lifecycle.evaluate_runtime_choices()
         choice_map = {item["cell_id"]: item for item in choices["evaluations"]}
         self.assertEqual(choice_map["finance_low_trust_router"]["recommended_action"], "hibernate")
         self.assertEqual(choice_map["finance_priority_router"]["recommended_action"], "reactivate")
+        self.assertEqual(choice_map["finance_low_trust_router"]["utility_band"], "abstain")
+        self.assertIn(choice_map["finance_priority_router"]["utility_band"], {"acceptable", "attractive"})
+
+    def test_route_confidence_abstention_and_recurring_need_detection(self) -> None:
+        self.run_cli(["fabric", "init", str(CONFIG_PATH)])
+        _, _, _, _, _, memory, need_manager, authority_engine, routing = self.init_runtime()
+
+        for index in (1, 2):
+            need_manager.record_signal(signal=self.make_signal("expired_coordination", f"need-recurring-{index:03d}"))
+        need_manager.expire_signals(now_utc="2026-03-13T02:00:00Z")
+        recurring_summary = need_manager.summary(now_utc="2026-03-13T02:00:00Z")
+        self.assertGreaterEqual(recurring_summary["recurring_unresolved_count"], 1)
+        self.assertTrue(recurring_summary["recurring_signatures"])
+
+        self.update_runtime_states(
+            {
+                "finance_intake_router": {"runtime_state": "active", "active_task_ref": "busy:intake"},
+                "finance_priority_router": {"runtime_state": "active", "active_task_ref": "busy:priority"},
+                "finance_low_trust_router": {"runtime_state": "active", "active_task_ref": "busy:experimental"},
+            }
+        )
+        decision = self.route_payload(
+            routing=routing,
+            need_manager=need_manager,
+            authority_engine=authority_engine,
+            memory=memory,
+            workflow_id="wf_phase65_abstain",
+            payload_path=STANDARD_PAYLOAD_PATH,
+        )
+        self.assertEqual(decision["selection_mode"], "abstained")
+        self.assertEqual(decision["confidence_band"], "low")
+        self.assertEqual(decision["selected_cells"], [])
+        self.assertTrue(decision["decision_reason"])
+        self.assertTrue(decision["rejected_candidates"])
+
+    def test_route_failure_memory_changes_later_choice(self) -> None:
+        self.run_cli(["fabric", "init", str(CONFIG_PATH)])
+        _, _, _, _, _, memory, need_manager, authority_engine, routing = self.init_runtime()
+
+        before = self.route_payload(
+            routing=routing,
+            need_manager=need_manager,
+            authority_engine=authority_engine,
+            memory=memory,
+            workflow_id="wf_phase65_failure_before",
+            payload_path=STANDARD_PAYLOAD_PATH,
+        )
+        self.assertEqual(self.selected_router(before), "finance_intake_router")
+        routing.record_outcome(
+            decision_id=str(before["decision_id"]),
+            outcome_kind="failure",
+            effectiveness_score=0.1,
+            detail="fixture route failure memory",
+        )
+        after = self.route_payload(
+            routing=routing,
+            need_manager=need_manager,
+            authority_engine=authority_engine,
+            memory=memory,
+            workflow_id="wf_phase65_failure_after",
+            payload_path=STANDARD_PAYLOAD_PATH,
+        )
+        after_scores = {item["cell_id"]: item for item in after["candidate_scores"]}
+        self.assertEqual(self.selected_router(after), "finance_priority_router")
+        self.assertLess(
+            after_scores["finance_intake_router"]["routing_memory"]["score"],
+            after_scores["finance_priority_router"]["routing_memory"]["score"],
+        )
 
     def test_authority_veto_and_quarantine_paths(self) -> None:
         self.run_cli(["fabric", "init", str(CONFIG_PATH)])
@@ -290,6 +378,32 @@ class Phase6RoutingAuthorityTest(unittest.TestCase):
         self.assertTrue(quarantine_entry["event"]["rollback_ref"])
         self.assertEqual(quarantine_entry["details"]["kind"], "quarantine_escalation")
         self.assertTrue(quarantine_entry["details"]["authority_review_id"])
+
+    def test_authority_history_changes_later_review_behavior(self) -> None:
+        self.run_cli(["fabric", "init", str(CONFIG_PATH)])
+        _, _, _, _, lifecycle, _, _, authority_engine, _ = self.init_runtime()
+
+        for attempt in (1, 2):
+            with self.assertRaises(FabricError):
+                lifecycle.activate_cell(
+                    cell_id="finance_low_trust_router",
+                    proposer=self.scenario["actors"]["proposer"],
+                    governance_approver=self.scenario["actors"]["governance_approver"],
+                    reason=f"repeat risky reactivation attempt {attempt}",
+                    need_signal=self.make_signal("trust_risk", f"need-reactivate-repeat-{attempt:03d}"),
+                    authority_engine=authority_engine,
+                )
+
+        reviews = [item for item in authority_engine.load_reviews() if item["action"] == "reactivate"]
+        self.assertGreaterEqual(len(reviews), 2)
+        latest_review = reviews[-1]
+        self.assertIn("repeated_veto_pattern", latest_review["veto_conditions"])
+        self.assertIn("trust_band_under_review", latest_review["veto_conditions"])
+        self.assertIn("weak_lineage_branch", latest_review["veto_conditions"])
+        self.assertTrue(latest_review["decision_notes"])
+        summary = authority_engine.summary()
+        self.assertGreaterEqual(summary["repeated_veto_pattern_count"], 1)
+        self.assertGreaterEqual(summary["outcomes_by_trust_band"]["low"]["vetoed"], 2)
 
     def test_phase6_trace_and_evidence_pass(self) -> None:
         self.run_cli(["fabric", "init", str(CONFIG_PATH)])

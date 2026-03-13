@@ -83,6 +83,7 @@
 - [x] Domain tissue tests pass locally.
 - [x] Benchmark evidence can be generated locally.
 - [x] Phase 7.5 hardening improved benchmark explanations, tissue analytics, bounded resource reporting, and structural-pressure honesty without changing the frozen benchmark classes or project units.
+- [x] Phase 7.6 hardening improved descriptor-reuse credibility, route-of-custody reporting, confidence-aware outcome reporting, and explicit structural no-action explanations without changing the frozen benchmark classes or project units.
 
 ## Phase 8
 - [x] Phase 8 fixtures, run profiles, and a resumable soak harness exist locally.

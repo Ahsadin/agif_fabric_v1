@@ -42,6 +42,14 @@ TISSUE_TRUTH_FIELDS = {
     "finance_workspace_governance_tissue": ["governance_action", "final_status"],
     "finance_reporting_output_tissue": ["final_status"],
 }
+TISSUE_LABELS = {
+    "finance_intake_routing_tissue": "intake/routing",
+    "finance_extraction_tissue": "extraction",
+    "finance_validation_correction_tissue": "validation/correction",
+    "finance_anomaly_reviewer_tissue": "anomaly/reviewer",
+    "finance_workspace_governance_tissue": "workspace/governance",
+    "finance_reporting_output_tissue": "reporting/output",
+}
 
 
 def run_phase7_benchmarks() -> dict[str, Any]:
@@ -134,6 +142,11 @@ def run_phase7_benchmarks() -> dict[str, Any]:
             "case_rows": comparison_rows,
             "fabric_beats_baseline_cases": fabric_beats_baseline_cases,
             "descriptor_change_cases": descriptor_change_cases,
+            "resource_tradeoffs": _resource_tradeoffs(
+                baseline_summary=baseline_summary,
+                no_adapt_summary=no_adapt_summary,
+                with_adapt_summary=with_adapt_summary,
+            ),
             "usefulness_gate_passed": bool(fabric_beats_baseline_cases) and bool(descriptor_change_cases),
         },
     }
@@ -176,8 +189,10 @@ def write_phase7_result_tables(results: dict[str, Any], *, output_dir: Path) -> 
                     f"{payload['metrics']['active_logical_population_ratio']:.3f}",
                     str(resource_usage["estimated_runtime_memory_bytes"]),
                     str(resource_usage["retained_memory_delta_bytes"]),
+                    str(resource_usage["retained_memory_delta_per_case_bytes"]),
                     f"{resource_usage['routing_decisions_per_case']:.3f}",
                     f"{resource_usage['authority_reviews_per_case']:.3f}",
+                    f"{resource_usage['governance_overhead_share']:.3f}",
                     str(split_merge["structural_signal_count"]),
                 ]
             )
@@ -194,6 +209,7 @@ def write_phase7_result_tables(results: dict[str, Any], *, output_dir: Path) -> 
                     f"{row['multi_cell_no_adapt_score']:.3f}",
                     f"{row['multi_cell_with_adapt_score']:.3f}",
                     "yes" if row["with_adapt_descriptor_reuse"] else "no",
+                    row["with_adapt_confidence"],
                     row["reason_summary"],
                 ]
             )
@@ -213,6 +229,71 @@ def write_phase7_result_tables(results: dict[str, Any], *, output_dir: Path) -> 
             )
             + " |"
         )
+    route_rows = []
+    for row in artifact_results["comparisons"]["case_rows"]:
+        route_rows.append(
+            "| "
+            + " | ".join(
+                [
+                    row["case_id"],
+                    row["outcome_trail"],
+                    row["with_adapt_route_of_custody"],
+                    row["with_adapt_governance_detail"],
+                ]
+            )
+            + " |"
+        )
+    descriptor_rows = []
+    for row in artifact_results["comparisons"]["case_rows"]:
+        if not row["with_adapt_descriptor_reuse"]:
+            continue
+        descriptor_rows.append(
+            "| "
+            + " | ".join(
+                [
+                    row["case_id"],
+                    row["with_adapt_descriptor_detail"],
+                    row["with_adapt_improved"],
+                    row["with_adapt_need_resolution"],
+                ]
+            )
+            + " |"
+        )
+    tradeoff_rows = []
+    for row in artifact_results["comparisons"]["resource_tradeoffs"]["rows"]:
+        tradeoff_rows.append(
+            "| "
+            + " | ".join(
+                [
+                    row["comparison"],
+                    f"{row['accuracy_gain']:.3f}",
+                    str(row["retained_memory_cost_bytes"]),
+                    f"{row['accuracy_gain_per_retained_kib']:.6f}",
+                    f"{row['authority_overhead_delta_per_case']:.3f}",
+                ]
+            )
+            + " |"
+        )
+    structural_rows = []
+    for class_name in (
+        "flat_baseline",
+        "multi_cell_without_bounded_adaptation",
+        "multi_cell_with_bounded_adaptation",
+    ):
+        split_merge = artifact_results["classes"][class_name]["metrics"]["split_merge_efficiency"]
+        structural_rows.append(
+            "| "
+            + " | ".join(
+                [
+                    class_name,
+                    "yes" if split_merge["measured"] else "no",
+                    str(split_merge["structural_signal_count"]),
+                    split_merge["detail"],
+                    split_merge["future_trigger"],
+                ]
+            )
+            + " |"
+        )
     tissue_rows = []
     for class_name in ("multi_cell_without_bounded_adaptation", "multi_cell_with_bounded_adaptation"):
         tissues = artifact_results["classes"][class_name]["analytics"]["tissues"]
@@ -223,10 +304,13 @@ def write_phase7_result_tables(results: dict[str, Any], *, output_dir: Path) -> 
                 + " | ".join(
                     [
                         class_name,
-                        tissue_id,
+                        TISSUE_LABELS.get(tissue_id, tissue_id),
                         f"{payload['usefulness_rate']:.3f}",
+                        f"{payload['workload_share']:.3f}",
+                        str(payload["useful_case_count"]),
                         str(payload["stage_count"]),
                         str(payload["handoff_in_count"] + payload["handoff_out_count"]),
+                        str(payload["intervention_case_count"]),
                         str(payload["anomaly_burden"]),
                         str(payload["governance_burden"]),
                         str(payload["reuse_contribution"]),
@@ -248,15 +332,21 @@ def write_phase7_result_tables(results: dict[str, Any], *, output_dir: Path) -> 
             "",
             "## Case Comparison",
             "",
-            "| Case | Flat baseline | Multi-cell no adapt | Multi-cell with adapt | Descriptor reuse mattered | Why it mattered |",
-            "| --- | ---: | ---: | ---: | --- | --- |",
+            "| Case | Flat baseline | Multi-cell no adapt | Multi-cell with adapt | Descriptor reuse mattered | With adapt confidence | Why it mattered |",
+            "| --- | ---: | ---: | ---: | --- | --- | --- |",
             *case_rows,
             "",
             "## Resource And Control",
             "",
-            "| Benchmark class | Active/logical ratio | Runtime bytes | Retained memory delta bytes | Routing decisions/case | Authority reviews/case | Structural signal cases |",
-            "| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+            "| Benchmark class | Active/logical ratio | Runtime bytes | Retained memory delta bytes | Retained/case bytes | Routing decisions/case | Authority reviews/case | Governance overhead share | Structural signal cases |",
+            "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
             *resource_rows,
+            "",
+            "## Adaptation Tradeoffs",
+            "",
+            "| Comparison | Accuracy gain | Retained memory cost bytes | Accuracy gain per retained KiB | Authority overhead delta/case |",
+            "| --- | ---: | ---: | ---: | ---: |",
+            *tradeoff_rows,
             "",
             "## Counterfactual Notes",
             "",
@@ -264,10 +354,28 @@ def write_phase7_result_tables(results: dict[str, Any], *, output_dir: Path) -> 
             "| --- | --- | --- | --- |",
             *counterfactual_rows,
             "",
+            "## Route Of Custody",
+            "",
+            "| Case | Outcome trail | With adapt tissue custody | Governance detail |",
+            "| --- | --- | --- | --- |",
+            *route_rows,
+            "",
+            "## Descriptor Reuse Evidence",
+            "",
+            "| Case | Descriptor and retained state | Prevented errors or lifts | Need resolution trail |",
+            "| --- | --- | --- | --- |",
+            *(descriptor_rows or ["| none | none | none | none |"]),
+            "",
+            "## Structural Pressure",
+            "",
+            "| Benchmark class | Measured split/merge | Structural signal cases | Why no action or what was measured | Future trigger |",
+            "| --- | --- | ---: | --- | --- |",
+            *structural_rows,
+            "",
             "## Tissue Analytics",
             "",
-            "| Benchmark class | Tissue | Usefulness | Stage workload | Handoffs | Anomaly burden | Governance burden | Reuse contribution |",
-            "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+            "| Benchmark class | Tissue | Usefulness | Workload share | Useful cases | Stage workload | Handoffs | Intervention cases | Anomaly burden | Governance burden | Reuse contribution |",
+            "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
             *tissue_rows,
             "",
             f"- Fabric beats baseline cases: `{', '.join(artifact_results['comparisons']['fabric_beats_baseline_cases'])}`",
@@ -412,8 +520,10 @@ def _run_fabric_suite(*, config_path: Path, suite: dict[str, Any]) -> dict[str, 
             "initial_routing_summary": initial_routing_summary,
             "population": lifecycle.summary(),
             "memory_summary": memory.summary(),
+            "promoted_memories": memory.load_promoted_memories(),
             "need_summary": need_manager.summary(),
             "authority_summary": authority.summary(),
+            "authority_reviews": authority.load_reviews(),
             "routing_summary": routing.summary(),
             "evidence_path": evidence_path,
         }
@@ -434,6 +544,385 @@ def _run_fabric_single_case(*, config_path: Path, case_spec: dict[str, Any]) -> 
             "case_score": _score_result(result=payload["data"]["result"], truth=case_spec["truth"]),
             "output_digest": str(payload["data"]["output_digest"]),
         }
+
+
+def _enrich_fabric_case_results(
+    *,
+    case_results: list[dict[str, Any]],
+    suite_cases: list[dict[str, Any]],
+    promoted_memories: dict[str, Any],
+    authority_reviews: list[dict[str, Any]],
+    need_summary: dict[str, Any],
+) -> list[dict[str, Any]]:
+    promoted_index = _index_promoted_memories(promoted_memories)
+    review_index = {str(item["review_id"]): deepcopy(item) for item in authority_reviews}
+    resolution_outcomes = {
+        str(key): deepcopy(value)
+        for key, value in dict(need_summary.get("resolution_outcomes", {})).items()
+    }
+    enriched: list[dict[str, Any]] = []
+    for case_result, case_spec in zip(case_results, suite_cases):
+        enriched.append(
+            {
+                **case_result,
+                "analysis": _build_fabric_case_analysis(
+                    case_result=case_result,
+                    case_spec=case_spec,
+                    promoted_index=promoted_index,
+                    review_index=review_index,
+                    resolution_outcomes=resolution_outcomes,
+                ),
+            }
+        )
+    return enriched
+
+
+def _index_promoted_memories(promoted_memories: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    index: dict[str, dict[str, Any]] = {}
+    for bucket_name in ("active", "archived"):
+        bucket = dict(promoted_memories.get(bucket_name, {}))
+        for memory_id, record in bucket.items():
+            materialized = deepcopy(record)
+            materialized["bucket"] = bucket_name
+            index[str(materialized.get("memory_id", memory_id))] = materialized
+    return index
+
+
+def _build_fabric_case_analysis(
+    *,
+    case_result: dict[str, Any],
+    case_spec: dict[str, Any],
+    promoted_index: dict[str, dict[str, Any]],
+    review_index: dict[str, dict[str, Any]],
+    resolution_outcomes: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
+    workspace = dict(case_result.get("workspace", {}))
+    stage_outputs = dict(workspace.get("stage_outputs", {}))
+    stage_history = list(workspace.get("stage_history", []))
+    handoffs = list(workspace.get("handoffs", []))
+    extraction = dict(stage_outputs.get("extraction", {}))
+    correction = dict(stage_outputs.get("correction", {}))
+    anomaly = dict(stage_outputs.get("anomaly_review", {}))
+    governance = dict(stage_outputs.get("governance_review", {}))
+    reporting = dict(stage_outputs.get("reporting", {}))
+    descriptor_reuse = dict(correction.get("descriptor_reuse", {}))
+    memory_record = None
+    memory_id = descriptor_reuse.get("memory_id")
+    if memory_id is not None:
+        memory_record = promoted_index.get(str(memory_id))
+    correction_reviews = _review_summaries(
+        review_ids=list(correction.get("authority_review_ids", [])),
+        review_index=review_index,
+    )
+    governance_reviews = _review_summaries(
+        review_ids=list(governance.get("authority_review_ids", [])),
+        review_index=review_index,
+    )
+    confidence = _confidence_analysis(
+        result=case_result["result"],
+        case_spec=case_spec,
+        extraction=extraction,
+        correction=correction,
+        anomaly=anomaly,
+        governance=governance,
+        workspace_ok=bool(stage_outputs.get("workspace_guard", {}).get("workspace_ok", True)),
+    )
+    route_of_custody = _route_of_custody_analysis(
+        result=case_result["result"],
+        stage_history=stage_history,
+        handoffs=handoffs,
+        extraction=extraction,
+        correction=correction,
+        anomaly=anomaly,
+        governance=governance,
+        reporting=reporting,
+        correction_reviews=correction_reviews,
+        governance_reviews=governance_reviews,
+    )
+    descriptor_detail = _descriptor_reuse_analysis(
+        extraction=extraction,
+        correction=correction,
+        descriptor_reuse=descriptor_reuse,
+        memory_record=memory_record,
+        correction_reviews=correction_reviews,
+    )
+    need_resolution = _need_resolution_analysis(
+        workflow_id=str(workspace.get("workflow_id", "")),
+        resolution_outcomes=resolution_outcomes,
+    )
+    return {
+        "route_of_custody": route_of_custody,
+        "confidence": confidence,
+        "descriptor_reuse_detail": descriptor_detail,
+        "governance_control": {
+            "action": str(governance.get("governance_action", case_result["result"].get("governance_action", ""))),
+            "authority_review_ids": list(governance.get("authority_review_ids", [])),
+            "summary": _governance_summary(
+                governance=governance,
+                governance_reviews=governance_reviews,
+            ),
+        },
+        "need_resolution": need_resolution,
+    }
+
+
+def _review_summaries(
+    *,
+    review_ids: list[str],
+    review_index: dict[str, dict[str, Any]],
+) -> list[dict[str, Any]]:
+    summaries: list[dict[str, Any]] = []
+    for review_id in review_ids:
+        review = review_index.get(str(review_id))
+        if review is None:
+            continue
+        summaries.append(
+            {
+                "review_id": str(review["review_id"]),
+                "action": str(review.get("action", "")),
+                "decision": str(review.get("decision", "")),
+                "trust_band": str(review.get("trust_state", {}).get("trust_band", "unknown")),
+                "notes": list(review.get("decision_notes", [])),
+            }
+        )
+    return summaries
+
+
+def _confidence_analysis(
+    *,
+    result: dict[str, Any],
+    case_spec: dict[str, Any],
+    extraction: dict[str, Any],
+    correction: dict[str, Any],
+    anomaly: dict[str, Any],
+    governance: dict[str, Any],
+    workspace_ok: bool,
+) -> dict[str, Any]:
+    extraction_confidence = float(extraction.get("extraction_confidence", 0.0))
+    missing_fields = [str(item) for item in extraction.get("missing_fields", [])]
+    anomalies = [str(item) for item in anomaly.get("anomalies", [])]
+    descriptor_used = bool(correction.get("descriptor_reuse", {}).get("used"))
+    support_reasons: list[str] = []
+    drag_reasons: list[str] = []
+    if extraction_confidence >= 0.85:
+        support_reasons.append("extraction tissue had high OCR support")
+    elif extraction_confidence >= 0.6:
+        support_reasons.append("extraction tissue had bounded but usable OCR support")
+    else:
+        drag_reasons.append("extraction tissue started from low OCR support")
+    if missing_fields:
+        drag_reasons.append("extraction left gaps in " + ", ".join(missing_fields))
+    if descriptor_used:
+        support_reasons.append("validation/correction reused reviewed prior descriptor state")
+    elif correction.get("correction_notes"):
+        support_reasons.append("validation/correction repaired bounded field gaps")
+    if anomalies:
+        drag_reasons.append("anomaly/reviewer raised " + ", ".join(anomalies))
+    else:
+        support_reasons.append("anomaly/reviewer cleared the document")
+    governance_action = str(governance.get("governance_action", result.get("governance_action", "")))
+    final_status = str(governance.get("final_status", result.get("final_status", "")))
+    if final_status == "hold" and anomalies:
+        support_reasons.append("workspace/governance kept release on hold under anomaly pressure")
+    elif governance_action == "approved_release" and not anomalies:
+        support_reasons.append("workspace/governance released after clear reviewer state")
+    if not workspace_ok:
+        drag_reasons.append("workspace/governance saw incomplete custody state")
+    base_score = 0.25 + (0.45 * extraction_confidence)
+    if descriptor_used:
+        base_score += 0.18
+    if workspace_ok:
+        base_score += 0.08
+    if final_status == "accepted" and not anomalies:
+        base_score += 0.12
+    if final_status == "hold" and anomalies:
+        base_score += 0.12
+    base_score -= 0.07 * len(missing_fields)
+    base_score -= 0.06 * len(anomalies)
+    score = max(0.05, min(0.99, round(base_score, 6)))
+    if score >= 0.8:
+        label = "high"
+    elif score >= 0.6:
+        label = "guarded"
+    else:
+        label = "fragile"
+    return {
+        "outcome_state": {
+            "final_status": str(result.get("final_status", "")),
+            "reviewer_status": str(result.get("reviewer_status", "")),
+            "governance_action": str(result.get("governance_action", "")),
+        },
+        "score": score,
+        "label": label,
+        "support_reasons": support_reasons,
+        "drag_reasons": drag_reasons,
+        "summary": (
+            f"{label} confidence ({score:.3f}) with outcome "
+            f"{result.get('final_status')}/{result.get('reviewer_status')}"
+        ),
+        "truth_match": {
+            "final_status": str(result.get("final_status", "")) == str(case_spec["truth"]["final_status"]),
+            "governance_action": str(result.get("governance_action", "")) == str(case_spec["expected_governance"]),
+        },
+    }
+
+
+def _route_of_custody_analysis(
+    *,
+    result: dict[str, Any],
+    stage_history: list[dict[str, Any]],
+    handoffs: list[dict[str, Any]],
+    extraction: dict[str, Any],
+    correction: dict[str, Any],
+    anomaly: dict[str, Any],
+    governance: dict[str, Any],
+    reporting: dict[str, Any],
+    correction_reviews: list[dict[str, Any]],
+    governance_reviews: list[dict[str, Any]],
+) -> dict[str, Any]:
+    tissue_sequence: list[str] = []
+    for entry in stage_history:
+        tissue_label = TISSUE_LABELS.get(str(entry.get("tissue_id", "")), str(entry.get("tissue_id", "")))
+        if not tissue_sequence or tissue_sequence[-1] != tissue_label:
+            tissue_sequence.append(tissue_label)
+    descriptor_reuse = dict(correction.get("descriptor_reuse", {}))
+    critical_steps = [
+        "intake/routing classified vendor_invoice and selected invoice_extraction",
+        "extraction captured "
+        + (
+            "complete invoice fields"
+            if not extraction.get("missing_fields")
+            else "bounded gaps: " + ", ".join(str(item) for item in extraction.get("missing_fields", []))
+        ),
+        "validation/correction "
+        + (
+            f"reused {descriptor_reuse.get('descriptor_id')} after authority "
+            f"{correction_reviews[0]['review_id']}"
+            if descriptor_reuse.get("used") and correction_reviews
+            else (
+                "reused prior reviewed descriptor state"
+                if descriptor_reuse.get("used")
+                else "stayed local to current document state"
+            )
+        ),
+        "anomaly/reviewer "
+        + (
+            "flagged " + ", ".join(str(item) for item in anomaly.get("anomalies", []))
+            if anomaly.get("anomalies")
+            else "cleared the document"
+        ),
+        "workspace/governance "
+        + (
+            f"{governance.get('governance_action')} via {governance_reviews[0]['review_id']}"
+            if governance_reviews
+            else str(governance.get("governance_action", "approved_release"))
+        ),
+        "reporting/output wrote bounded summary and final status "
+        + str(result.get("final_status", "")),
+    ]
+    return {
+        "tissue_sequence": tissue_sequence,
+        "handoff_count": len(handoffs),
+        "critical_steps": critical_steps,
+        "summary": " -> ".join(tissue_sequence) + f"; handoffs={len(handoffs)}",
+        "reporting_notes": list(reporting.get("custody_notes", [])),
+    }
+
+
+def _descriptor_reuse_analysis(
+    *,
+    extraction: dict[str, Any],
+    correction: dict[str, Any],
+    descriptor_reuse: dict[str, Any],
+    memory_record: dict[str, Any] | None,
+    correction_reviews: list[dict[str, Any]],
+) -> dict[str, Any]:
+    used = bool(descriptor_reuse.get("used"))
+    raw_fields = dict(extraction.get("extracted_fields", {}))
+    corrected_fields = dict(correction.get("normalized_fields", {}))
+    restored_fields: list[str] = []
+    if str(raw_fields.get("vendor_name", "")) != str(corrected_fields.get("vendor_name", "")):
+        restored_fields.append("normalized_vendor")
+    if str(raw_fields.get("currency", "")) != str(corrected_fields.get("currency", "")):
+        restored_fields.append("normalized_currency")
+    if str(raw_fields.get("due_date", "")) != str(corrected_fields.get("due_date", "")):
+        restored_fields.append("derived_due_date")
+    if not used:
+        if descriptor_reuse.get("eligible"):
+            summary = "descriptor candidate existed but was not reused"
+        else:
+            summary = "no reviewed descriptor artifact was available"
+        return {
+            "used": False,
+            "summary": summary,
+            "restored_fields": restored_fields,
+        }
+    summary_parts = [
+        f"{descriptor_reuse.get('descriptor_id')} from {descriptor_reuse.get('memory_id')}",
+    ]
+    if memory_record is not None:
+        summary_parts.append(
+            f"{memory_record.get('retention_tier')} tier, {int(memory_record.get('payload_bytes', 0))} bytes"
+        )
+        summary_parts.append(
+            f"reuse_count={int(memory_record.get('reuse_count', 0))}, trust={float(memory_record.get('trust_score', 0.0)):.2f}"
+        )
+    if correction_reviews:
+        summary_parts.append(f"approved by {correction_reviews[0]['review_id']}")
+    if restored_fields:
+        summary_parts.append("restored " + ", ".join(restored_fields))
+    return {
+        "used": True,
+        "descriptor_id": str(descriptor_reuse.get("descriptor_id")),
+        "memory_id": str(descriptor_reuse.get("memory_id")),
+        "memory_class": None if memory_record is None else str(memory_record.get("memory_class")),
+        "retention_tier": None if memory_record is None else str(memory_record.get("retention_tier")),
+        "payload_bytes": 0 if memory_record is None else int(memory_record.get("payload_bytes", 0)),
+        "reuse_count": 0 if memory_record is None else int(memory_record.get("reuse_count", 0)),
+        "trust_score": 0.0 if memory_record is None else float(memory_record.get("trust_score", 0.0)),
+        "review_count": 0 if memory_record is None else int(memory_record.get("review_count", 0)),
+        "restored_fields": restored_fields,
+        "summary": "; ".join(summary_parts),
+    }
+
+
+def _governance_summary(
+    *,
+    governance: dict[str, Any],
+    governance_reviews: list[dict[str, Any]],
+) -> str:
+    action = str(governance.get("governance_action", "approved_release"))
+    if not governance_reviews:
+        if action == "approved_release":
+            return "bounded release completed without extra authority review"
+        return f"{action} without stored authority review detail"
+    review = governance_reviews[0]
+    return (
+        f"{action} via {review['review_id']} "
+        f"({review['decision']}, trust_band={review['trust_band']})"
+    )
+
+
+def _need_resolution_analysis(
+    *,
+    workflow_id: str,
+    resolution_outcomes: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
+    matches = [
+        deepcopy(value)
+        for value in resolution_outcomes.values()
+        if str(value.get("need_signal_id", "")).startswith(f"{workflow_id}:")
+    ]
+    matches.sort(key=lambda item: str(item.get("need_signal_id", "")))
+    summaries = [
+        f"{item.get('signal_kind')} -> {item.get('resolution_ref')} ({item.get('resolution_quality')})"
+        for item in matches
+    ]
+    return {
+        "count": len(matches),
+        "summaries": summaries,
+        "summary": "none" if not summaries else "; ".join(summaries),
+    }
 
 
 def _summarize_flat_runs(
@@ -463,6 +952,9 @@ def _summarize_flat_runs(
                 "structural_signal_count": 0,
                 "structural_signal_cases": [],
                 "candidate_tissues": [],
+                "pressure_ratio": 0.0,
+                "no_action_reason": "flat baseline has no lifecycle-managed population to split or merge",
+                "future_trigger": "not applicable until the benchmark uses a governed fabric population",
             },
             "governance_success_rate": governance_rate,
             "resource_usage": {
@@ -471,17 +963,21 @@ def _summarize_flat_runs(
                 "memory_tier_usage_bytes": {"hot": 0, "warm": 0, "cold": 0, "ephemeral": 0},
                 "memory_tier_delta_bytes": {"hot": 0, "warm": 0, "cold": 0, "ephemeral": 0},
                 "retained_memory_delta_bytes": 0,
+                "retained_memory_delta_per_case_bytes": 0.0,
                 "active_population": 0,
                 "logical_population": 0,
                 "active_population_cost_bytes": 0.0,
+                "retained_memory_value_density": 0.0,
                 "within_runtime_working_set_cap": True,
                 "memory_within_caps": {"hot": True, "warm": True, "cold": True, "ephemeral": True},
                 "routing_decision_count": 0,
                 "routing_decisions_per_case": 0.0,
                 "authority_review_count": 0,
                 "authority_reviews_per_case": 0.0,
+                "governance_overhead_share": 0.0,
                 "need_signal_count": 0,
                 "need_signals_per_case": 0.0,
+                "average_need_effectiveness": 0.0,
                 "runtime_memory_delta_bytes": 0,
             },
             "bounded_forgetting": 0.0,
@@ -516,7 +1012,19 @@ def _summarize_fabric_runs(
         for item in eligible_cases
         if item["case_id"] in cold_followup_scores
     ]
-    split_merge_signal = _split_merge_signal(case_results=case_results, split_merge_events=split_merge_events)
+    split_merge_signal = _split_merge_signal(
+        case_results=case_results,
+        split_merge_events=split_merge_events,
+        population=population,
+        authority_summary=pass_one["authority_summary"],
+    )
+    case_results = _enrich_fabric_case_results(
+        case_results=case_results,
+        suite_cases=suite["cases"],
+        promoted_memories=pass_one["promoted_memories"],
+        authority_reviews=pass_one["authority_reviews"],
+        need_summary=pass_one["need_summary"],
+    )
     return {
         "case_results": case_results,
         "metrics": {
@@ -687,6 +1195,10 @@ def _counterfactual_notes(
     flat_mismatches = _truth_mismatches(result=baseline_case["result"], truth=case_spec["truth"])
     no_adapt_mismatches = _truth_mismatches(result=no_adapt_case["result"], truth=case_spec["truth"])
     with_adapt_mismatches = _truth_mismatches(result=with_adapt_case["result"], truth=case_spec["truth"])
+    no_adapt_analysis = dict(no_adapt_case.get("analysis", {}))
+    with_adapt_analysis = dict(with_adapt_case.get("analysis", {}))
+    with_adapt_descriptor = dict(with_adapt_analysis.get("descriptor_reuse_detail", {}))
+    with_adapt_confidence = dict(with_adapt_analysis.get("confidence", {}))
     reason_parts: list[str] = []
     if no_adapt_case["correctness_score"] > baseline_case["correctness_score"]:
         if str(case_spec["truth"]["final_status"]) == "hold":
@@ -697,7 +1209,17 @@ def _counterfactual_notes(
         bool(with_adapt_case["descriptor_reuse"]["used"])
         and with_adapt_case["correctness_score"] > no_adapt_case["correctness_score"]
     ):
-        reason_parts.append("reviewed descriptor reuse restored vendor or currency context from prior memory")
+        reason_parts.append(
+            "reviewed descriptor reuse restored bounded context from prior memory: "
+            + with_adapt_descriptor.get("summary", "descriptor-backed correction")
+        )
+    elif bool(with_adapt_case["descriptor_reuse"]["used"]):
+        reason_parts.append("descriptor reuse improved document state without overriding governance")
+    if (
+        str(with_adapt_case["result"].get("final_status")) == "hold"
+        and bool(with_adapt_case["descriptor_reuse"]["used"])
+    ):
+        reason_parts.append("governance stayed active after correction instead of silently auto-releasing")
     if not reason_parts:
         reason_parts.append("all classes behaved the same on this case")
     return {
@@ -714,6 +1236,29 @@ def _counterfactual_notes(
         ),
         "reason_summary": "; ".join(reason_parts),
         "with_adapt_residual_mismatches": "none" if not with_adapt_mismatches else ", ".join(with_adapt_mismatches),
+        "outcome_trail": "; ".join(
+            [
+                f"flat={baseline_case['result'].get('final_status')}/{baseline_case['result'].get('reviewer_status')}",
+                f"no_adapt={no_adapt_case['result'].get('final_status')}/{no_adapt_case['result'].get('reviewer_status')}",
+                f"with_adapt={with_adapt_case['result'].get('final_status')}/{with_adapt_case['result'].get('reviewer_status')}",
+            ]
+        ),
+        "with_adapt_confidence": str(with_adapt_confidence.get("summary", "n/a")),
+        "with_adapt_route_of_custody": str(
+            dict(with_adapt_analysis.get("route_of_custody", {})).get("summary", "n/a")
+        ),
+        "with_adapt_descriptor_detail": str(with_adapt_descriptor.get("summary", "none")),
+        "with_adapt_governance_detail": str(
+            dict(with_adapt_analysis.get("governance_control", {})).get("summary", "n/a")
+        ),
+        "with_adapt_need_resolution": str(
+            dict(with_adapt_analysis.get("need_resolution", {})).get("summary", "none")
+        ),
+        "with_adapt_support_reasons": "; ".join(with_adapt_confidence.get("support_reasons", [])),
+        "with_adapt_drag_reasons": "; ".join(with_adapt_confidence.get("drag_reasons", [])),
+        "no_adapt_route_of_custody": str(
+            dict(no_adapt_analysis.get("route_of_custody", {})).get("summary", "n/a")
+        ),
     }
 
 
@@ -755,25 +1300,38 @@ def _resource_usage(
     routing_decisions = int(routing_summary.get("decision_count", 0)) - int(initial_routing_summary.get("decision_count", 0))
     authority_reviews = int(authority_summary.get("review_count", 0)) - int(initial_authority_summary.get("review_count", 0))
     need_signals = int(need_summary.get("signal_count", 0)) - int(initial_need_summary.get("signal_count", 0))
+    retained_delta = int(tier_delta_bytes["warm"]) + int(tier_delta_bytes["cold"])
     return {
         "estimated_runtime_memory_bytes": int(population.get("estimated_runtime_memory_bytes", 0)),
         "estimated_idle_memory_bytes": int(population.get("estimated_idle_memory_bytes", 0)),
         "memory_tier_usage_bytes": deepcopy(memory_summary["tier_usage_bytes"]),
         "memory_tier_delta_bytes": tier_delta_bytes,
-        "retained_memory_delta_bytes": int(tier_delta_bytes["warm"]) + int(tier_delta_bytes["cold"]),
+        "retained_memory_delta_bytes": retained_delta,
+        "retained_memory_delta_per_case_bytes": round(retained_delta / float(max(1, case_count)), 3),
         "active_population": active_population,
         "logical_population": int(population.get("logical_population", 0)),
         "active_population_cost_bytes": 0.0
         if active_population == 0
         else round(float(population.get("estimated_runtime_memory_bytes", 0)) / float(active_population), 3),
+        "retained_memory_value_density": 0.0
+        if retained_delta <= 0
+        else round(
+            float(population.get("active_to_logical_ratio", 0.0))
+            / float(max(1, retained_delta)),
+            9,
+        ),
         "within_runtime_working_set_cap": bool(population.get("within_runtime_working_set_cap", False)),
         "memory_within_caps": deepcopy(memory_summary["within_caps"]),
         "routing_decision_count": routing_decisions,
         "routing_decisions_per_case": round(routing_decisions / float(max(1, case_count)), 6),
         "authority_review_count": authority_reviews,
         "authority_reviews_per_case": round(authority_reviews / float(max(1, case_count)), 6),
+        "governance_overhead_share": 0.0
+        if routing_decisions == 0
+        else round(authority_reviews / float(max(1, routing_decisions)), 6),
         "need_signal_count": need_signals,
         "need_signals_per_case": round(need_signals / float(max(1, case_count)), 6),
+        "average_need_effectiveness": float(need_summary.get("average_effectiveness_score", 0.0)),
         "runtime_memory_delta_bytes": int(population.get("estimated_runtime_memory_bytes", 0))
         - int(initial_population.get("estimated_runtime_memory_bytes", 0)),
     }
@@ -792,6 +1350,7 @@ def _tissue_analytics(
             "handoff_out_count": 0,
             "usefulness_total": 0.0,
             "useful_case_count": 0,
+            "intervention_case_count": 0,
             "anomaly_burden": 0,
             "governance_burden": 0,
             "reuse_contribution": 0,
@@ -823,13 +1382,23 @@ def _tissue_analytics(
             buckets[str(handoff["to_tissue"])]["handoff_in_count"] += 1
         anomaly_output = dict(stage_outputs.get("anomaly_review", {}))
         buckets["finance_anomaly_reviewer_tissue"]["anomaly_burden"] += len(anomaly_output.get("anomalies", []))
+        if anomaly_output.get("anomalies"):
+            buckets["finance_anomaly_reviewer_tissue"]["intervention_case_count"] += 1
         governance_output = dict(stage_outputs.get("governance_review", {}))
         buckets["finance_workspace_governance_tissue"]["governance_burden"] += len(
             governance_output.get("authority_review_ids", [])
         )
+        if governance_output.get("authority_review_ids") or governance_output.get("governance_action") != "approved_release":
+            buckets["finance_workspace_governance_tissue"]["intervention_case_count"] += 1
         correction_output = dict(stage_outputs.get("correction", {}))
         if bool(correction_output.get("descriptor_reuse", {}).get("used")):
             buckets["finance_validation_correction_tissue"]["reuse_contribution"] += 1
+            buckets["finance_validation_correction_tissue"]["intervention_case_count"] += 1
+        elif correction_output.get("correction_notes"):
+            buckets["finance_validation_correction_tissue"]["intervention_case_count"] += 1
+        report_output = dict(stage_outputs.get("reporting", {}))
+        if report_output.get("custody_notes"):
+            buckets["finance_reporting_output_tissue"]["intervention_case_count"] += 1
     analytics: dict[str, dict[str, Any]] = {}
     for tissue_id in TISSUE_ORDER:
         bucket = buckets[tissue_id]
@@ -848,6 +1417,7 @@ def _tissue_analytics(
             "anomaly_burden": bucket["anomaly_burden"],
             "governance_burden": bucket["governance_burden"],
             "reuse_contribution": bucket["reuse_contribution"],
+            "intervention_case_count": bucket["intervention_case_count"],
         }
     return analytics
 
@@ -862,12 +1432,65 @@ def _field_accuracy(*, result: dict[str, Any], truth: dict[str, Any], fields: li
     return round(matches / float(len(fields)), 6)
 
 
-def _split_merge_signal(*, case_results: list[dict[str, Any]], split_merge_events: int) -> dict[str, Any]:
+def _resource_tradeoffs(
+    *,
+    baseline_summary: dict[str, Any],
+    no_adapt_summary: dict[str, Any],
+    with_adapt_summary: dict[str, Any],
+) -> dict[str, Any]:
+    rows = []
+    comparisons = [
+        ("flat -> no_adapt", baseline_summary, no_adapt_summary),
+        ("no_adapt -> with_adapt", no_adapt_summary, with_adapt_summary),
+    ]
+    for label, left, right in comparisons:
+        left_accuracy = float(left["metrics"]["task_accuracy"])
+        right_accuracy = float(right["metrics"]["task_accuracy"])
+        left_resource = dict(left["metrics"]["resource_usage"])
+        right_resource = dict(right["metrics"]["resource_usage"])
+        retained_cost = max(
+            0,
+            int(right_resource.get("retained_memory_delta_bytes", 0))
+            - int(left_resource.get("retained_memory_delta_bytes", 0)),
+        )
+        gain = round(right_accuracy - left_accuracy, 6)
+        rows.append(
+            {
+                "comparison": label,
+                "accuracy_gain": gain,
+                "retained_memory_cost_bytes": retained_cost,
+                "accuracy_gain_per_retained_kib": 0.0
+                if retained_cost <= 0
+                else round(gain / float(retained_cost / 1024.0), 9),
+                "authority_overhead_delta_per_case": round(
+                    float(right_resource.get("authority_reviews_per_case", 0.0))
+                    - float(left_resource.get("authority_reviews_per_case", 0.0)),
+                    6,
+                ),
+            }
+        )
+    return {"rows": rows}
+
+
+def _split_merge_signal(
+    *,
+    case_results: list[dict[str, Any]],
+    split_merge_events: int,
+    population: dict[str, Any],
+    authority_summary: dict[str, Any],
+) -> dict[str, Any]:
     structural_signal_cases = sorted(
         case_result["case_id"]
         for case_result in case_results
         if str(case_result["result"].get("reviewer_status")) == "review_required"
         or int(case_result["result"].get("anomaly_count", 0)) >= 2
+    )
+    active_population = int(population.get("active_population", 0))
+    steady_target = int(population.get("steady_active_population_target", 0))
+    pressure_ratio = 0.0 if steady_target == 0 else round(active_population / float(max(1, steady_target)), 6)
+    future_trigger = (
+        "governed split becomes relevant when repeated reviewer pressure coincides with active population at or above "
+        f"{steady_target} and lifecycle split counters move above zero"
     )
     if split_merge_events > 0:
         return {
@@ -877,14 +1500,26 @@ def _split_merge_signal(*, case_results: list[dict[str, Any]], split_merge_event
             "structural_signal_count": len(structural_signal_cases),
             "structural_signal_cases": structural_signal_cases,
             "candidate_tissues": ["finance_anomaly_reviewer_tissue", "finance_workspace_governance_tissue"],
+            "pressure_ratio": pressure_ratio,
+            "no_action_reason": "",
+            "future_trigger": future_trigger,
         }
     return {
         "measured": False,
         "value": 0.0,
-        "detail": "no governed split or merge executed; reviewer and governance pressure still signaled future split candidates",
+        "detail": (
+            "no governed split or merge executed; reviewer and governance pressure appeared, "
+            f"but active population stayed at {active_population}/{steady_target} and split counters remained zero"
+        ),
         "structural_signal_count": len(structural_signal_cases),
         "structural_signal_cases": structural_signal_cases,
         "candidate_tissues": []
         if not structural_signal_cases
         else ["finance_anomaly_reviewer_tissue", "finance_workspace_governance_tissue"],
+        "pressure_ratio": pressure_ratio,
+        "no_action_reason": (
+            "pressure stayed bounded inside existing tissues, no lifecycle split/merge action was approved, "
+            f"and authority review volume stayed at {int(authority_summary.get('review_count', 0))}"
+        ),
+        "future_trigger": future_trigger,
     }

@@ -38,6 +38,7 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Phase 6.5 hardening: complete and locally verified without changing project units
 - Phase 7: complete and locally verified
 - Phase 7.5 hardening: complete and locally verified without changing project units
+- Phase 7.6 hardening: complete and locally verified without changing project units
 - Phase 8: harness and bounded local validation implemented; full long-run closure still open pending real 24h and 72h soak evidence
 
 ## Phase 3 Foundation
@@ -110,6 +111,15 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
   - retained-memory and runtime-overhead deltas
   - explicit structural-pressure signals when split or merge remains unexecuted
 - Phase 7.5 hardening evidence now lives at `05_testing/PHASE75_HARDENING_EVIDENCE.md`.
+- Phase 7.6 hardening further strengthens the same Phase 7 benchmark system with:
+  - one more deterministic governance-sensitive alias case
+  - reconciled correction-memory vendor matching across quantized supersession
+  - route-of-custody summaries per case
+  - explicit descriptor-memory and need-resolution evidence
+  - confidence-aware outcome summaries
+  - adaptation tradeoff reporting
+  - more explicit structural-pressure and no-action explanations
+- Phase 7.6 hardening evidence now lives at `05_testing/PHASE76_HARDENING_EVIDENCE.md`.
 
 ## Phase 8 Long-Run Harness
 - Deterministic Phase 8 fixtures now live under `fixtures/document_workflow/phase8/`.
@@ -184,6 +194,7 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Phase 6.5 hardening verification method: run `python3 scripts/check_phase6_routing_authority.py` and confirm `05_testing/PHASE65_HARDENING_EVIDENCE.md`.
 - Phase 7 verification method: run `python3 scripts/check_phase7_benchmarks.py` and confirm `05_testing/PHASE7_TISSUES_BENCHMARK_EVIDENCE.md`.
 - Phase 7.5 hardening verification method: run `python3 scripts/check_phase7_benchmarks.py` and confirm `05_testing/PHASE75_HARDENING_EVIDENCE.md`.
+- Phase 7.6 hardening verification method: run `python3 scripts/check_phase7_benchmarks.py` and confirm `05_testing/PHASE76_HARDENING_EVIDENCE.md`.
 - Phase 8 harness verification method: run `python3 scripts/check_phase8_soak.py` and confirm the bounded summary under `06_outputs/run_summaries/` plus `05_testing/PHASE8_LONGRUN_EVIDENCE.md`.
 - Local verification status is recorded in `01_plan/PROGRESS_TRACKER.md` and `CHANGELOG.md`.
 - Real 24h and 72h soak closure remain assumed only until later work completes them locally.

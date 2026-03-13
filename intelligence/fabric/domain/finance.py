@@ -1143,16 +1143,36 @@ def _build_report(
 ) -> dict[str, Any]:
     summary = (
         f"{benchmark_class} processed {workflow_payload.get('document_id')} as {classification['document_class']} "
-        f"with governance action {governance['governance_action']}."
+        f"and finished {governance['final_status']} with governance action {governance['governance_action']}."
     )
     evidence_points = [
         f"descriptor_reuse={correction['descriptor_reuse']['used']}",
+        f"descriptor_id={correction['descriptor_reuse']['descriptor_id'] or 'none'}",
         f"anomaly_count={len(anomaly['anomalies'])}",
+        f"authority_reviews={len(correction['authority_review_ids']) + len(governance['authority_review_ids'])}",
         f"workspace_ok={workspace_check['workspace_ok']}",
+    ]
+    custody_notes = [
+        f"classified_as={classification['document_class']}",
+        "correction="
+        + (
+            f"descriptor:{correction['descriptor_reuse']['descriptor_id']}"
+            if correction["descriptor_reuse"]["used"]
+            else "local_only"
+        ),
+        f"anomaly_review={','.join(anomaly['anomalies']) or 'none'}",
+        f"governance={governance['governance_action']}",
+    ]
+    confidence_factors = [
+        f"support=descriptor_reuse:{correction['descriptor_reuse']['used']}",
+        f"support=workspace_complete:{workspace_check['workspace_ok']}",
+        f"drag=anomaly_count:{len(anomaly['anomalies'])}",
     ]
     return {
         "summary": summary,
         "evidence_points": evidence_points,
+        "custody_notes": custody_notes,
+        "confidence_factors": confidence_factors,
     }
 
 
@@ -1338,7 +1358,12 @@ def _find_matching_correction_memory(
         if not isinstance(summary_vector, list):
             summary_vector = []
         score = 0.0
-        if summary_vector and vendor_signature and vendor_signature[:12] == str(summary_vector[0]).strip().lower()[:12]:
+        stored_signature = _vendor_signature(str(summary_vector[0])) if summary_vector else ""
+        normalized_vendor_signature = _vendor_signature(str(payload.get("normalized_vendor", "")))
+        if vendor_signature and (
+            vendor_signature[:12] == stored_signature[:12]
+            or vendor_signature[:12] == normalized_vendor_signature[:12]
+        ):
             score += 0.72
         if str(payload.get("default_currency", "")).strip().upper() == str(normalized_fields.get("currency", "")).strip().upper():
             score += 0.08

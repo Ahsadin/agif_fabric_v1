@@ -34,6 +34,11 @@
 - This pass improved benchmark credibility, counterfactual explanations, tissue analytics, retained-memory and runtime-overhead reporting, and explicit structural-pressure signaling inside already-closed Phase 7.
 - The progress units remain `525/600` because the locked plan does not award extra units for hardening inside a closed phase.
 
+## 2026-03-13 Phase 7.6 Hardening Note
+- A Phase 7.6 hardening pass was completed locally.
+- This pass reconciled correction-memory descriptor matching across quantized supersession, added one more deterministic governance-sensitive alias case, and strengthened route-of-custody, descriptor-memory, confidence, tradeoff, and structural-pressure reporting inside already-closed Phase 7.
+- The progress units remain `525/600` because the locked plan does not award extra units for hardening inside a closed phase.
+
 ## Verification Status
 - Locally verified:
   - required project directories exist
@@ -88,6 +93,7 @@
   - `AGIF_FABRIC_P7_PASS` is earned and recorded in `05_testing/PASS_TOKENS.md`
   - the Phase 7.5 hardening pass strengthens the same benchmark suite without changing the committed project units
   - the hardened result tables now include counterfactual notes, tissue analytics, bounded resource deltas, and explicit structural-pressure signals locally
+  - the Phase 7.6 hardening pass now adds a deterministic high-value alias hold case, reconciled correction-memory matching, route-of-custody summaries, descriptor-memory evidence, confidence-aware outcomes, and adaptation tradeoff reporting locally
   - the Phase 8 soak harness and bounded local validation exist locally
   - `python3 scripts/check_phase8_soak.py` passes locally
   - the bounded validation summary under `06_outputs/run_summaries/` exists locally

@@ -123,6 +123,45 @@
           }
         },
         {
+          "case_id": "invoice_high_value_alias_hold",
+          "correctness_score": 0.375,
+          "descriptor_reuse": {
+            "descriptor_id": null,
+            "eligible": false,
+            "memory_id": null,
+            "used": false
+          },
+          "output_digest": "60b94212a236c6ff8673cf7824c0d151a8b24174f6397efc759cd390314da197",
+          "result": {
+            "accepted": true,
+            "anomaly_count": 2,
+            "benchmark_class": "flat_baseline",
+            "descriptor_reuse": {
+              "descriptor_id": null,
+              "eligible": false,
+              "memory_id": null,
+              "used": false
+            },
+            "document_class": "vendor_invoice",
+            "document_id": "phase7-doc-006",
+            "extraction_profile": "invoice_extraction",
+            "final_status": "accepted",
+            "governance_action": "not_applicable",
+            "handoff_count": 0,
+            "input_digest": "681b1987550eb610768daa3add3a774a19a2430e147e9627a2b8b9bf64dad4bf",
+            "normalized_currency": "",
+            "normalized_total": "5950.00",
+            "normalized_vendor": "N0rthwind Off1ce GmbH",
+            "proof_domain": "document/workflow intelligence",
+            "report_summary": "Flat baseline completed a single bounded pass without real tissues, reviewer hold, or descriptor reuse.",
+            "reviewer_status": "clear_without_review",
+            "selected_cells": [],
+            "selected_roles": [],
+            "tissues_used": [],
+            "workflow_name": "finance_document_workflow_phase7"
+          }
+        },
+        {
           "case_id": "invoice_anomaly_hold",
           "correctness_score": 0.625,
           "descriptor_reuse": {
@@ -214,8 +253,10 @@
           "active_population_cost_bytes": 0.0,
           "authority_review_count": 0,
           "authority_reviews_per_case": 0.0,
+          "average_need_effectiveness": 0.0,
           "estimated_idle_memory_bytes": 0,
           "estimated_runtime_memory_bytes": 0,
+          "governance_overhead_share": 0.0,
           "logical_population": 0,
           "memory_tier_delta_bytes": {
             "cold": 0,
@@ -238,6 +279,8 @@
           "need_signal_count": 0,
           "need_signals_per_case": 0.0,
           "retained_memory_delta_bytes": 0,
+          "retained_memory_delta_per_case_bytes": 0.0,
+          "retained_memory_value_density": 0.0,
           "routing_decision_count": 0,
           "routing_decisions_per_case": 0.0,
           "runtime_memory_delta_bytes": 0,
@@ -246,87 +289,96 @@
         "split_merge_efficiency": {
           "candidate_tissues": [],
           "detail": "flat baseline has no split or merge path",
+          "future_trigger": "not applicable until the benchmark uses a governed fabric population",
           "measured": false,
+          "no_action_reason": "flat baseline has no lifecycle-managed population to split or merge",
+          "pressure_ratio": 0.0,
           "structural_signal_cases": [],
           "structural_signal_count": 0,
           "value": 0.0
         },
-        "task_accuracy": 0.625,
-        "unsafe_action_rate": 0.4
+        "task_accuracy": 0.583333,
+        "unsafe_action_rate": 0.5
       }
     },
     "multi_cell_with_bounded_adaptation": {
       "analytics": {
         "tissues": {
           "finance_anomaly_reviewer_tissue": {
-            "anomaly_burden": 3,
-            "case_count": 5,
+            "anomaly_burden": 4,
+            "case_count": 6,
             "governance_burden": 0,
-            "handoff_in_count": 5,
-            "handoff_out_count": 5,
+            "handoff_in_count": 6,
+            "handoff_out_count": 6,
+            "intervention_case_count": 3,
             "reuse_contribution": 0,
-            "stage_count": 5,
-            "useful_case_count": 5,
+            "stage_count": 6,
+            "useful_case_count": 6,
             "usefulness_rate": 1.0,
             "workload_share": 0.1
           },
           "finance_extraction_tissue": {
             "anomaly_burden": 0,
-            "case_count": 5,
+            "case_count": 6,
             "governance_burden": 0,
-            "handoff_in_count": 5,
-            "handoff_out_count": 5,
+            "handoff_in_count": 6,
+            "handoff_out_count": 6,
+            "intervention_case_count": 0,
             "reuse_contribution": 0,
-            "stage_count": 5,
-            "useful_case_count": 5,
+            "stage_count": 6,
+            "useful_case_count": 6,
             "usefulness_rate": 1.0,
             "workload_share": 0.1
           },
           "finance_intake_routing_tissue": {
             "anomaly_burden": 0,
-            "case_count": 5,
+            "case_count": 6,
             "governance_burden": 0,
             "handoff_in_count": 0,
-            "handoff_out_count": 5,
+            "handoff_out_count": 6,
+            "intervention_case_count": 0,
             "reuse_contribution": 0,
-            "stage_count": 10,
-            "useful_case_count": 5,
+            "stage_count": 12,
+            "useful_case_count": 6,
             "usefulness_rate": 1.0,
             "workload_share": 0.2
           },
           "finance_reporting_output_tissue": {
             "anomaly_burden": 0,
-            "case_count": 5,
+            "case_count": 6,
             "governance_burden": 0,
-            "handoff_in_count": 5,
+            "handoff_in_count": 6,
             "handoff_out_count": 0,
+            "intervention_case_count": 6,
             "reuse_contribution": 0,
-            "stage_count": 10,
-            "useful_case_count": 5,
+            "stage_count": 12,
+            "useful_case_count": 6,
             "usefulness_rate": 1.0,
             "workload_share": 0.2
           },
           "finance_validation_correction_tissue": {
             "anomaly_burden": 0,
-            "case_count": 5,
+            "case_count": 6,
             "governance_burden": 0,
-            "handoff_in_count": 5,
-            "handoff_out_count": 5,
-            "reuse_contribution": 2,
-            "stage_count": 10,
-            "useful_case_count": 5,
+            "handoff_in_count": 6,
+            "handoff_out_count": 6,
+            "intervention_case_count": 3,
+            "reuse_contribution": 3,
+            "stage_count": 12,
+            "useful_case_count": 6,
             "usefulness_rate": 1.0,
             "workload_share": 0.2
           },
           "finance_workspace_governance_tissue": {
             "anomaly_burden": 0,
-            "case_count": 5,
-            "governance_burden": 2,
-            "handoff_in_count": 5,
-            "handoff_out_count": 5,
+            "case_count": 6,
+            "governance_burden": 3,
+            "handoff_in_count": 6,
+            "handoff_out_count": 6,
+            "intervention_case_count": 3,
             "reuse_contribution": 0,
-            "stage_count": 10,
-            "useful_case_count": 5,
+            "stage_count": 12,
+            "useful_case_count": 6,
             "usefulness_rate": 1.0,
             "workload_share": 0.2
           }
@@ -334,6 +386,72 @@
       },
       "case_results": [
         {
+          "analysis": {
+            "confidence": {
+              "drag_reasons": [],
+              "label": "high",
+              "outcome_state": {
+                "final_status": "accepted",
+                "governance_action": "approved_release",
+                "reviewer_status": "clear"
+              },
+              "score": 0.864,
+              "summary": "high confidence (0.864) with outcome accepted/clear",
+              "support_reasons": [
+                "extraction tissue had high OCR support",
+                "anomaly/reviewer cleared the document",
+                "workspace/governance released after clear reviewer state"
+              ],
+              "truth_match": {
+                "final_status": true,
+                "governance_action": true
+              }
+            },
+            "descriptor_reuse_detail": {
+              "restored_fields": [
+                "normalized_currency",
+                "derived_due_date"
+              ],
+              "summary": "no reviewed descriptor artifact was available",
+              "used": false
+            },
+            "governance_control": {
+              "action": "approved_release",
+              "authority_review_ids": [],
+              "summary": "bounded release completed without extra authority review"
+            },
+            "need_resolution": {
+              "count": 0,
+              "summaries": [],
+              "summary": "none"
+            },
+            "route_of_custody": {
+              "critical_steps": [
+                "intake/routing classified vendor_invoice and selected invoice_extraction",
+                "extraction captured complete invoice fields",
+                "validation/correction stayed local to current document state",
+                "anomaly/reviewer cleared the document",
+                "workspace/governance approved_release",
+                "reporting/output wrote bounded summary and final status accepted"
+              ],
+              "handoff_count": 5,
+              "reporting_notes": [
+                "classified_as=vendor_invoice",
+                "correction=local_only",
+                "anomaly_review=none",
+                "governance=approved_release"
+              ],
+              "summary": "intake/routing -> extraction -> validation/correction -> anomaly/reviewer -> workspace/governance -> reporting/output; handoffs=5",
+              "tissue_sequence": [
+                "intake/routing",
+                "extraction",
+                "validation/correction",
+                "anomaly/reviewer",
+                "workspace/governance",
+                "reporting/output"
+              ]
+            }
+          },
           "case_id": "invoice_seed_reference",
           "correctness_score": 1.0,
           "descriptor_reuse": {
@@ -342,7 +460,7 @@
             "memory_id": null,
             "used": false
           },
-          "output_digest": "d05cb9b716acbaf4e014b1638d4ad64e40bb33d851de98a23d8b7b7f6eaa79d0",
+          "output_digest": "3d6954772d02d9793ff56757d855b99d14e2b36a08275e32ee41b79c818db8de",
           "result": {
             "accepted": true,
             "anomaly_count": 0,
@@ -364,7 +482,7 @@
             "normalized_total": "1200.50",
             "normalized_vendor": "Northwind Office GmbH",
             "proof_domain": "document/workflow intelligence",
-            "report_summary": "multi_cell_with_bounded_adaptation processed phase7-doc-001 as vendor_invoice with governance action approved_release.",
+            "report_summary": "multi_cell_with_bounded_adaptation processed phase7-doc-001 as vendor_invoice and finished accepted with governance action approved_release.",
             "reviewer_status": "clear",
             "selected_cells": [
               "finance_anomaly_reviewer",
@@ -500,6 +618,8 @@
               "cell_id": "finance_audit_reporter",
               "decision_ref": "routing_stage_00009",
               "output_keys": [
+                "confidence_factors",
+                "custody_notes",
                 "evidence_points",
                 "summary"
               ],
@@ -542,7 +662,7 @@
               "normalized_total": "1200.50",
               "normalized_vendor": "Northwind Office GmbH",
               "proof_domain": "document/workflow intelligence",
-              "report_summary": "multi_cell_with_bounded_adaptation processed phase7-doc-001 as vendor_invoice with governance action approved_release.",
+              "report_summary": "multi_cell_with_bounded_adaptation processed phase7-doc-001 as vendor_invoice and finished accepted with governance action approved_release.",
               "reviewer_status": "clear",
               "selected_cells": [
                 "finance_anomaly_reviewer",
@@ -807,12 +927,25 @@
                 "final_status": "accepted"
               },
               "reporting": {
+                "confidence_factors": [
+                  "support=descriptor_reuse:False",
+                  "support=workspace_complete:True",
+                  "drag=anomaly_count:0"
+                ],
+                "custody_notes": [
+                  "classified_as=vendor_invoice",
+                  "correction=local_only",
+                  "anomaly_review=none",
+                  "governance=approved_release"
+                ],
                 "evidence_points": [
                   "descriptor_reuse=False",
+                  "descriptor_id=none",
                   "anomaly_count=0",
+                  "authority_reviews=0",
                   "workspace_ok=True"
                 ],
-                "summary": "multi_cell_with_bounded_adaptation processed phase7-doc-001 as vendor_invoice with governance action approved_release."
+                "summary": "multi_cell_with_bounded_adaptation processed phase7-doc-001 as vendor_invoice and finished accepted with governance action approved_release."
               },
               "workspace_guard": {
                 "missing_handoffs": [],
@@ -852,6 +985,86 @@
           }
         },
         {
+          "analysis": {
+            "confidence": {
+              "drag_reasons": [
+                "extraction left gaps in currency"
+              ],
+              "label": "high",
+              "outcome_state": {
+                "final_status": "accepted",
+                "governance_action": "approved_release",
+                "reviewer_status": "clear"
+              },
+              "score": 0.848,
+              "summary": "high confidence (0.848) with outcome accepted/clear",
+              "support_reasons": [
+                "extraction tissue had bounded but usable OCR support",
+                "validation/correction reused reviewed prior descriptor state",
+                "anomaly/reviewer cleared the document",
+                "workspace/governance released after clear reviewer state"
+              ],
+              "truth_match": {
+                "final_status": true,
+                "governance_action": true
+              }
+            },
+            "descriptor_reuse_detail": {
+              "descriptor_id": "desc_0001",
+              "memory_class": "pattern_memory",
+              "memory_id": "mem_0001",
+              "payload_bytes": 597,
+              "restored_fields": [
+                "normalized_vendor",
+                "normalized_currency",
+                "derived_due_date"
+              ],
+              "retention_tier": "warm",
+              "reuse_count": 1,
+              "review_count": 1,
+              "summary": "desc_0001 from mem_0001; warm tier, 597 bytes; reuse_count=1, trust=0.76; approved by authority_00002; restored normalized_vendor, normalized_currency, derived_due_date",
+              "trust_score": 0.76,
+              "used": true
+            },
+            "governance_control": {
+              "action": "approved_release",
+              "authority_review_ids": [],
+              "summary": "bounded release completed without extra authority review"
+            },
+            "need_resolution": {
+              "count": 1,
+              "summaries": [
+                "uncertainty -> desc_0001 (resolved_well)"
+              ],
+              "summary": "uncertainty -> desc_0001 (resolved_well)"
+            },
+            "route_of_custody": {
+              "critical_steps": [
+                "intake/routing classified vendor_invoice and selected invoice_extraction",
+                "extraction captured bounded gaps: currency",
+                "validation/correction reused desc_0001 after authority authority_00002",
+                "anomaly/reviewer cleared the document",
+                "workspace/governance approved_release",
+                "reporting/output wrote bounded summary and final status accepted"
+              ],
+              "handoff_count": 5,
+              "reporting_notes": [
+                "classified_as=vendor_invoice",
+                "correction=descriptor:desc_0001",
+                "anomaly_review=none",
+                "governance=approved_release"
+              ],
+              "summary": "intake/routing -> extraction -> validation/correction -> anomaly/reviewer -> workspace/governance -> reporting/output; handoffs=5",
+              "tissue_sequence": [
+                "intake/routing",
+                "extraction",
+                "validation/correction",
+                "anomaly/reviewer",
+                "workspace/governance",
+                "reporting/output"
+              ]
+            }
+          },
           "case_id": "invoice_followup_alias",
           "correctness_score": 1.0,
           "descriptor_reuse": {
@@ -860,7 +1073,7 @@
             "memory_id": "mem_0001",
             "used": true
           },
-          "output_digest": "d742f165ea1417317983e051e933c814aedbfdd00a26f146a46d4b48772afcd9",
+          "output_digest": "a4a18a6745f13dea0c60c62dec652d018f0120b41c919d70b551348df6f704bc",
           "result": {
             "accepted": true,
             "anomaly_count": 0,
@@ -882,7 +1095,7 @@
             "normalized_total": "761.60",
             "normalized_vendor": "Northwind Office GmbH",
             "proof_domain": "document/workflow intelligence",
-            "report_summary": "multi_cell_with_bounded_adaptation processed phase7-doc-002 as vendor_invoice with governance action approved_release.",
+            "report_summary": "multi_cell_with_bounded_adaptation processed phase7-doc-002 as vendor_invoice and finished accepted with governance action approved_release.",
             "reviewer_status": "clear",
             "selected_cells": [
               "finance_anomaly_reviewer",
@@ -1018,6 +1231,8 @@
               "cell_id": "finance_audit_reporter",
               "decision_ref": "routing_stage_00019",
               "output_keys": [
+                "confidence_factors",
+                "custody_notes",
                 "evidence_points",
                 "summary"
               ],
@@ -1060,7 +1275,7 @@
               "normalized_total": "761.60",
               "normalized_vendor": "Northwind Office GmbH",
               "proof_domain": "document/workflow intelligence",
-              "report_summary": "multi_cell_with_bounded_adaptation processed phase7-doc-002 as vendor_invoice with governance action approved_release.",
+              "report_summary": "multi_cell_with_bounded_adaptation processed phase7-doc-002 as vendor_invoice and finished accepted with governance action approved_release.",
               "reviewer_status": "clear",
               "selected_cells": [
                 "finance_anomaly_reviewer",
@@ -1361,12 +1576,25 @@
                 "final_status": "accepted"
               },
               "reporting": {
+                "confidence_factors": [
+                  "support=descriptor_reuse:True",
+                  "support=workspace_complete:True",
+                  "drag=anomaly_count:0"
+                ],
+                "custody_notes": [
+                  "classified_as=vendor_invoice",
+                  "correction=descriptor:desc_0001",
+                  "anomaly_review=none",
+                  "governance=approved_release"
+                ],
                 "evidence_points": [
                   "descriptor_reuse=True",
+                  "descriptor_id=desc_0001",
                   "anomaly_count=0",
+                  "authority_reviews=1",
                   "workspace_ok=True"
                 ],
-                "summary": "multi_cell_with_bounded_adaptation processed phase7-doc-002 as vendor_invoice with governance action approved_release."
+                "summary": "multi_cell_with_bounded_adaptation processed phase7-doc-002 as vendor_invoice and finished accepted with governance action approved_release."
               },
               "workspace_guard": {
                 "missing_handoffs": [],
@@ -1406,6 +1634,86 @@
           }
         },
         {
+          "analysis": {
+            "confidence": {
+              "drag_reasons": [
+                "extraction tissue started from low OCR support",
+                "extraction left gaps in currency"
+              ],
+              "label": "guarded",
+              "outcome_state": {
+                "final_status": "accepted",
+                "governance_action": "approved_release",
+                "reviewer_status": "clear"
+              },
+              "score": 0.7715,
+              "summary": "guarded confidence (0.771) with outcome accepted/clear",
+              "support_reasons": [
+                "validation/correction reused reviewed prior descriptor state",
+                "anomaly/reviewer cleared the document",
+                "workspace/governance released after clear reviewer state"
+              ],
+              "truth_match": {
+                "final_status": true,
+                "governance_action": true
+              }
+            },
+            "descriptor_reuse_detail": {
+              "descriptor_id": "desc_0003",
+              "memory_class": "pattern_memory",
+              "memory_id": "mem_0003",
+              "payload_bytes": 595,
+              "restored_fields": [
+                "normalized_vendor",
+                "normalized_currency",
+                "derived_due_date"
+              ],
+              "retention_tier": "warm",
+              "reuse_count": 1,
+              "review_count": 1,
+              "summary": "desc_0003 from mem_0003; warm tier, 595 bytes; reuse_count=1, trust=0.76; approved by authority_00004; restored normalized_vendor, normalized_currency, derived_due_date",
+              "trust_score": 0.76,
+              "used": true
+            },
+            "governance_control": {
+              "action": "approved_release",
+              "authority_review_ids": [],
+              "summary": "bounded release completed without extra authority review"
+            },
+            "need_resolution": {
+              "count": 1,
+              "summaries": [
+                "uncertainty -> desc_0003 (resolved_well)"
+              ],
+              "summary": "uncertainty -> desc_0003 (resolved_well)"
+            },
+            "route_of_custody": {
+              "critical_steps": [
+                "intake/routing classified vendor_invoice and selected invoice_extraction",
+                "extraction captured bounded gaps: currency",
+                "validation/correction reused desc_0003 after authority authority_00004",
+                "anomaly/reviewer cleared the document",
+                "workspace/governance approved_release",
+                "reporting/output wrote bounded summary and final status accepted"
+              ],
+              "handoff_count": 5,
+              "reporting_notes": [
+                "classified_as=vendor_invoice",
+                "correction=descriptor:desc_0003",
+                "anomaly_review=none",
+                "governance=approved_release"
+              ],
+              "summary": "intake/routing -> extraction -> validation/correction -> anomaly/reviewer -> workspace/governance -> reporting/output; handoffs=5",
+              "tissue_sequence": [
+                "intake/routing",
+                "extraction",
+                "validation/correction",
+                "anomaly/reviewer",
+                "workspace/governance",
+                "reporting/output"
+              ]
+            }
+          },
           "case_id": "invoice_followup_alias_repeat",
           "correctness_score": 1.0,
           "descriptor_reuse": {
@@ -1414,7 +1722,7 @@
             "memory_id": "mem_0003",
             "used": true
           },
-          "output_digest": "784362f2ccc85fe6c3851017ca36f9562efce3bb5d160bc1a4c3c887d9533185",
+          "output_digest": "e13b03f82d234620da7a23de84903b16618941a0000272301c8c181822ad5ee4",
           "result": {
             "accepted": true,
             "anomaly_count": 0,
@@ -1436,7 +1744,7 @@
             "normalized_total": "481.95",
             "normalized_vendor": "Northwind Office GmbH",
             "proof_domain": "document/workflow intelligence",
-            "report_summary": "multi_cell_with_bounded_adaptation processed phase7-doc-004 as vendor_invoice with governance action approved_release.",
+            "report_summary": "multi_cell_with_bounded_adaptation processed phase7-doc-004 as vendor_invoice and finished accepted with governance action approved_release.",
             "reviewer_status": "clear",
             "selected_cells": [
               "finance_anomaly_reviewer",
@@ -1572,6 +1880,8 @@
               "cell_id": "finance_audit_reporter",
               "decision_ref": "routing_stage_00029",
               "output_keys": [
+                "confidence_factors",
+                "custody_notes",
                 "evidence_points",
                 "summary"
               ],
@@ -1614,7 +1924,7 @@
               "normalized_total": "481.95",
               "normalized_vendor": "Northwind Office GmbH",
               "proof_domain": "document/workflow intelligence",
-              "report_summary": "multi_cell_with_bounded_adaptation processed phase7-doc-004 as vendor_invoice with governance action approved_release.",
+              "report_summary": "multi_cell_with_bounded_adaptation processed phase7-doc-004 as vendor_invoice and finished accepted with governance action approved_release.",
               "reviewer_status": "clear",
               "selected_cells": [
                 "finance_anomaly_reviewer",
@@ -1915,12 +2225,25 @@
                 "final_status": "accepted"
               },
               "reporting": {
+                "confidence_factors": [
+                  "support=descriptor_reuse:True",
+                  "support=workspace_complete:True",
+                  "drag=anomaly_count:0"
+                ],
+                "custody_notes": [
+                  "classified_as=vendor_invoice",
+                  "correction=descriptor:desc_0003",
+                  "anomaly_review=none",
+                  "governance=approved_release"
+                ],
                 "evidence_points": [
                   "descriptor_reuse=True",
+                  "descriptor_id=desc_0003",
                   "anomaly_count=0",
+                  "authority_reviews=1",
                   "workspace_ok=True"
                 ],
-                "summary": "multi_cell_with_bounded_adaptation processed phase7-doc-004 as vendor_invoice with governance action approved_release."
+                "summary": "multi_cell_with_bounded_adaptation processed phase7-doc-004 as vendor_invoice and finished accepted with governance action approved_release."
               },
               "workspace_guard": {
                 "missing_handoffs": [],
@@ -1960,37 +2283,120 @@
           }
         },
         {
-          "case_id": "invoice_anomaly_hold",
+          "analysis": {
+            "confidence": {
+              "drag_reasons": [
+                "extraction tissue started from low OCR support",
+                "extraction left gaps in currency",
+                "anomaly/reviewer raised amount_exceeds_auto_approval_limit"
+              ],
+              "label": "guarded",
+              "outcome_state": {
+                "final_status": "hold",
+                "governance_action": "hold_for_review",
+                "reviewer_status": "review_required"
+              },
+              "score": 0.7115,
+              "summary": "guarded confidence (0.712) with outcome hold/review_required",
+              "support_reasons": [
+                "validation/correction reused reviewed prior descriptor state",
+                "workspace/governance kept release on hold under anomaly pressure"
+              ],
+              "truth_match": {
+                "final_status": true,
+                "governance_action": true
+              }
+            },
+            "descriptor_reuse_detail": {
+              "descriptor_id": "desc_0005",
+              "memory_class": "pattern_memory",
+              "memory_id": "mem_0005",
+              "payload_bytes": 595,
+              "restored_fields": [
+                "normalized_vendor",
+                "normalized_currency",
+                "derived_due_date"
+              ],
+              "retention_tier": "warm",
+              "reuse_count": 2,
+              "review_count": 1,
+              "summary": "desc_0005 from mem_0005; warm tier, 595 bytes; reuse_count=2, trust=0.76; approved by authority_00006; restored normalized_vendor, normalized_currency, derived_due_date",
+              "trust_score": 0.76,
+              "used": true
+            },
+            "governance_control": {
+              "action": "hold_for_review",
+              "authority_review_ids": [
+                "authority_00007"
+              ],
+              "summary": "hold_for_review via authority_00007 (approved, trust_band=high)"
+            },
+            "need_resolution": {
+              "count": 2,
+              "summaries": [
+                "trust_risk -> authority_00007 (resolved_well)",
+                "uncertainty -> desc_0005 (resolved_well)"
+              ],
+              "summary": "trust_risk -> authority_00007 (resolved_well); uncertainty -> desc_0005 (resolved_well)"
+            },
+            "route_of_custody": {
+              "critical_steps": [
+                "intake/routing classified vendor_invoice and selected invoice_extraction",
+                "extraction captured bounded gaps: currency",
+                "validation/correction reused desc_0005 after authority authority_00006",
+                "anomaly/reviewer flagged amount_exceeds_auto_approval_limit",
+                "workspace/governance hold_for_review via authority_00007",
+                "reporting/output wrote bounded summary and final status hold"
+              ],
+              "handoff_count": 5,
+              "reporting_notes": [
+                "classified_as=vendor_invoice",
+                "correction=descriptor:desc_0005",
+                "anomaly_review=amount_exceeds_auto_approval_limit",
+                "governance=hold_for_review"
+              ],
+              "summary": "intake/routing -> extraction -> validation/correction -> anomaly/reviewer -> workspace/governance -> reporting/output; handoffs=5",
+              "tissue_sequence": [
+                "intake/routing",
+                "extraction",
+                "validation/correction",
+                "anomaly/reviewer",
+                "workspace/governance",
+                "reporting/output"
+              ]
+            }
+          },
+          "case_id": "invoice_high_value_alias_hold",
           "correctness_score": 1.0,
           "descriptor_reuse": {
-            "descriptor_id": null,
-            "eligible": false,
-            "memory_id": null,
-            "used": false
+            "descriptor_id": "desc_0005",
+            "eligible": true,
+            "memory_id": "mem_0005",
+            "used": true
           },
-          "output_digest": "5279e695a299d1936f89c87731a2357ccb92da7e329609f19a420f3d811fbf93",
+          "output_digest": "06fb74b72c16601aa134c4e33ac061ff0628178af92f5f71d6e1a5394186ae36",
           "result": {
             "accepted": false,
-            "anomaly_count": 2,
+            "anomaly_count": 1,
             "benchmark_class": "multi_cell_with_bounded_adaptation",
             "descriptor_reuse": {
-              "descriptor_id": null,
-              "eligible": false,
-              "memory_id": null,
-              "used": false
+              "descriptor_id": "desc_0005",
+              "eligible": true,
+              "memory_id": "mem_0005",
+              "used": true
             },
             "document_class": "vendor_invoice",
-            "document_id": "phase7-doc-003",
+            "document_id": "phase7-doc-006",
             "extraction_profile": "invoice_extraction",
             "final_status": "hold",
             "governance_action": "hold_for_review",
             "handoff_count": 5,
-            "input_digest": "c90ef79aa1408c0bb0be2f59bf1927d7e178576f76dcfe878fdf8f8e5eb277bc",
+            "input_digest": "681b1987550eb610768daa3add3a774a19a2430e147e9627a2b8b9bf64dad4bf",
             "normalized_currency": "EUR",
-            "normalized_total": "9500.00",
-            "normalized_vendor": "Orbit Travel Claims Ltd",
+            "normalized_total": "5950.00",
+            "normalized_vendor": "Northwind Office GmbH",
             "proof_domain": "document/workflow intelligence",
-            "report_summary": "multi_cell_with_bounded_adaptation processed phase7-doc-003 as vendor_invoice with governance action hold_for_review.",
+            "report_summary": "multi_cell_with_bounded_adaptation processed phase7-doc-006 as vendor_invoice and finished hold with governance action hold_for_review.",
             "reviewer_status": "review_required",
             "selected_cells": [
               "finance_anomaly_reviewer",
@@ -2126,6 +2532,8 @@
               "cell_id": "finance_audit_reporter",
               "decision_ref": "routing_stage_00039",
               "output_keys": [
+                "confidence_factors",
+                "custody_notes",
                 "evidence_points",
                 "summary"
               ],
@@ -2149,26 +2557,26 @@
             "current_stage": "complete",
             "final_output": {
               "accepted": false,
-              "anomaly_count": 2,
+              "anomaly_count": 1,
               "benchmark_class": "multi_cell_with_bounded_adaptation",
               "descriptor_reuse": {
-                "descriptor_id": null,
-                "eligible": false,
-                "memory_id": null,
-                "used": false
+                "descriptor_id": "desc_0005",
+                "eligible": true,
+                "memory_id": "mem_0005",
+                "used": true
               },
               "document_class": "vendor_invoice",
-              "document_id": "phase7-doc-003",
+              "document_id": "phase7-doc-006",
               "extraction_profile": "invoice_extraction",
               "final_status": "hold",
               "governance_action": "hold_for_review",
               "handoff_count": 5,
-              "input_digest": "c90ef79aa1408c0bb0be2f59bf1927d7e178576f76dcfe878fdf8f8e5eb277bc",
+              "input_digest": "681b1987550eb610768daa3add3a774a19a2430e147e9627a2b8b9bf64dad4bf",
               "normalized_currency": "EUR",
-              "normalized_total": "9500.00",
-              "normalized_vendor": "Orbit Travel Claims Ltd",
+              "normalized_total": "5950.00",
+              "normalized_vendor": "Northwind Office GmbH",
               "proof_domain": "document/workflow intelligence",
-              "report_summary": "multi_cell_with_bounded_adaptation processed phase7-doc-003 as vendor_invoice with governance action hold_for_review.",
+              "report_summary": "multi_cell_with_bounded_adaptation processed phase7-doc-006 as vendor_invoice and finished hold with governance action hold_for_review.",
               "reviewer_status": "review_required",
               "selected_cells": [
                 "finance_anomaly_reviewer",
@@ -2206,7 +2614,650 @@
             },
             "governance": {
               "authority_review_ids": [
-                "authority_00006"
+                "authority_00007"
+              ],
+              "final_status": "hold",
+              "governance_action": "hold_for_review"
+            },
+            "handoffs": [
+              {
+                "artifact_stage_id": "intake_routing",
+                "artifact_summary": "invoice_extraction",
+                "from_tissue": "finance_intake_routing_tissue",
+                "handoff_id": "handoff_001",
+                "to_tissue": "finance_extraction_tissue"
+              },
+              {
+                "artifact_stage_id": "extraction",
+                "artifact_summary": "raw extracted fields",
+                "from_tissue": "finance_extraction_tissue",
+                "handoff_id": "handoff_002",
+                "to_tissue": "finance_validation_correction_tissue"
+              },
+              {
+                "artifact_stage_id": "correction",
+                "artifact_summary": "normalized finance fields",
+                "from_tissue": "finance_validation_correction_tissue",
+                "handoff_id": "handoff_003",
+                "to_tissue": "finance_anomaly_reviewer_tissue"
+              },
+              {
+                "artifact_stage_id": "anomaly_review",
+                "artifact_summary": "reviewer_status=review_required",
+                "from_tissue": "finance_anomaly_reviewer_tissue",
+                "handoff_id": "handoff_004",
+                "to_tissue": "finance_workspace_governance_tissue"
+              },
+              {
+                "artifact_stage_id": "governance_review",
+                "artifact_summary": "hold_for_review",
+                "from_tissue": "finance_workspace_governance_tissue",
+                "handoff_id": "handoff_005",
+                "to_tissue": "finance_reporting_output_tissue"
+              }
+            ],
+            "stage_history": [
+              {
+                "cell_id": "finance_document_classifier",
+                "notes": [
+                  "selected finance_document_classifier for intake_classification"
+                ],
+                "role_name": "document_classifier",
+                "stage_id": "intake_classification",
+                "tissue_id": "finance_intake_routing_tissue"
+              },
+              {
+                "cell_id": "finance_intake_router",
+                "notes": [
+                  "selected finance_intake_router for intake_routing"
+                ],
+                "role_name": "intake_router",
+                "stage_id": "intake_routing",
+                "tissue_id": "finance_intake_routing_tissue"
+              },
+              {
+                "cell_id": "finance_invoice_extractor",
+                "notes": [
+                  "selected finance_invoice_extractor for extraction"
+                ],
+                "role_name": "invoice_extractor",
+                "stage_id": "extraction",
+                "tissue_id": "finance_extraction_tissue"
+              },
+              {
+                "cell_id": "finance_normalizer",
+                "notes": [
+                  "selected finance_normalizer for normalization"
+                ],
+                "role_name": "field_normalizer",
+                "stage_id": "normalization",
+                "tissue_id": "finance_validation_correction_tissue"
+              },
+              {
+                "cell_id": "finance_correction_specialist",
+                "notes": [
+                  "selected finance_correction_specialist for correction"
+                ],
+                "role_name": "correction_specialist",
+                "stage_id": "correction",
+                "tissue_id": "finance_validation_correction_tissue"
+              },
+              {
+                "cell_id": "finance_anomaly_reviewer",
+                "notes": [
+                  "selected finance_anomaly_reviewer for anomaly_review"
+                ],
+                "role_name": "anomaly_reviewer",
+                "stage_id": "anomaly_review",
+                "tissue_id": "finance_anomaly_reviewer_tissue"
+              },
+              {
+                "cell_id": "finance_workspace_guard",
+                "notes": [
+                  "selected finance_workspace_guard for workspace_guard"
+                ],
+                "role_name": "workspace_guard",
+                "stage_id": "workspace_guard",
+                "tissue_id": "finance_workspace_governance_tissue"
+              },
+              {
+                "cell_id": "finance_governance_coordinator",
+                "notes": [
+                  "selected finance_governance_coordinator for governance_review"
+                ],
+                "role_name": "governance_coordinator",
+                "stage_id": "governance_review",
+                "tissue_id": "finance_workspace_governance_tissue"
+              },
+              {
+                "cell_id": "finance_audit_reporter",
+                "notes": [
+                  "selected finance_audit_reporter for reporting"
+                ],
+                "role_name": "audit_reporter",
+                "stage_id": "reporting",
+                "tissue_id": "finance_reporting_output_tissue"
+              },
+              {
+                "cell_id": "finance_output_formatter",
+                "notes": [
+                  "selected finance_output_formatter for output_formatting"
+                ],
+                "role_name": "output_formatter",
+                "stage_id": "output_formatting",
+                "tissue_id": "finance_reporting_output_tissue"
+              }
+            ],
+            "stage_outputs": {
+              "anomaly_review": {
+                "anomalies": [
+                  "amount_exceeds_auto_approval_limit"
+                ],
+                "anomaly_score": 0.42,
+                "reviewer_status": "review_required"
+              },
+              "correction": {
+                "authority_review_ids": [
+                  "authority_00006"
+                ],
+                "benchmark_class": "multi_cell_with_bounded_adaptation",
+                "correction_notes": [
+                  "descriptor-backed correction applied"
+                ],
+                "descriptor_refs_used": [
+                  "desc_0005"
+                ],
+                "descriptor_reuse": {
+                  "descriptor_id": "desc_0005",
+                  "eligible": true,
+                  "memory_id": "mem_0005",
+                  "used": true
+                },
+                "normalized_fields": {
+                  "cost_center": "FIN-OPS",
+                  "currency": "EUR",
+                  "document_type": "invoice",
+                  "due_date": "2026-03-26",
+                  "invoice_date": "2026-03-12",
+                  "invoice_number": "NW-2026-099",
+                  "ocr_quality": "low",
+                  "payment_term_days": 14,
+                  "payment_terms": "N14",
+                  "source_channel": "scan_pdf",
+                  "subtotal": "5000.00",
+                  "tax": "950.00",
+                  "total": "5950.00",
+                  "vendor_name": "Northwind Office GmbH"
+                },
+                "replay_descriptor_payloads": [
+                  {
+                    "compression_mode": "quantized_summary_v1",
+                    "default_currency": "EUR",
+                    "default_payment_term_days": 14,
+                    "descriptor_kind": "correction_memory",
+                    "document_id": "phase7-doc-004",
+                    "memory_class": "pattern_memory",
+                    "normalized_vendor": "Northwind Office GmbH",
+                    "producer_cell_id": "finance_correction_specialist",
+                    "retention_tier": "warm",
+                    "reuse_hints": {
+                      "document_type": "invoice",
+                      "routing_hint": "local",
+                      "vendor_token": "n0rthwin"
+                    },
+                    "schema_version": "agif.fabric.memory.quantized_summary.v1",
+                    "source_run_ref": null,
+                    "summary_vector": [
+                      "n0rthwind office g",
+                      "invoice",
+                      null,
+                      "481.95"
+                    ],
+                    "task_scope": "finance_document_workflow_phase7:northwind office gmbh",
+                    "workflow_id": null,
+                    "workflow_name": "finance_document_workflow_phase7"
+                  }
+                ]
+              },
+              "extraction": {
+                "extracted_fields": {
+                  "cost_center": "FIN-OPS",
+                  "currency": "",
+                  "document_type": "invoice",
+                  "due_date": "",
+                  "invoice_date": "2026-03-12",
+                  "invoice_number": "NW-2026-099",
+                  "ocr_quality": "low",
+                  "payment_terms": "N14",
+                  "source_channel": "scan_pdf",
+                  "subtotal": "5000.00",
+                  "tax": "950.00",
+                  "total": "5950.00",
+                  "vendor_name": "N0rthwind Off1ce GMBH"
+                },
+                "extraction_confidence": 0.47,
+                "missing_fields": [
+                  "currency"
+                ]
+              },
+              "governance_review": {
+                "authority_review_ids": [
+                  "authority_00007"
+                ],
+                "final_status": "hold",
+                "governance_action": "hold_for_review"
+              },
+              "intake_classification": {
+                "classification_reason": "document_type=invoice",
+                "document_class": "vendor_invoice"
+              },
+              "intake_routing": {
+                "extraction_profile": "invoice_extraction",
+                "priority_band": "review",
+                "target_cell_id": "finance_invoice_extractor"
+              },
+              "normalization": {
+                "normalization_notes": [
+                  "invoice_date=2026-03-12",
+                  "due_date=missing",
+                  "currency=missing"
+                ],
+                "normalized_fields": {
+                  "cost_center": "FIN-OPS",
+                  "currency": "",
+                  "document_type": "invoice",
+                  "due_date": "",
+                  "invoice_date": "2026-03-12",
+                  "invoice_number": "NW-2026-099",
+                  "ocr_quality": "low",
+                  "payment_term_days": 14,
+                  "payment_terms": "N14",
+                  "source_channel": "scan_pdf",
+                  "subtotal": "5000.00",
+                  "tax": "950.00",
+                  "total": "5950.00",
+                  "vendor_name": "N0rthwind Off1ce GmbH"
+                }
+              },
+              "output_formatting": {
+                "final_status": "hold"
+              },
+              "reporting": {
+                "confidence_factors": [
+                  "support=descriptor_reuse:True",
+                  "support=workspace_complete:True",
+                  "drag=anomaly_count:1"
+                ],
+                "custody_notes": [
+                  "classified_as=vendor_invoice",
+                  "correction=descriptor:desc_0005",
+                  "anomaly_review=amount_exceeds_auto_approval_limit",
+                  "governance=hold_for_review"
+                ],
+                "evidence_points": [
+                  "descriptor_reuse=True",
+                  "descriptor_id=desc_0005",
+                  "anomaly_count=1",
+                  "authority_reviews=2",
+                  "workspace_ok=True"
+                ],
+                "summary": "multi_cell_with_bounded_adaptation processed phase7-doc-006 as vendor_invoice and finished hold with governance action hold_for_review."
+              },
+              "workspace_guard": {
+                "missing_handoffs": [],
+                "workspace_ok": true
+              }
+            },
+            "tissue_registry_ref": "cells/finance_workflow/tissue_registry_phase7.json",
+            "tissues_used": [
+              "finance_intake_routing_tissue",
+              "finance_extraction_tissue",
+              "finance_validation_correction_tissue",
+              "finance_anomaly_reviewer_tissue",
+              "finance_workspace_governance_tissue",
+              "finance_reporting_output_tissue"
+            ],
+            "workflow_id": "wf_681b1987550eb610",
+            "workflow_payload": {
+              "document_id": "phase7-doc-006",
+              "inputs": {
+                "cost_center": "FIN-OPS",
+                "currency": "",
+                "document_type": "invoice",
+                "due_date": "",
+                "invoice_date": "2026-03-12",
+                "invoice_number": "NW-2026-099",
+                "ocr_quality": "low",
+                "payment_terms": "N14",
+                "source_channel": "scan_pdf",
+                "subtotal": "5000.00",
+                "tax": "950.00",
+                "total": "5950.00",
+                "vendor_name": "N0rthwind Off1ce GMBH"
+              },
+              "workflow_name": "finance_document_workflow_phase7"
+            },
+            "workspace_version": "agif.fabric.workspace.phase7.v1"
+          }
+        },
+        {
+          "analysis": {
+            "confidence": {
+              "drag_reasons": [
+                "anomaly/reviewer raised amount_exceeds_auto_approval_limit, unknown_cost_center"
+              ],
+              "label": "guarded",
+              "outcome_state": {
+                "final_status": "hold",
+                "governance_action": "hold_for_review",
+                "reviewer_status": "review_required"
+              },
+              "score": 0.744,
+              "summary": "guarded confidence (0.744) with outcome hold/review_required",
+              "support_reasons": [
+                "extraction tissue had high OCR support",
+                "workspace/governance kept release on hold under anomaly pressure"
+              ],
+              "truth_match": {
+                "final_status": true,
+                "governance_action": true
+              }
+            },
+            "descriptor_reuse_detail": {
+              "restored_fields": [],
+              "summary": "no reviewed descriptor artifact was available",
+              "used": false
+            },
+            "governance_control": {
+              "action": "hold_for_review",
+              "authority_review_ids": [
+                "authority_00009"
+              ],
+              "summary": "hold_for_review via authority_00009 (approved, trust_band=high)"
+            },
+            "need_resolution": {
+              "count": 1,
+              "summaries": [
+                "trust_risk -> authority_00009 (resolved_well)"
+              ],
+              "summary": "trust_risk -> authority_00009 (resolved_well)"
+            },
+            "route_of_custody": {
+              "critical_steps": [
+                "intake/routing classified vendor_invoice and selected invoice_extraction",
+                "extraction captured complete invoice fields",
+                "validation/correction stayed local to current document state",
+                "anomaly/reviewer flagged amount_exceeds_auto_approval_limit, unknown_cost_center",
+                "workspace/governance hold_for_review via authority_00009",
+                "reporting/output wrote bounded summary and final status hold"
+              ],
+              "handoff_count": 5,
+              "reporting_notes": [
+                "classified_as=vendor_invoice",
+                "correction=local_only",
+                "anomaly_review=amount_exceeds_auto_approval_limit,unknown_cost_center",
+                "governance=hold_for_review"
+              ],
+              "summary": "intake/routing -> extraction -> validation/correction -> anomaly/reviewer -> workspace/governance -> reporting/output; handoffs=5",
+              "tissue_sequence": [
+                "intake/routing",
+                "extraction",
+                "validation/correction",
+                "anomaly/reviewer",
+                "workspace/governance",
+                "reporting/output"
+              ]
+            }
+          },
+          "case_id": "invoice_anomaly_hold",
+          "correctness_score": 1.0,
+          "descriptor_reuse": {
+            "descriptor_id": null,
+            "eligible": false,
+            "memory_id": null,
+            "used": false
+          },
+          "output_digest": "9da4add272915bf80ae22c823deb1007bb9f62f1b4afa2cd382d23a1192aa452",
+          "result": {
+            "accepted": false,
+            "anomaly_count": 2,
+            "benchmark_class": "multi_cell_with_bounded_adaptation",
+            "descriptor_reuse": {
+              "descriptor_id": null,
+              "eligible": false,
+              "memory_id": null,
+              "used": false
+            },
+            "document_class": "vendor_invoice",
+            "document_id": "phase7-doc-003",
+            "extraction_profile": "invoice_extraction",
+            "final_status": "hold",
+            "governance_action": "hold_for_review",
+            "handoff_count": 5,
+            "input_digest": "c90ef79aa1408c0bb0be2f59bf1927d7e178576f76dcfe878fdf8f8e5eb277bc",
+            "normalized_currency": "EUR",
+            "normalized_total": "9500.00",
+            "normalized_vendor": "Orbit Travel Claims Ltd",
+            "proof_domain": "document/workflow intelligence",
+            "report_summary": "multi_cell_with_bounded_adaptation processed phase7-doc-003 as vendor_invoice and finished hold with governance action hold_for_review.",
+            "reviewer_status": "review_required",
+            "selected_cells": [
+              "finance_anomaly_reviewer",
+              "finance_audit_reporter",
+              "finance_correction_specialist",
+              "finance_document_classifier",
+              "finance_governance_coordinator",
+              "finance_intake_router",
+              "finance_invoice_extractor",
+              "finance_normalizer",
+              "finance_output_formatter",
+              "finance_workspace_guard"
+            ],
+            "selected_roles": [
+              "anomaly_reviewer",
+              "audit_reporter",
+              "correction_specialist",
+              "document_classifier",
+              "field_normalizer",
+              "governance_coordinator",
+              "intake_router",
+              "invoice_extractor",
+              "output_formatter",
+              "workspace_guard"
+            ],
+            "tissues_used": [
+              "finance_anomaly_reviewer_tissue",
+              "finance_extraction_tissue",
+              "finance_intake_routing_tissue",
+              "finance_reporting_output_tissue",
+              "finance_validation_correction_tissue",
+              "finance_workspace_governance_tissue"
+            ],
+            "workflow_name": "finance_document_workflow_phase7"
+          },
+          "trace": [
+            {
+              "cell_id": "finance_document_classifier",
+              "decision_ref": "routing_stage_00041",
+              "output_keys": [
+                "classification_reason",
+                "document_class"
+              ],
+              "selection_mode": "selected",
+              "stage_id": "intake_classification",
+              "tissue_id": "finance_intake_routing_tissue"
+            },
+            {
+              "cell_id": "finance_intake_router",
+              "decision_ref": "routing_stage_00042",
+              "output_keys": [
+                "extraction_profile",
+                "priority_band",
+                "target_cell_id"
+              ],
+              "selection_mode": "selected",
+              "stage_id": "intake_routing",
+              "tissue_id": "finance_intake_routing_tissue"
+            },
+            {
+              "cell_id": "finance_invoice_extractor",
+              "decision_ref": "routing_stage_00043",
+              "output_keys": [
+                "extracted_fields",
+                "extraction_confidence",
+                "missing_fields"
+              ],
+              "selection_mode": "selected",
+              "stage_id": "extraction",
+              "tissue_id": "finance_extraction_tissue"
+            },
+            {
+              "cell_id": "finance_normalizer",
+              "decision_ref": "routing_stage_00044",
+              "output_keys": [
+                "normalization_notes",
+                "normalized_fields"
+              ],
+              "selection_mode": "selected",
+              "stage_id": "normalization",
+              "tissue_id": "finance_validation_correction_tissue"
+            },
+            {
+              "cell_id": "finance_correction_specialist",
+              "decision_ref": "routing_stage_00045",
+              "output_keys": [
+                "authority_review_ids",
+                "benchmark_class",
+                "correction_notes",
+                "descriptor_refs_used",
+                "descriptor_reuse"
+              ],
+              "selection_mode": "selected",
+              "stage_id": "correction",
+              "tissue_id": "finance_validation_correction_tissue"
+            },
+            {
+              "cell_id": "finance_anomaly_reviewer",
+              "decision_ref": "routing_stage_00046",
+              "output_keys": [
+                "anomalies",
+                "anomaly_score",
+                "reviewer_status"
+              ],
+              "selection_mode": "selected",
+              "stage_id": "anomaly_review",
+              "tissue_id": "finance_anomaly_reviewer_tissue"
+            },
+            {
+              "cell_id": "finance_workspace_guard",
+              "decision_ref": "routing_stage_00047",
+              "output_keys": [
+                "missing_handoffs",
+                "workspace_ok"
+              ],
+              "selection_mode": "selected",
+              "stage_id": "workspace_guard",
+              "tissue_id": "finance_workspace_governance_tissue"
+            },
+            {
+              "cell_id": "finance_governance_coordinator",
+              "decision_ref": "routing_stage_00048",
+              "output_keys": [
+                "authority_review_ids",
+                "final_status",
+                "governance_action"
+              ],
+              "selection_mode": "selected",
+              "stage_id": "governance_review",
+              "tissue_id": "finance_workspace_governance_tissue"
+            },
+            {
+              "cell_id": "finance_audit_reporter",
+              "decision_ref": "routing_stage_00049",
+              "output_keys": [
+                "confidence_factors",
+                "custody_notes",
+                "evidence_points",
+                "summary"
+              ],
+              "selection_mode": "selected",
+              "stage_id": "reporting",
+              "tissue_id": "finance_reporting_output_tissue"
+            },
+            {
+              "cell_id": "finance_output_formatter",
+              "decision_ref": "routing_stage_00050",
+              "output_keys": [
+                "final_status"
+              ],
+              "selection_mode": "selected",
+              "stage_id": "output_formatting",
+              "tissue_id": "finance_reporting_output_tissue"
+            }
+          ],
+          "workspace": {
+            "benchmark_class": "multi_cell_with_bounded_adaptation",
+            "current_stage": "complete",
+            "final_output": {
+              "accepted": false,
+              "anomaly_count": 2,
+              "benchmark_class": "multi_cell_with_bounded_adaptation",
+              "descriptor_reuse": {
+                "descriptor_id": null,
+                "eligible": false,
+                "memory_id": null,
+                "used": false
+              },
+              "document_class": "vendor_invoice",
+              "document_id": "phase7-doc-003",
+              "extraction_profile": "invoice_extraction",
+              "final_status": "hold",
+              "governance_action": "hold_for_review",
+              "handoff_count": 5,
+              "input_digest": "c90ef79aa1408c0bb0be2f59bf1927d7e178576f76dcfe878fdf8f8e5eb277bc",
+              "normalized_currency": "EUR",
+              "normalized_total": "9500.00",
+              "normalized_vendor": "Orbit Travel Claims Ltd",
+              "proof_domain": "document/workflow intelligence",
+              "report_summary": "multi_cell_with_bounded_adaptation processed phase7-doc-003 as vendor_invoice and finished hold with governance action hold_for_review.",
+              "reviewer_status": "review_required",
+              "selected_cells": [
+                "finance_anomaly_reviewer",
+                "finance_audit_reporter",
+                "finance_correction_specialist",
+                "finance_document_classifier",
+                "finance_governance_coordinator",
+                "finance_intake_router",
+                "finance_invoice_extractor",
+                "finance_normalizer",
+                "finance_output_formatter",
+                "finance_workspace_guard"
+              ],
+              "selected_roles": [
+                "anomaly_reviewer",
+                "audit_reporter",
+                "correction_specialist",
+                "document_classifier",
+                "field_normalizer",
+                "governance_coordinator",
+                "intake_router",
+                "invoice_extractor",
+                "output_formatter",
+                "workspace_guard"
+              ],
+              "tissues_used": [
+                "finance_anomaly_reviewer_tissue",
+                "finance_extraction_tissue",
+                "finance_intake_routing_tissue",
+                "finance_reporting_output_tissue",
+                "finance_validation_correction_tissue",
+                "finance_workspace_governance_tissue"
+              ],
+              "workflow_name": "finance_document_workflow_phase7"
+            },
+            "governance": {
+              "authority_review_ids": [
+                "authority_00009"
               ],
               "final_status": "hold",
               "governance_action": "hold_for_review"
@@ -2399,7 +3450,7 @@
               },
               "governance_review": {
                 "authority_review_ids": [
-                  "authority_00006"
+                  "authority_00009"
                 ],
                 "final_status": "hold",
                 "governance_action": "hold_for_review"
@@ -2440,12 +3491,25 @@
                 "final_status": "hold"
               },
               "reporting": {
+                "confidence_factors": [
+                  "support=descriptor_reuse:False",
+                  "support=workspace_complete:True",
+                  "drag=anomaly_count:2"
+                ],
+                "custody_notes": [
+                  "classified_as=vendor_invoice",
+                  "correction=local_only",
+                  "anomaly_review=amount_exceeds_auto_approval_limit,unknown_cost_center",
+                  "governance=hold_for_review"
+                ],
                 "evidence_points": [
                   "descriptor_reuse=False",
+                  "descriptor_id=none",
                   "anomaly_count=2",
+                  "authority_reviews=1",
                   "workspace_ok=True"
                 ],
-                "summary": "multi_cell_with_bounded_adaptation processed phase7-doc-003 as vendor_invoice with governance action hold_for_review."
+                "summary": "multi_cell_with_bounded_adaptation processed phase7-doc-003 as vendor_invoice and finished hold with governance action hold_for_review."
               },
               "workspace_guard": {
                 "missing_handoffs": [],
@@ -2485,6 +3549,74 @@
           }
         },
         {
+          "analysis": {
+            "confidence": {
+              "drag_reasons": [
+                "anomaly/reviewer raised total_mismatch"
+              ],
+              "label": "high",
+              "outcome_state": {
+                "final_status": "hold",
+                "governance_action": "hold_for_review",
+                "reviewer_status": "review_required"
+              },
+              "score": 0.804,
+              "summary": "high confidence (0.804) with outcome hold/review_required",
+              "support_reasons": [
+                "extraction tissue had high OCR support",
+                "workspace/governance kept release on hold under anomaly pressure"
+              ],
+              "truth_match": {
+                "final_status": true,
+                "governance_action": true
+              }
+            },
+            "descriptor_reuse_detail": {
+              "restored_fields": [],
+              "summary": "no reviewed descriptor artifact was available",
+              "used": false
+            },
+            "governance_control": {
+              "action": "hold_for_review",
+              "authority_review_ids": [
+                "authority_00011"
+              ],
+              "summary": "hold_for_review via authority_00011 (approved, trust_band=high)"
+            },
+            "need_resolution": {
+              "count": 1,
+              "summaries": [
+                "trust_risk -> authority_00011 (resolved_well)"
+              ],
+              "summary": "trust_risk -> authority_00011 (resolved_well)"
+            },
+            "route_of_custody": {
+              "critical_steps": [
+                "intake/routing classified vendor_invoice and selected invoice_extraction",
+                "extraction captured complete invoice fields",
+                "validation/correction stayed local to current document state",
+                "anomaly/reviewer flagged total_mismatch",
+                "workspace/governance hold_for_review via authority_00011",
+                "reporting/output wrote bounded summary and final status hold"
+              ],
+              "handoff_count": 5,
+              "reporting_notes": [
+                "classified_as=vendor_invoice",
+                "correction=local_only",
+                "anomaly_review=total_mismatch",
+                "governance=hold_for_review"
+              ],
+              "summary": "intake/routing -> extraction -> validation/correction -> anomaly/reviewer -> workspace/governance -> reporting/output; handoffs=5",
+              "tissue_sequence": [
+                "intake/routing",
+                "extraction",
+                "validation/correction",
+                "anomaly/reviewer",
+                "workspace/governance",
+                "reporting/output"
+              ]
+            }
+          },
           "case_id": "invoice_total_mismatch_hold",
           "correctness_score": 1.0,
           "descriptor_reuse": {
@@ -2493,7 +3625,7 @@
             "memory_id": null,
             "used": false
           },
-          "output_digest": "1961eca5f292e2b4ec98701cb10e93514d9b01585a5aa69e2391752af843eca7",
+          "output_digest": "672b38a0fbdb25fa131ba4e3b286c1bc6203771e600ed73b3b2879e52c850de5",
           "result": {
             "accepted": false,
             "anomaly_count": 1,
@@ -2515,7 +3647,7 @@
             "normalized_total": "140.00",
             "normalized_vendor": "Fabrikam Stationery GmbH",
             "proof_domain": "document/workflow intelligence",
-            "report_summary": "multi_cell_with_bounded_adaptation processed phase7-doc-005 as vendor_invoice with governance action hold_for_review.",
+            "report_summary": "multi_cell_with_bounded_adaptation processed phase7-doc-005 as vendor_invoice and finished hold with governance action hold_for_review.",
             "reviewer_status": "review_required",
             "selected_cells": [
               "finance_anomaly_reviewer",
@@ -2554,7 +3686,7 @@
           "trace": [
             {
               "cell_id": "finance_document_classifier",
-              "decision_ref": "routing_stage_00041",
+              "decision_ref": "routing_stage_00051",
               "output_keys": [
                 "classification_reason",
                 "document_class"
@@ -2565,7 +3697,7 @@
             },
             {
               "cell_id": "finance_intake_router",
-              "decision_ref": "routing_stage_00042",
+              "decision_ref": "routing_stage_00052",
               "output_keys": [
                 "extraction_profile",
                 "priority_band",
@@ -2577,7 +3709,7 @@
             },
             {
               "cell_id": "finance_invoice_extractor",
-              "decision_ref": "routing_stage_00043",
+              "decision_ref": "routing_stage_00053",
               "output_keys": [
                 "extracted_fields",
                 "extraction_confidence",
@@ -2589,7 +3721,7 @@
             },
             {
               "cell_id": "finance_normalizer",
-              "decision_ref": "routing_stage_00044",
+              "decision_ref": "routing_stage_00054",
               "output_keys": [
                 "normalization_notes",
                 "normalized_fields"
@@ -2600,7 +3732,7 @@
             },
             {
               "cell_id": "finance_correction_specialist",
-              "decision_ref": "routing_stage_00045",
+              "decision_ref": "routing_stage_00055",
               "output_keys": [
                 "authority_review_ids",
                 "benchmark_class",
@@ -2614,7 +3746,7 @@
             },
             {
               "cell_id": "finance_anomaly_reviewer",
-              "decision_ref": "routing_stage_00046",
+              "decision_ref": "routing_stage_00056",
               "output_keys": [
                 "anomalies",
                 "anomaly_score",
@@ -2626,7 +3758,7 @@
             },
             {
               "cell_id": "finance_workspace_guard",
-              "decision_ref": "routing_stage_00047",
+              "decision_ref": "routing_stage_00057",
               "output_keys": [
                 "missing_handoffs",
                 "workspace_ok"
@@ -2637,7 +3769,7 @@
             },
             {
               "cell_id": "finance_governance_coordinator",
-              "decision_ref": "routing_stage_00048",
+              "decision_ref": "routing_stage_00058",
               "output_keys": [
                 "authority_review_ids",
                 "final_status",
@@ -2649,8 +3781,10 @@
             },
             {
               "cell_id": "finance_audit_reporter",
-              "decision_ref": "routing_stage_00049",
+              "decision_ref": "routing_stage_00059",
               "output_keys": [
+                "confidence_factors",
+                "custody_notes",
                 "evidence_points",
                 "summary"
               ],
@@ -2660,7 +3794,7 @@
             },
             {
               "cell_id": "finance_output_formatter",
-              "decision_ref": "routing_stage_00050",
+              "decision_ref": "routing_stage_00060",
               "output_keys": [
                 "final_status"
               ],
@@ -2693,7 +3827,7 @@
               "normalized_total": "140.00",
               "normalized_vendor": "Fabrikam Stationery GmbH",
               "proof_domain": "document/workflow intelligence",
-              "report_summary": "multi_cell_with_bounded_adaptation processed phase7-doc-005 as vendor_invoice with governance action hold_for_review.",
+              "report_summary": "multi_cell_with_bounded_adaptation processed phase7-doc-005 as vendor_invoice and finished hold with governance action hold_for_review.",
               "reviewer_status": "review_required",
               "selected_cells": [
                 "finance_anomaly_reviewer",
@@ -2731,7 +3865,7 @@
             },
             "governance": {
               "authority_review_ids": [
-                "authority_00008"
+                "authority_00011"
               ],
               "final_status": "hold",
               "governance_action": "hold_for_review"
@@ -2923,7 +4057,7 @@
               },
               "governance_review": {
                 "authority_review_ids": [
-                  "authority_00008"
+                  "authority_00011"
                 ],
                 "final_status": "hold",
                 "governance_action": "hold_for_review"
@@ -2964,12 +4098,25 @@
                 "final_status": "hold"
               },
               "reporting": {
+                "confidence_factors": [
+                  "support=descriptor_reuse:False",
+                  "support=workspace_complete:True",
+                  "drag=anomaly_count:1"
+                ],
+                "custody_notes": [
+                  "classified_as=vendor_invoice",
+                  "correction=local_only",
+                  "anomaly_review=total_mismatch",
+                  "governance=hold_for_review"
+                ],
                 "evidence_points": [
                   "descriptor_reuse=False",
+                  "descriptor_id=none",
                   "anomaly_count=1",
+                  "authority_reviews=1",
                   "workspace_ok=True"
                 ],
-                "summary": "multi_cell_with_bounded_adaptation processed phase7-doc-005 as vendor_invoice with governance action hold_for_review."
+                "summary": "multi_cell_with_bounded_adaptation processed phase7-doc-005 as vendor_invoice and finished hold with governance action hold_for_review."
               },
               "workspace_guard": {
                 "missing_handoffs": [],
@@ -3014,28 +4161,30 @@
         "bounded_forgetting": 0.0,
         "descriptor_reuse_rate": 1.0,
         "governance_success_rate": 1.0,
-        "improvement_from_prior_descriptors": 0.625,
-        "memory_density_gain": 0.000993641,
+        "improvement_from_prior_descriptors": 0.5,
+        "memory_density_gain": 0.001020929,
         "replay_determinism": 1.0,
         "resource_usage": {
           "active_population": 10,
           "active_population_cost_bytes": 150732.8,
-          "authority_review_count": 10,
-          "authority_reviews_per_case": 2.0,
+          "authority_review_count": 14,
+          "authority_reviews_per_case": 2.333333,
+          "average_need_effectiveness": 0.85,
           "estimated_idle_memory_bytes": 28672,
           "estimated_runtime_memory_bytes": 1507328,
+          "governance_overhead_share": 0.2,
           "logical_population": 11,
           "memory_tier_delta_bytes": {
             "cold": 0,
-            "ephemeral": 20571,
+            "ephemeral": 20776,
             "hot": 173,
-            "warm": 5032
+            "warm": 5877
           },
           "memory_tier_usage_bytes": {
             "cold": 0,
-            "ephemeral": 20571,
+            "ephemeral": 20776,
             "hot": 511,
-            "warm": 5032
+            "warm": 5877
           },
           "memory_within_caps": {
             "cold": true,
@@ -3043,11 +4192,13 @@
             "hot": true,
             "warm": true
           },
-          "need_signal_count": 4,
-          "need_signals_per_case": 0.8,
-          "retained_memory_delta_bytes": 5032,
-          "routing_decision_count": 60,
-          "routing_decisions_per_case": 12.0,
+          "need_signal_count": 6,
+          "need_signals_per_case": 1.0,
+          "retained_memory_delta_bytes": 5877,
+          "retained_memory_delta_per_case_bytes": 979.5,
+          "retained_memory_value_density": 0.000154686,
+          "routing_decision_count": 70,
+          "routing_decisions_per_case": 11.666667,
           "runtime_memory_delta_bytes": 1507328,
           "within_runtime_working_set_cap": true
         },
@@ -3056,13 +4207,17 @@
             "finance_anomaly_reviewer_tissue",
             "finance_workspace_governance_tissue"
           ],
-          "detail": "no governed split or merge executed; reviewer and governance pressure still signaled future split candidates",
+          "detail": "no governed split or merge executed; reviewer and governance pressure appeared, but active population stayed at 10/24 and split counters remained zero",
+          "future_trigger": "governed split becomes relevant when repeated reviewer pressure coincides with active population at or above 24 and lifecycle split counters move above zero",
           "measured": false,
+          "no_action_reason": "pressure stayed bounded inside existing tissues, no lifecycle split/merge action was approved, and authority review volume stayed at 14",
+          "pressure_ratio": 0.416667,
           "structural_signal_cases": [
             "invoice_anomaly_hold",
+            "invoice_high_value_alias_hold",
             "invoice_total_mismatch_hold"
           ],
-          "structural_signal_count": 2,
+          "structural_signal_count": 3,
           "value": 0.0
         },
         "task_accuracy": 1.0,
@@ -3077,81 +4232,153 @@
       "analytics": {
         "tissues": {
           "finance_anomaly_reviewer_tissue": {
-            "anomaly_burden": 5,
-            "case_count": 5,
+            "anomaly_burden": 7,
+            "case_count": 6,
             "governance_burden": 0,
-            "handoff_in_count": 5,
-            "handoff_out_count": 5,
+            "handoff_in_count": 6,
+            "handoff_out_count": 6,
+            "intervention_case_count": 5,
             "reuse_contribution": 0,
-            "stage_count": 5,
-            "useful_case_count": 3,
-            "usefulness_rate": 0.6,
+            "stage_count": 6,
+            "useful_case_count": 4,
+            "usefulness_rate": 0.666667,
             "workload_share": 0.1
           },
           "finance_extraction_tissue": {
             "anomaly_burden": 0,
-            "case_count": 5,
+            "case_count": 6,
             "governance_burden": 0,
-            "handoff_in_count": 5,
-            "handoff_out_count": 5,
+            "handoff_in_count": 6,
+            "handoff_out_count": 6,
+            "intervention_case_count": 0,
             "reuse_contribution": 0,
-            "stage_count": 5,
-            "useful_case_count": 5,
+            "stage_count": 6,
+            "useful_case_count": 6,
             "usefulness_rate": 1.0,
             "workload_share": 0.1
           },
           "finance_intake_routing_tissue": {
             "anomaly_burden": 0,
-            "case_count": 5,
+            "case_count": 6,
             "governance_burden": 0,
             "handoff_in_count": 0,
-            "handoff_out_count": 5,
+            "handoff_out_count": 6,
+            "intervention_case_count": 0,
             "reuse_contribution": 0,
-            "stage_count": 10,
-            "useful_case_count": 5,
+            "stage_count": 12,
+            "useful_case_count": 6,
             "usefulness_rate": 1.0,
             "workload_share": 0.2
           },
           "finance_reporting_output_tissue": {
             "anomaly_burden": 0,
-            "case_count": 5,
+            "case_count": 6,
             "governance_burden": 0,
-            "handoff_in_count": 5,
+            "handoff_in_count": 6,
             "handoff_out_count": 0,
+            "intervention_case_count": 6,
             "reuse_contribution": 0,
-            "stage_count": 10,
-            "useful_case_count": 3,
-            "usefulness_rate": 0.6,
+            "stage_count": 12,
+            "useful_case_count": 4,
+            "usefulness_rate": 0.666667,
             "workload_share": 0.2
           },
           "finance_validation_correction_tissue": {
             "anomaly_burden": 0,
-            "case_count": 5,
+            "case_count": 6,
             "governance_burden": 0,
-            "handoff_in_count": 5,
-            "handoff_out_count": 5,
+            "handoff_in_count": 6,
+            "handoff_out_count": 6,
+            "intervention_case_count": 3,
             "reuse_contribution": 0,
-            "stage_count": 10,
+            "stage_count": 12,
             "useful_case_count": 3,
-            "usefulness_rate": 0.733333,
+            "usefulness_rate": 0.666667,
             "workload_share": 0.2
           },
           "finance_workspace_governance_tissue": {
             "anomaly_burden": 0,
-            "case_count": 5,
-            "governance_burden": 4,
-            "handoff_in_count": 5,
-            "handoff_out_count": 5,
+            "case_count": 6,
+            "governance_burden": 5,
+            "handoff_in_count": 6,
+            "handoff_out_count": 6,
+            "intervention_case_count": 5,
             "reuse_contribution": 0,
-            "stage_count": 10,
-            "useful_case_count": 3,
-            "usefulness_rate": 0.6,
+            "stage_count": 12,
+            "useful_case_count": 4,
+            "usefulness_rate": 0.666667,
             "workload_share": 0.2
           }
         }
       },
       "case_results": [
         {
+          "analysis": {
+            "confidence": {
+              "drag_reasons": [],
+              "label": "high",
+              "outcome_state": {
+                "final_status": "accepted",
+                "governance_action": "approved_release",
+                "reviewer_status": "clear"
+              },
+              "score": 0.864,
+              "summary": "high confidence (0.864) with outcome accepted/clear",
+              "support_reasons": [
+                "extraction tissue had high OCR support",
+                "anomaly/reviewer cleared the document",
+                "workspace/governance released after clear reviewer state"
+              ],
+              "truth_match": {
+                "final_status": true,
+                "governance_action": true
+              }
+            },
+            "descriptor_reuse_detail": {
+              "restored_fields": [
+                "normalized_currency",
+                "derived_due_date"
+              ],
+              "summary": "no reviewed descriptor artifact was available",
+              "used": false
+            },
+            "governance_control": {
+              "action": "approved_release",
+              "authority_review_ids": [],
+              "summary": "bounded release completed without extra authority review"
+            },
+            "need_resolution": {
+              "count": 0,
+              "summaries": [],
+              "summary": "none"
+            },
+            "route_of_custody": {
+              "critical_steps": [
+                "intake/routing classified vendor_invoice and selected invoice_extraction",
+                "extraction captured complete invoice fields",
+                "validation/correction stayed local to current document state",
+                "anomaly/reviewer cleared the document",
+                "workspace/governance approved_release",
+                "reporting/output wrote bounded summary and final status accepted"
+              ],
+              "handoff_count": 5,
+              "reporting_notes": [
+                "classified_as=vendor_invoice",
+                "correction=local_only",
+                "anomaly_review=none",
+                "governance=approved_release"
+              ],
+              "summary": "intake/routing -> extraction -> validation/correction -> anomaly/reviewer -> workspace/governance -> reporting/output; handoffs=5",
+              "tissue_sequence": [
+                "intake/routing",
+                "extraction",
+                "validation/correction",
+                "anomaly/reviewer",
+                "workspace/governance",
+                "reporting/output"
+              ]
+            }
+          },
           "case_id": "invoice_seed_reference",
           "correctness_score": 1.0,
           "descriptor_reuse": {
@@ -3160,7 +4387,7 @@
             "memory_id": null,
             "used": false
           },
-          "output_digest": "7ad412ad2a0917ef6383378e4c390639525fe26af9b870b19287b851ade5afa0",
+          "output_digest": "9d434ec07b121d854fba51a72876aad41c9606aa2e30a0dce37096db56e5edf4",
           "result": {
             "accepted": true,
             "anomaly_count": 0,
@@ -3182,7 +4409,7 @@
             "normalized_total": "1200.50",
             "normalized_vendor": "Northwind Office GmbH",
             "proof_domain": "document/workflow intelligence",
-            "report_summary": "multi_cell_without_bounded_adaptation processed phase7-doc-001 as vendor_invoice with governance action approved_release.",
+            "report_summary": "multi_cell_without_bounded_adaptation processed phase7-doc-001 as vendor_invoice and finished accepted with governance action approved_release.",
             "reviewer_status": "clear",
             "selected_cells": [
               "finance_anomaly_reviewer",
@@ -3318,6 +4545,8 @@
               "cell_id": "finance_audit_reporter",
               "decision_ref": "routing_stage_00009",
               "output_keys": [
+                "confidence_factors",
+                "custody_notes",
                 "evidence_points",
                 "summary"
               ],
@@ -3360,7 +4589,7 @@
               "normalized_total": "1200.50",
               "normalized_vendor": "Northwind Office GmbH",
               "proof_domain": "document/workflow intelligence",
-              "report_summary": "multi_cell_without_bounded_adaptation processed phase7-doc-001 as vendor_invoice with governance action approved_release.",
+              "report_summary": "multi_cell_without_bounded_adaptation processed phase7-doc-001 as vendor_invoice and finished accepted with governance action approved_release.",
               "reviewer_status": "clear",
               "selected_cells": [
                 "finance_anomaly_reviewer",
@@ -3625,12 +4854,25 @@
                 "final_status": "accepted"
               },
               "reporting": {
+                "confidence_factors": [
+                  "support=descriptor_reuse:False",
+                  "support=workspace_complete:True",
+                  "drag=anomaly_count:0"
+                ],
+                "custody_notes": [
+                  "classified_as=vendor_invoice",
+                  "correction=local_only",
+                  "anomaly_review=none",
+                  "governance=approved_release"
+                ],
                 "evidence_points": [
                   "descriptor_reuse=False",
+                  "descriptor_id=none",
                   "anomaly_count=0",
+                  "authority_reviews=0",
                   "workspace_ok=True"
                 ],
-                "summary": "multi_cell_without_bounded_adaptation processed phase7-doc-001 as vendor_invoice with governance action approved_release."
+                "summary": "multi_cell_without_bounded_adaptation processed phase7-doc-001 as vendor_invoice and finished accepted with governance action approved_release."
               },
               "workspace_guard": {
                 "missing_handoffs": [],
@@ -3670,6 +4912,80 @@
           }
         },
         {
+          "analysis": {
+            "confidence": {
+              "drag_reasons": [
+                "extraction left gaps in currency",
+                "anomaly/reviewer raised missing_currency"
+              ],
+              "label": "guarded",
+              "outcome_state": {
+                "final_status": "hold",
+                "governance_action": "hold_for_review",
+                "reviewer_status": "review_required"
+              },
+              "score": 0.608,
+              "summary": "guarded confidence (0.608) with outcome hold/review_required",
+              "support_reasons": [
+                "extraction tissue had bounded but usable OCR support",
+                "validation/correction repaired bounded field gaps",
+                "workspace/governance kept release on hold under anomaly pressure"
+              ],
+              "truth_match": {
+                "final_status": false,
+                "governance_action": false
+              }
+            },
+            "descriptor_reuse_detail": {
+              "restored_fields": [
+                "normalized_vendor",
+                "derived_due_date"
+              ],
+              "summary": "no reviewed descriptor artifact was available",
+              "used": false
+            },
+            "governance_control": {
+              "action": "hold_for_review",
+              "authority_review_ids": [
+                "authority_00002"
+              ],
+              "summary": "hold_for_review via authority_00002 (approved, trust_band=high)"
+            },
+            "need_resolution": {
+              "count": 2,
+              "summaries": [
+                "trust_risk -> authority_00002 (resolved_well)",
+                "uncertainty -> None (open)"
+              ],
+              "summary": "trust_risk -> authority_00002 (resolved_well); uncertainty -> None (open)"
+            },
+            "route_of_custody": {
+              "critical_steps": [
+                "intake/routing classified vendor_invoice and selected invoice_extraction",
+                "extraction captured bounded gaps: currency",
+                "validation/correction stayed local to current document state",
+                "anomaly/reviewer flagged missing_currency",
+                "workspace/governance hold_for_review via authority_00002",
+                "reporting/output wrote bounded summary and final status hold"
+              ],
+              "handoff_count": 5,
+              "reporting_notes": [
+                "classified_as=vendor_invoice",
+                "correction=local_only",
+                "anomaly_review=missing_currency",
+                "governance=hold_for_review"
+              ],
+              "summary": "intake/routing -> extraction -> validation/correction -> anomaly/reviewer -> workspace/governance -> reporting/output; handoffs=5",
+              "tissue_sequence": [
+                "intake/routing",
+                "extraction",
+                "validation/correction",
+                "anomaly/reviewer",
+                "workspace/governance",
+                "reporting/output"
+              ]
+            }
+          },
           "case_id": "invoice_followup_alias",
           "correctness_score": 0.375,
           "descriptor_reuse": {
@@ -3678,7 +4994,7 @@
             "memory_id": null,
             "used": false
           },
-          "output_digest": "e15f864d46dbf962f2b632977461a37e23c682b0cb47466e6426dca8eddc55e8",
+          "output_digest": "f8ce8df8329864ad7d9cbfc66ff7cda96c34715ec21e9fea797fcdd77ff7349b",
           "result": {
             "accepted": false,
             "anomaly_count": 1,
@@ -3700,7 +5016,7 @@
             "normalized_total": "761.60",
             "normalized_vendor": "Northwind Off1ce GmbH",
             "proof_domain": "document/workflow intelligence",
-            "report_summary": "multi_cell_without_bounded_adaptation processed phase7-doc-002 as vendor_invoice with governance action hold_for_review.",
+            "report_summary": "multi_cell_without_bounded_adaptation processed phase7-doc-002 as vendor_invoice and finished hold with governance action hold_for_review.",
             "reviewer_status": "review_required",
             "selected_cells": [
               "finance_anomaly_reviewer",
@@ -3836,6 +5152,8 @@
               "cell_id": "finance_audit_reporter",
               "decision_ref": "routing_stage_00019",
               "output_keys": [
+                "confidence_factors",
+                "custody_notes",
                 "evidence_points",
                 "summary"
               ],
@@ -3878,7 +5196,7 @@
               "normalized_total": "761.60",
               "normalized_vendor": "Northwind Off1ce GmbH",
               "proof_domain": "document/workflow intelligence",
-              "report_summary": "multi_cell_without_bounded_adaptation processed phase7-doc-002 as vendor_invoice with governance action hold_for_review.",
+              "report_summary": "multi_cell_without_bounded_adaptation processed phase7-doc-002 as vendor_invoice and finished hold with governance action hold_for_review.",
               "reviewer_status": "review_required",
               "selected_cells": [
                 "finance_anomaly_reviewer",
@@ -4153,12 +5471,25 @@
                 "final_status": "hold"
               },
               "reporting": {
+                "confidence_factors": [
+                  "support=descriptor_reuse:False",
+                  "support=workspace_complete:True",
+                  "drag=anomaly_count:1"
+                ],
+                "custody_notes": [
+                  "classified_as=vendor_invoice",
+                  "correction=local_only",
+                  "anomaly_review=missing_currency",
+                  "governance=hold_for_review"
+                ],
                 "evidence_points": [
                   "descriptor_reuse=False",
+                  "descriptor_id=none",
                   "anomaly_count=1",
+                  "authority_reviews=1",
                   "workspace_ok=True"
                 ],
-                "summary": "multi_cell_without_bounded_adaptation processed phase7-doc-002 as vendor_invoice with governance action hold_for_review."
+                "summary": "multi_cell_without_bounded_adaptation processed phase7-doc-002 as vendor_invoice and finished hold with governance action hold_for_review."
               },
               "workspace_guard": {
                 "missing_handoffs": [],
@@ -4198,6 +5529,80 @@
           }
         },
         {
+          "analysis": {
+            "confidence": {
+              "drag_reasons": [
+                "extraction tissue started from low OCR support",
+                "extraction left gaps in currency",
+                "anomaly/reviewer raised missing_currency"
+              ],
+              "label": "fragile",
+              "outcome_state": {
+                "final_status": "hold",
+                "governance_action": "hold_for_review",
+                "reviewer_status": "review_required"
+              },
+              "score": 0.5315,
+              "summary": "fragile confidence (0.531) with outcome hold/review_required",
+              "support_reasons": [
+                "validation/correction repaired bounded field gaps",
+                "workspace/governance kept release on hold under anomaly pressure"
+              ],
+              "truth_match": {
+                "final_status": false,
+                "governance_action": false
+              }
+            },
+            "descriptor_reuse_detail": {
+              "restored_fields": [
+                "normalized_vendor",
+                "derived_due_date"
+              ],
+              "summary": "no reviewed descriptor artifact was available",
+              "used": false
+            },
+            "governance_control": {
+              "action": "hold_for_review",
+              "authority_review_ids": [
+                "authority_00004"
+              ],
+              "summary": "hold_for_review via authority_00004 (approved, trust_band=high)"
+            },
+            "need_resolution": {
+              "count": 2,
+              "summaries": [
+                "trust_risk -> authority_00004 (resolved_well)",
+                "uncertainty -> None (open)"
+              ],
+              "summary": "trust_risk -> authority_00004 (resolved_well); uncertainty -> None (open)"
+            },
+            "route_of_custody": {
+              "critical_steps": [
+                "intake/routing classified vendor_invoice and selected invoice_extraction",
+                "extraction captured bounded gaps: currency",
+                "validation/correction stayed local to current document state",
+                "anomaly/reviewer flagged missing_currency",
+                "workspace/governance hold_for_review via authority_00004",
+                "reporting/output wrote bounded summary and final status hold"
+              ],
+              "handoff_count": 5,
+              "reporting_notes": [
+                "classified_as=vendor_invoice",
+                "correction=local_only",
+                "anomaly_review=missing_currency",
+                "governance=hold_for_review"
+              ],
+              "summary": "intake/routing -> extraction -> validation/correction -> anomaly/reviewer -> workspace/governance -> reporting/output; handoffs=5",
+              "tissue_sequence": [
+                "intake/routing",
+                "extraction",
+                "validation/correction",
+                "anomaly/reviewer",
+                "workspace/governance",
+                "reporting/output"
+              ]
+            }
+          },
           "case_id": "invoice_followup_alias_repeat",
           "correctness_score": 0.375,
           "descriptor_reuse": {
@@ -4206,7 +5611,7 @@
             "memory_id": null,
             "used": false
           },
-          "output_digest": "3029a612b0fcad33b7e528944218612117b8829acb48fe35536832a3d3a0bccb",
+          "output_digest": "f60d1c16f0e433601e9be917519fde635091caeb284ebfae29475da16680dc3b",
           "result": {
             "accepted": false,
             "anomaly_count": 1,
@@ -4228,7 +5633,7 @@
             "normalized_total": "481.95",
             "normalized_vendor": "N0rthwind Office GmbH",
             "proof_domain": "document/workflow intelligence",
-            "report_summary": "multi_cell_without_bounded_adaptation processed phase7-doc-004 as vendor_invoice with governance action hold_for_review.",
+            "report_summary": "multi_cell_without_bounded_adaptation processed phase7-doc-004 as vendor_invoice and finished hold with governance action hold_for_review.",
             "reviewer_status": "review_required",
             "selected_cells": [
               "finance_anomaly_reviewer",
@@ -4364,6 +5769,8 @@
               "cell_id": "finance_audit_reporter",
               "decision_ref": "routing_stage_00029",
               "output_keys": [
+                "confidence_factors",
+                "custody_notes",
                 "evidence_points",
                 "summary"
               ],
@@ -4406,7 +5813,7 @@
               "normalized_total": "481.95",
               "normalized_vendor": "N0rthwind Office GmbH",
               "proof_domain": "document/workflow intelligence",
-              "report_summary": "multi_cell_without_bounded_adaptation processed phase7-doc-004 as vendor_invoice with governance action hold_for_review.",
+              "report_summary": "multi_cell_without_bounded_adaptation processed phase7-doc-004 as vendor_invoice and finished hold with governance action hold_for_review.",
               "reviewer_status": "review_required",
               "selected_cells": [
                 "finance_anomaly_reviewer",
@@ -4681,12 +6088,25 @@
                 "final_status": "hold"
               },
               "reporting": {
+                "confidence_factors": [
+                  "support=descriptor_reuse:False",
+                  "support=workspace_complete:True",
+                  "drag=anomaly_count:1"
+                ],
+                "custody_notes": [
+                  "classified_as=vendor_invoice",
+                  "correction=local_only",
+                  "anomaly_review=missing_currency",
+                  "governance=hold_for_review"
+                ],
                 "evidence_points": [
                   "descriptor_reuse=False",
+                  "descriptor_id=none",
                   "anomaly_count=1",
+                  "authority_reviews=1",
                   "workspace_ok=True"
                 ],
-                "summary": "multi_cell_without_bounded_adaptation processed phase7-doc-004 as vendor_invoice with governance action hold_for_review."
+                "summary": "multi_cell_without_bounded_adaptation processed phase7-doc-004 as vendor_invoice and finished hold with governance action hold_for_review."
               },
               "workspace_guard": {
                 "missing_handoffs": [],
@@ -4726,15 +6146,89 @@
           }
         },
         {
-          "case_id": "invoice_anomaly_hold",
-          "correctness_score": 1.0,
+          "analysis": {
+            "confidence": {
+              "drag_reasons": [
+                "extraction tissue started from low OCR support",
+                "extraction left gaps in currency",
+                "anomaly/reviewer raised amount_exceeds_auto_approval_limit, missing_currency"
+              ],
+              "label": "fragile",
+              "outcome_state": {
+                "final_status": "hold",
+                "governance_action": "hold_for_review",
+                "reviewer_status": "review_required"
+              },
+              "score": 0.4715,
+              "summary": "fragile confidence (0.471) with outcome hold/review_required",
+              "support_reasons": [
+                "validation/correction repaired bounded field gaps",
+                "workspace/governance kept release on hold under anomaly pressure"
+              ],
+              "truth_match": {
+                "final_status": true,
+                "governance_action": true
+              }
+            },
+            "descriptor_reuse_detail": {
+              "restored_fields": [
+                "normalized_vendor",
+                "derived_due_date"
+              ],
+              "summary": "no reviewed descriptor artifact was available",
+              "used": false
+            },
+            "governance_control": {
+              "action": "hold_for_review",
+              "authority_review_ids": [
+                "authority_00006"
+              ],
+              "summary": "hold_for_review via authority_00006 (approved, trust_band=high)"
+            },
+            "need_resolution": {
+              "count": 2,
+              "summaries": [
+                "trust_risk -> authority_00006 (resolved_well)",
+                "uncertainty -> None (open)"
+              ],
+              "summary": "trust_risk -> authority_00006 (resolved_well); uncertainty -> None (open)"
+            },
+            "route_of_custody": {
+              "critical_steps": [
+                "intake/routing classified vendor_invoice and selected invoice_extraction",
+                "extraction captured bounded gaps: currency",
+                "validation/correction stayed local to current document state",
+                "anomaly/reviewer flagged amount_exceeds_auto_approval_limit, missing_currency",
+                "workspace/governance hold_for_review via authority_00006",
+                "reporting/output wrote bounded summary and final status hold"
+              ],
+              "handoff_count": 5,
+              "reporting_notes": [
+                "classified_as=vendor_invoice",
+                "correction=local_only",
+                "anomaly_review=amount_exceeds_auto_approval_limit,missing_currency",
+                "governance=hold_for_review"
+              ],
+              "summary": "intake/routing -> extraction -> validation/correction -> anomaly/reviewer -> workspace/governance -> reporting/output; handoffs=5",
+              "tissue_sequence": [
+                "intake/routing",
+                "extraction",
+                "validation/correction",
+                "anomaly/reviewer",
+                "workspace/governance",
+                "reporting/output"
+              ]
+            }
+          },
+          "case_id": "invoice_high_value_alias_hold",
+          "correctness_score": 0.75,
           "descriptor_reuse": {
             "descriptor_id": null,
             "eligible": false,
             "memory_id": null,
             "used": false
           },
-          "output_digest": "dc6560b53e780302950e359a8e767cb3a6cf581a95966f9722234261dd456075",
+          "output_digest": "07f8bccc8da3096731869630a6f9c845622ee4c34934601f67892ee8e2184e8e",
           "result": {
             "accepted": false,
             "anomaly_count": 2,
@@ -4746,17 +6240,17 @@
               "used": false
             },
             "document_class": "vendor_invoice",
-            "document_id": "phase7-doc-003",
+            "document_id": "phase7-doc-006",
             "extraction_profile": "invoice_extraction",
             "final_status": "hold",
             "governance_action": "hold_for_review",
             "handoff_count": 5,
-            "input_digest": "c90ef79aa1408c0bb0be2f59bf1927d7e178576f76dcfe878fdf8f8e5eb277bc",
-            "normalized_currency": "EUR",
-            "normalized_total": "9500.00",
-            "normalized_vendor": "Orbit Travel Claims Ltd",
+            "input_digest": "681b1987550eb610768daa3add3a774a19a2430e147e9627a2b8b9bf64dad4bf",
+            "normalized_currency": "",
+            "normalized_total": "5950.00",
+            "normalized_vendor": "N0rthwind Off1ce GmbH",
             "proof_domain": "document/workflow intelligence",
-            "report_summary": "multi_cell_without_bounded_adaptation processed phase7-doc-003 as vendor_invoice with governance action hold_for_review.",
+            "report_summary": "multi_cell_without_bounded_adaptation processed phase7-doc-006 as vendor_invoice and finished hold with governance action hold_for_review.",
             "reviewer_status": "review_required",
             "selected_cells": [
               "finance_anomaly_reviewer",
@@ -4892,6 +6386,8 @@
               "cell_id": "finance_audit_reporter",
               "decision_ref": "routing_stage_00039",
               "output_keys": [
+                "confidence_factors",
+                "custody_notes",
                 "evidence_points",
                 "summary"
               ],
@@ -4924,17 +6420,17 @@
                 "used": false
               },
               "document_class": "vendor_invoice",
-              "document_id": "phase7-doc-003",
+              "document_id": "phase7-doc-006",
               "extraction_profile": "invoice_extraction",
               "final_status": "hold",
               "governance_action": "hold_for_review",
               "handoff_count": 5,
-              "input_digest": "c90ef79aa1408c0bb0be2f59bf1927d7e178576f76dcfe878fdf8f8e5eb277bc",
-              "normalized_currency": "EUR",
-              "normalized_total": "9500.00",
-              "normalized_vendor": "Orbit Travel Claims Ltd",
+              "input_digest": "681b1987550eb610768daa3add3a774a19a2430e147e9627a2b8b9bf64dad4bf",
+              "normalized_currency": "",
+              "normalized_total": "5950.00",
+              "normalized_vendor": "N0rthwind Off1ce GmbH",
               "proof_domain": "document/workflow intelligence",
-              "report_summary": "multi_cell_without_bounded_adaptation processed phase7-doc-003 as vendor_invoice with governance action hold_for_review.",
+              "report_summary": "multi_cell_without_bounded_adaptation processed phase7-doc-006 as vendor_invoice and finished hold with governance action hold_for_review.",
               "reviewer_status": "review_required",
               "selected_cells": [
                 "finance_anomaly_reviewer",
@@ -4973,6 +6469,618 @@
             "governance": {
               "authority_review_ids": [
                 "authority_00006"
+              ],
+              "final_status": "hold",
+              "governance_action": "hold_for_review"
+            },
+            "handoffs": [
+              {
+                "artifact_stage_id": "intake_routing",
+                "artifact_summary": "invoice_extraction",
+                "from_tissue": "finance_intake_routing_tissue",
+                "handoff_id": "handoff_001",
+                "to_tissue": "finance_extraction_tissue"
+              },
+              {
+                "artifact_stage_id": "extraction",
+                "artifact_summary": "raw extracted fields",
+                "from_tissue": "finance_extraction_tissue",
+                "handoff_id": "handoff_002",
+                "to_tissue": "finance_validation_correction_tissue"
+              },
+              {
+                "artifact_stage_id": "correction",
+                "artifact_summary": "normalized finance fields",
+                "from_tissue": "finance_validation_correction_tissue",
+                "handoff_id": "handoff_003",
+                "to_tissue": "finance_anomaly_reviewer_tissue"
+              },
+              {
+                "artifact_stage_id": "anomaly_review",
+                "artifact_summary": "reviewer_status=review_required",
+                "from_tissue": "finance_anomaly_reviewer_tissue",
+                "handoff_id": "handoff_004",
+                "to_tissue": "finance_workspace_governance_tissue"
+              },
+              {
+                "artifact_stage_id": "governance_review",
+                "artifact_summary": "hold_for_review",
+                "from_tissue": "finance_workspace_governance_tissue",
+                "handoff_id": "handoff_005",
+                "to_tissue": "finance_reporting_output_tissue"
+              }
+            ],
+            "stage_history": [
+              {
+                "cell_id": "finance_document_classifier",
+                "notes": [
+                  "selected finance_document_classifier for intake_classification"
+                ],
+                "role_name": "document_classifier",
+                "stage_id": "intake_classification",
+                "tissue_id": "finance_intake_routing_tissue"
+              },
+              {
+                "cell_id": "finance_intake_router",
+                "notes": [
+                  "selected finance_intake_router for intake_routing"
+                ],
+                "role_name": "intake_router",
+                "stage_id": "intake_routing",
+                "tissue_id": "finance_intake_routing_tissue"
+              },
+              {
+                "cell_id": "finance_invoice_extractor",
+                "notes": [
+                  "selected finance_invoice_extractor for extraction"
+                ],
+                "role_name": "invoice_extractor",
+                "stage_id": "extraction",
+                "tissue_id": "finance_extraction_tissue"
+              },
+              {
+                "cell_id": "finance_normalizer",
+                "notes": [
+                  "selected finance_normalizer for normalization"
+                ],
+                "role_name": "field_normalizer",
+                "stage_id": "normalization",
+                "tissue_id": "finance_validation_correction_tissue"
+              },
+              {
+                "cell_id": "finance_correction_specialist",
+                "notes": [
+                  "selected finance_correction_specialist for correction"
+                ],
+                "role_name": "correction_specialist",
+                "stage_id": "correction",
+                "tissue_id": "finance_validation_correction_tissue"
+              },
+              {
+                "cell_id": "finance_anomaly_reviewer",
+                "notes": [
+                  "selected finance_anomaly_reviewer for anomaly_review"
+                ],
+                "role_name": "anomaly_reviewer",
+                "stage_id": "anomaly_review",
+                "tissue_id": "finance_anomaly_reviewer_tissue"
+              },
+              {
+                "cell_id": "finance_workspace_guard",
+                "notes": [
+                  "selected finance_workspace_guard for workspace_guard"
+                ],
+                "role_name": "workspace_guard",
+                "stage_id": "workspace_guard",
+                "tissue_id": "finance_workspace_governance_tissue"
+              },
+              {
+                "cell_id": "finance_governance_coordinator",
+                "notes": [
+                  "selected finance_governance_coordinator for governance_review"
+                ],
+                "role_name": "governance_coordinator",
+                "stage_id": "governance_review",
+                "tissue_id": "finance_workspace_governance_tissue"
+              },
+              {
+                "cell_id": "finance_audit_reporter",
+                "notes": [
+                  "selected finance_audit_reporter for reporting"
+                ],
+                "role_name": "audit_reporter",
+                "stage_id": "reporting",
+                "tissue_id": "finance_reporting_output_tissue"
+              },
+              {
+                "cell_id": "finance_output_formatter",
+                "notes": [
+                  "selected finance_output_formatter for output_formatting"
+                ],
+                "role_name": "output_formatter",
+                "stage_id": "output_formatting",
+                "tissue_id": "finance_reporting_output_tissue"
+              }
+            ],
+            "stage_outputs": {
+              "anomaly_review": {
+                "anomalies": [
+                  "amount_exceeds_auto_approval_limit",
+                  "missing_currency"
+                ],
+                "anomaly_score": 0.64,
+                "reviewer_status": "review_required"
+              },
+              "correction": {
+                "authority_review_ids": [],
+                "benchmark_class": "multi_cell_without_bounded_adaptation",
+                "correction_notes": [
+                  "due_date derived from payment terms"
+                ],
+                "descriptor_refs_used": [],
+                "descriptor_reuse": {
+                  "descriptor_id": null,
+                  "eligible": false,
+                  "memory_id": null,
+                  "used": false
+                },
+                "normalized_fields": {
+                  "cost_center": "FIN-OPS",
+                  "currency": "",
+                  "document_type": "invoice",
+                  "due_date": "2026-03-26",
+                  "invoice_date": "2026-03-12",
+                  "invoice_number": "NW-2026-099",
+                  "ocr_quality": "low",
+                  "payment_term_days": 14,
+                  "payment_terms": "N14",
+                  "source_channel": "scan_pdf",
+                  "subtotal": "5000.00",
+                  "tax": "950.00",
+                  "total": "5950.00",
+                  "vendor_name": "N0rthwind Off1ce GmbH"
+                },
+                "replay_descriptor_payloads": []
+              },
+              "extraction": {
+                "extracted_fields": {
+                  "cost_center": "FIN-OPS",
+                  "currency": "",
+                  "document_type": "invoice",
+                  "due_date": "",
+                  "invoice_date": "2026-03-12",
+                  "invoice_number": "NW-2026-099",
+                  "ocr_quality": "low",
+                  "payment_terms": "N14",
+                  "source_channel": "scan_pdf",
+                  "subtotal": "5000.00",
+                  "tax": "950.00",
+                  "total": "5950.00",
+                  "vendor_name": "N0rthwind Off1ce GMBH"
+                },
+                "extraction_confidence": 0.47,
+                "missing_fields": [
+                  "currency"
+                ]
+              },
+              "governance_review": {
+                "authority_review_ids": [
+                  "authority_00006"
+                ],
+                "final_status": "hold",
+                "governance_action": "hold_for_review"
+              },
+              "intake_classification": {
+                "classification_reason": "document_type=invoice",
+                "document_class": "vendor_invoice"
+              },
+              "intake_routing": {
+                "extraction_profile": "invoice_extraction",
+                "priority_band": "review",
+                "target_cell_id": "finance_invoice_extractor"
+              },
+              "normalization": {
+                "normalization_notes": [
+                  "invoice_date=2026-03-12",
+                  "due_date=missing",
+                  "currency=missing"
+                ],
+                "normalized_fields": {
+                  "cost_center": "FIN-OPS",
+                  "currency": "",
+                  "document_type": "invoice",
+                  "due_date": "",
+                  "invoice_date": "2026-03-12",
+                  "invoice_number": "NW-2026-099",
+                  "ocr_quality": "low",
+                  "payment_term_days": 14,
+                  "payment_terms": "N14",
+                  "source_channel": "scan_pdf",
+                  "subtotal": "5000.00",
+                  "tax": "950.00",
+                  "total": "5950.00",
+                  "vendor_name": "N0rthwind Off1ce GmbH"
+                }
+              },
+              "output_formatting": {
+                "final_status": "hold"
+              },
+              "reporting": {
+                "confidence_factors": [
+                  "support=descriptor_reuse:False",
+                  "support=workspace_complete:True",
+                  "drag=anomaly_count:2"
+                ],
+                "custody_notes": [
+                  "classified_as=vendor_invoice",
+                  "correction=local_only",
+                  "anomaly_review=amount_exceeds_auto_approval_limit,missing_currency",
+                  "governance=hold_for_review"
+                ],
+                "evidence_points": [
+                  "descriptor_reuse=False",
+                  "descriptor_id=none",
+                  "anomaly_count=2",
+                  "authority_reviews=1",
+                  "workspace_ok=True"
+                ],
+                "summary": "multi_cell_without_bounded_adaptation processed phase7-doc-006 as vendor_invoice and finished hold with governance action hold_for_review."
+              },
+              "workspace_guard": {
+                "missing_handoffs": [],
+                "workspace_ok": true
+              }
+            },
+            "tissue_registry_ref": "cells/finance_workflow/tissue_registry_phase7.json",
+            "tissues_used": [
+              "finance_intake_routing_tissue",
+              "finance_extraction_tissue",
+              "finance_validation_correction_tissue",
+              "finance_anomaly_reviewer_tissue",
+              "finance_workspace_governance_tissue",
+              "finance_reporting_output_tissue"
+            ],
+            "workflow_id": "wf_681b1987550eb610",
+            "workflow_payload": {
+              "document_id": "phase7-doc-006",
+              "inputs": {
+                "cost_center": "FIN-OPS",
+                "currency": "",
+                "document_type": "invoice",
+                "due_date": "",
+                "invoice_date": "2026-03-12",
+                "invoice_number": "NW-2026-099",
+                "ocr_quality": "low",
+                "payment_terms": "N14",
+                "source_channel": "scan_pdf",
+                "subtotal": "5000.00",
+                "tax": "950.00",
+                "total": "5950.00",
+                "vendor_name": "N0rthwind Off1ce GMBH"
+              },
+              "workflow_name": "finance_document_workflow_phase7"
+            },
+            "workspace_version": "agif.fabric.workspace.phase7.v1"
+          }
+        },
+        {
+          "analysis": {
+            "confidence": {
+              "drag_reasons": [
+                "anomaly/reviewer raised amount_exceeds_auto_approval_limit, unknown_cost_center"
+              ],
+              "label": "guarded",
+              "outcome_state": {
+                "final_status": "hold",
+                "governance_action": "hold_for_review",
+                "reviewer_status": "review_required"
+              },
+              "score": 0.744,
+              "summary": "guarded confidence (0.744) with outcome hold/review_required",
+              "support_reasons": [
+                "extraction tissue had high OCR support",
+                "workspace/governance kept release on hold under anomaly pressure"
+              ],
+              "truth_match": {
+                "final_status": true,
+                "governance_action": true
+              }
+            },
+            "descriptor_reuse_detail": {
+              "restored_fields": [],
+              "summary": "no reviewed descriptor artifact was available",
+              "used": false
+            },
+            "governance_control": {
+              "action": "hold_for_review",
+              "authority_review_ids": [
+                "authority_00008"
+              ],
+              "summary": "hold_for_review via authority_00008 (approved, trust_band=high)"
+            },
+            "need_resolution": {
+              "count": 1,
+              "summaries": [
+                "trust_risk -> authority_00008 (resolved_well)"
+              ],
+              "summary": "trust_risk -> authority_00008 (resolved_well)"
+            },
+            "route_of_custody": {
+              "critical_steps": [
+                "intake/routing classified vendor_invoice and selected invoice_extraction",
+                "extraction captured complete invoice fields",
+                "validation/correction stayed local to current document state",
+                "anomaly/reviewer flagged amount_exceeds_auto_approval_limit, unknown_cost_center",
+                "workspace/governance hold_for_review via authority_00008",
+                "reporting/output wrote bounded summary and final status hold"
+              ],
+              "handoff_count": 5,
+              "reporting_notes": [
+                "classified_as=vendor_invoice",
+                "correction=local_only",
+                "anomaly_review=amount_exceeds_auto_approval_limit,unknown_cost_center",
+                "governance=hold_for_review"
+              ],
+              "summary": "intake/routing -> extraction -> validation/correction -> anomaly/reviewer -> workspace/governance -> reporting/output; handoffs=5",
+              "tissue_sequence": [
+                "intake/routing",
+                "extraction",
+                "validation/correction",
+                "anomaly/reviewer",
+                "workspace/governance",
+                "reporting/output"
+              ]
+            }
+          },
+          "case_id": "invoice_anomaly_hold",
+          "correctness_score": 1.0,
+          "descriptor_reuse": {
+            "descriptor_id": null,
+            "eligible": false,
+            "memory_id": null,
+            "used": false
+          },
+          "output_digest": "ea8136eec884f55947f85176e80c1dcf91c882cd7c40fe304397ad2dee8e0813",
+          "result": {
+            "accepted": false,
+            "anomaly_count": 2,
+            "benchmark_class": "multi_cell_without_bounded_adaptation",
+            "descriptor_reuse": {
+              "descriptor_id": null,
+              "eligible": false,
+              "memory_id": null,
+              "used": false
+            },
+            "document_class": "vendor_invoice",
+            "document_id": "phase7-doc-003",
+            "extraction_profile": "invoice_extraction",
+            "final_status": "hold",
+            "governance_action": "hold_for_review",
+            "handoff_count": 5,
+            "input_digest": "c90ef79aa1408c0bb0be2f59bf1927d7e178576f76dcfe878fdf8f8e5eb277bc",
+            "normalized_currency": "EUR",
+            "normalized_total": "9500.00",
+            "normalized_vendor": "Orbit Travel Claims Ltd",
+            "proof_domain": "document/workflow intelligence",
+            "report_summary": "multi_cell_without_bounded_adaptation processed phase7-doc-003 as vendor_invoice and finished hold with governance action hold_for_review.",
+            "reviewer_status": "review_required",
+            "selected_cells": [
+              "finance_anomaly_reviewer",
+              "finance_audit_reporter",
+              "finance_correction_specialist",
+              "finance_document_classifier",
+              "finance_governance_coordinator",
+              "finance_intake_router",
+              "finance_invoice_extractor",
+              "finance_normalizer",
+              "finance_output_formatter",
+              "finance_workspace_guard"
+            ],
+            "selected_roles": [
+              "anomaly_reviewer",
+              "audit_reporter",
+              "correction_specialist",
+              "document_classifier",
+              "field_normalizer",
+              "governance_coordinator",
+              "intake_router",
+              "invoice_extractor",
+              "output_formatter",
+              "workspace_guard"
+            ],
+            "tissues_used": [
+              "finance_anomaly_reviewer_tissue",
+              "finance_extraction_tissue",
+              "finance_intake_routing_tissue",
+              "finance_reporting_output_tissue",
+              "finance_validation_correction_tissue",
+              "finance_workspace_governance_tissue"
+            ],
+            "workflow_name": "finance_document_workflow_phase7"
+          },
+          "trace": [
+            {
+              "cell_id": "finance_document_classifier",
+              "decision_ref": "routing_stage_00041",
+              "output_keys": [
+                "classification_reason",
+                "document_class"
+              ],
+              "selection_mode": "selected",
+              "stage_id": "intake_classification",
+              "tissue_id": "finance_intake_routing_tissue"
+            },
+            {
+              "cell_id": "finance_intake_router",
+              "decision_ref": "routing_stage_00042",
+              "output_keys": [
+                "extraction_profile",
+                "priority_band",
+                "target_cell_id"
+              ],
+              "selection_mode": "selected",
+              "stage_id": "intake_routing",
+              "tissue_id": "finance_intake_routing_tissue"
+            },
+            {
+              "cell_id": "finance_invoice_extractor",
+              "decision_ref": "routing_stage_00043",
+              "output_keys": [
+                "extracted_fields",
+                "extraction_confidence",
+                "missing_fields"
+              ],
+              "selection_mode": "selected",
+              "stage_id": "extraction",
+              "tissue_id": "finance_extraction_tissue"
+            },
+            {
+              "cell_id": "finance_normalizer",
+              "decision_ref": "routing_stage_00044",
+              "output_keys": [
+                "normalization_notes",
+                "normalized_fields"
+              ],
+              "selection_mode": "selected",
+              "stage_id": "normalization",
+              "tissue_id": "finance_validation_correction_tissue"
+            },
+            {
+              "cell_id": "finance_correction_specialist",
+              "decision_ref": "routing_stage_00045",
+              "output_keys": [
+                "authority_review_ids",
+                "benchmark_class",
+                "correction_notes",
+                "descriptor_refs_used",
+                "descriptor_reuse"
+              ],
+              "selection_mode": "selected",
+              "stage_id": "correction",
+              "tissue_id": "finance_validation_correction_tissue"
+            },
+            {
+              "cell_id": "finance_anomaly_reviewer",
+              "decision_ref": "routing_stage_00046",
+              "output_keys": [
+                "anomalies",
+                "anomaly_score",
+                "reviewer_status"
+              ],
+              "selection_mode": "selected",
+              "stage_id": "anomaly_review",
+              "tissue_id": "finance_anomaly_reviewer_tissue"
+            },
+            {
+              "cell_id": "finance_workspace_guard",
+              "decision_ref": "routing_stage_00047",
+              "output_keys": [
+                "missing_handoffs",
+                "workspace_ok"
+              ],
+              "selection_mode": "selected",
+              "stage_id": "workspace_guard",
+              "tissue_id": "finance_workspace_governance_tissue"
+            },
+            {
+              "cell_id": "finance_governance_coordinator",
+              "decision_ref": "routing_stage_00048",
+              "output_keys": [
+                "authority_review_ids",
+                "final_status",
+                "governance_action"
+              ],
+              "selection_mode": "selected",
+              "stage_id": "governance_review",
+              "tissue_id": "finance_workspace_governance_tissue"
+            },
+            {
+              "cell_id": "finance_audit_reporter",
+              "decision_ref": "routing_stage_00049",
+              "output_keys": [
+                "confidence_factors",
+                "custody_notes",
+                "evidence_points",
+                "summary"
+              ],
+              "selection_mode": "selected",
+              "stage_id": "reporting",
+              "tissue_id": "finance_reporting_output_tissue"
+            },
+            {
+              "cell_id": "finance_output_formatter",
+              "decision_ref": "routing_stage_00050",
+              "output_keys": [
+                "final_status"
+              ],
+              "selection_mode": "selected",
+              "stage_id": "output_formatting",
+              "tissue_id": "finance_reporting_output_tissue"
+            }
+          ],
+          "workspace": {
+            "benchmark_class": "multi_cell_without_bounded_adaptation",
+            "current_stage": "complete",
+            "final_output": {
+              "accepted": false,
+              "anomaly_count": 2,
+              "benchmark_class": "multi_cell_without_bounded_adaptation",
+              "descriptor_reuse": {
+                "descriptor_id": null,
+                "eligible": false,
+                "memory_id": null,
+                "used": false
+              },
+              "document_class": "vendor_invoice",
+              "document_id": "phase7-doc-003",
+              "extraction_profile": "invoice_extraction",
+              "final_status": "hold",
+              "governance_action": "hold_for_review",
+              "handoff_count": 5,
+              "input_digest": "c90ef79aa1408c0bb0be2f59bf1927d7e178576f76dcfe878fdf8f8e5eb277bc",
+              "normalized_currency": "EUR",
+              "normalized_total": "9500.00",
+              "normalized_vendor": "Orbit Travel Claims Ltd",
+              "proof_domain": "document/workflow intelligence",
+              "report_summary": "multi_cell_without_bounded_adaptation processed phase7-doc-003 as vendor_invoice and finished hold with governance action hold_for_review.",
+              "reviewer_status": "review_required",
+              "selected_cells": [
+                "finance_anomaly_reviewer",
+                "finance_audit_reporter",
+                "finance_correction_specialist",
+                "finance_document_classifier",
+                "finance_governance_coordinator",
+                "finance_intake_router",
+                "finance_invoice_extractor",
+                "finance_normalizer",
+                "finance_output_formatter",
+                "finance_workspace_guard"
+              ],
+              "selected_roles": [
+                "anomaly_reviewer",
+                "audit_reporter",
+                "correction_specialist",
+                "document_classifier",
+                "field_normalizer",
+                "governance_coordinator",
+                "intake_router",
+                "invoice_extractor",
+                "output_formatter",
+                "workspace_guard"
+              ],
+              "tissues_used": [
+                "finance_anomaly_reviewer_tissue",
+                "finance_extraction_tissue",
+                "finance_intake_routing_tissue",
+                "finance_reporting_output_tissue",
+                "finance_validation_correction_tissue",
+                "finance_workspace_governance_tissue"
+              ],
+              "workflow_name": "finance_document_workflow_phase7"
+            },
+            "governance": {
+              "authority_review_ids": [
+                "authority_00008"
               ],
               "final_status": "hold",
               "governance_action": "hold_for_review"
@@ -5165,7 +7273,7 @@
               },
               "governance_review": {
                 "authority_review_ids": [
-                  "authority_00006"
+                  "authority_00008"
                 ],
                 "final_status": "hold",
                 "governance_action": "hold_for_review"
@@ -5206,12 +7314,25 @@
                 "final_status": "hold"
               },
               "reporting": {
+                "confidence_factors": [
+                  "support=descriptor_reuse:False",
+                  "support=workspace_complete:True",
+                  "drag=anomaly_count:2"
+                ],
+                "custody_notes": [
+                  "classified_as=vendor_invoice",
+                  "correction=local_only",
+                  "anomaly_review=amount_exceeds_auto_approval_limit,unknown_cost_center",
+                  "governance=hold_for_review"
+                ],
                 "evidence_points": [
                   "descriptor_reuse=False",
+                  "descriptor_id=none",
                   "anomaly_count=2",
+                  "authority_reviews=1",
                   "workspace_ok=True"
                 ],
-                "summary": "multi_cell_without_bounded_adaptation processed phase7-doc-003 as vendor_invoice with governance action hold_for_review."
+                "summary": "multi_cell_without_bounded_adaptation processed phase7-doc-003 as vendor_invoice and finished hold with governance action hold_for_review."
               },
               "workspace_guard": {
                 "missing_handoffs": [],
@@ -5251,6 +7372,74 @@
           }
         },
         {
+          "analysis": {
+            "confidence": {
+              "drag_reasons": [
+                "anomaly/reviewer raised total_mismatch"
+              ],
+              "label": "high",
+              "outcome_state": {
+                "final_status": "hold",
+                "governance_action": "hold_for_review",
+                "reviewer_status": "review_required"
+              },
+              "score": 0.804,
+              "summary": "high confidence (0.804) with outcome hold/review_required",
+              "support_reasons": [
+                "extraction tissue had high OCR support",
+                "workspace/governance kept release on hold under anomaly pressure"
+              ],
+              "truth_match": {
+                "final_status": true,
+                "governance_action": true
+              }
+            },
+            "descriptor_reuse_detail": {
+              "restored_fields": [],
+              "summary": "no reviewed descriptor artifact was available",
+              "used": false
+            },
+            "governance_control": {
+              "action": "hold_for_review",
+              "authority_review_ids": [
+                "authority_00010"
+              ],
+              "summary": "hold_for_review via authority_00010 (approved, trust_band=high)"
+            },
+            "need_resolution": {
+              "count": 1,
+              "summaries": [
+                "trust_risk -> authority_00010 (resolved_well)"
+              ],
+              "summary": "trust_risk -> authority_00010 (resolved_well)"
+            },
+            "route_of_custody": {
+              "critical_steps": [
+                "intake/routing classified vendor_invoice and selected invoice_extraction",
+                "extraction captured complete invoice fields",
+                "validation/correction stayed local to current document state",
+                "anomaly/reviewer flagged total_mismatch",
+                "workspace/governance hold_for_review via authority_00010",
+                "reporting/output wrote bounded summary and final status hold"
+              ],
+              "handoff_count": 5,
+              "reporting_notes": [
+                "classified_as=vendor_invoice",
+                "correction=local_only",
+                "anomaly_review=total_mismatch",
+                "governance=hold_for_review"
+              ],
+              "summary": "intake/routing -> extraction -> validation/correction -> anomaly/reviewer -> workspace/governance -> reporting/output; handoffs=5",
+              "tissue_sequence": [
+                "intake/routing",
+                "extraction",
+                "validation/correction",
+                "anomaly/reviewer",
+                "workspace/governance",
+                "reporting/output"
+              ]
+            }
+          },
           "case_id": "invoice_total_mismatch_hold",
           "correctness_score": 1.0,
           "descriptor_reuse": {
@@ -5259,7 +7448,7 @@
             "memory_id": null,
             "used": false
           },
-          "output_digest": "fe9d64584605eb9ec173f37aba058ee51c189029fa60ae1685adb5c118bb7cb9",
+          "output_digest": "10f02c31e2bd20a7d53ec4c4fb8d987ed801a7acf120df3076a2da32c4d02c56",
           "result": {
             "accepted": false,
             "anomaly_count": 1,
@@ -5281,7 +7470,7 @@
             "normalized_total": "140.00",
             "normalized_vendor": "Fabrikam Stationery GmbH",
             "proof_domain": "document/workflow intelligence",
-            "report_summary": "multi_cell_without_bounded_adaptation processed phase7-doc-005 as vendor_invoice with governance action hold_for_review.",
+            "report_summary": "multi_cell_without_bounded_adaptation processed phase7-doc-005 as vendor_invoice and finished hold with governance action hold_for_review.",
             "reviewer_status": "review_required",
             "selected_cells": [
               "finance_anomaly_reviewer",
@@ -5320,7 +7509,7 @@
           "trace": [
             {
               "cell_id": "finance_document_classifier",
-              "decision_ref": "routing_stage_00041",
+              "decision_ref": "routing_stage_00051",
               "output_keys": [
                 "classification_reason",
                 "document_class"
@@ -5331,7 +7520,7 @@
             },
             {
               "cell_id": "finance_intake_router",
-              "decision_ref": "routing_stage_00042",
+              "decision_ref": "routing_stage_00052",
               "output_keys": [
                 "extraction_profile",
                 "priority_band",
@@ -5343,7 +7532,7 @@
             },
             {
               "cell_id": "finance_invoice_extractor",
-              "decision_ref": "routing_stage_00043",
+              "decision_ref": "routing_stage_00053",
               "output_keys": [
                 "extracted_fields",
                 "extraction_confidence",
@@ -5355,7 +7544,7 @@
             },
             {
               "cell_id": "finance_normalizer",
-              "decision_ref": "routing_stage_00044",
+              "decision_ref": "routing_stage_00054",
               "output_keys": [
                 "normalization_notes",
                 "normalized_fields"
@@ -5366,7 +7555,7 @@
             },
             {
               "cell_id": "finance_correction_specialist",
-              "decision_ref": "routing_stage_00045",
+              "decision_ref": "routing_stage_00055",
               "output_keys": [
                 "authority_review_ids",
                 "benchmark_class",
@@ -5380,7 +7569,7 @@
             },
             {
               "cell_id": "finance_anomaly_reviewer",
-              "decision_ref": "routing_stage_00046",
+              "decision_ref": "routing_stage_00056",
               "output_keys": [
                 "anomalies",
                 "anomaly_score",
@@ -5392,7 +7581,7 @@
             },
             {
               "cell_id": "finance_workspace_guard",
-              "decision_ref": "routing_stage_00047",
+              "decision_ref": "routing_stage_00057",
               "output_keys": [
                 "missing_handoffs",
                 "workspace_ok"
@@ -5403,7 +7592,7 @@
             },
             {
               "cell_id": "finance_governance_coordinator",
-              "decision_ref": "routing_stage_00048",
+              "decision_ref": "routing_stage_00058",
               "output_keys": [
                 "authority_review_ids",
                 "final_status",
@@ -5415,8 +7604,10 @@
             },
             {
               "cell_id": "finance_audit_reporter",
-              "decision_ref": "routing_stage_00049",
+              "decision_ref": "routing_stage_00059",
               "output_keys": [
+                "confidence_factors",
+                "custody_notes",
                 "evidence_points",
                 "summary"
               ],
@@ -5426,7 +7617,7 @@
             },
             {
               "cell_id": "finance_output_formatter",
-              "decision_ref": "routing_stage_00050",
+              "decision_ref": "routing_stage_00060",
               "output_keys": [
                 "final_status"
               ],
@@ -5459,7 +7650,7 @@
               "normalized_total": "140.00",
               "normalized_vendor": "Fabrikam Stationery GmbH",
               "proof_domain": "document/workflow intelligence",
-              "report_summary": "multi_cell_without_bounded_adaptation processed phase7-doc-005 as vendor_invoice with governance action hold_for_review.",
+              "report_summary": "multi_cell_without_bounded_adaptation processed phase7-doc-005 as vendor_invoice and finished hold with governance action hold_for_review.",
               "reviewer_status": "review_required",
               "selected_cells": [
                 "finance_anomaly_reviewer",
@@ -5497,7 +7688,7 @@
             },
             "governance": {
               "authority_review_ids": [
-                "authority_00008"
+                "authority_00010"
               ],
               "final_status": "hold",
               "governance_action": "hold_for_review"
@@ -5689,7 +7880,7 @@
               },
               "governance_review": {
                 "authority_review_ids": [
-                  "authority_00008"
+                  "authority_00010"
                 ],
                 "final_status": "hold",
                 "governance_action": "hold_for_review"
@@ -5730,12 +7921,25 @@
                 "final_status": "hold"
               },
               "reporting": {
+                "confidence_factors": [
+                  "support=descriptor_reuse:False",
+                  "support=workspace_complete:True",
+                  "drag=anomaly_count:1"
+                ],
+                "custody_notes": [
+                  "classified_as=vendor_invoice",
+                  "correction=local_only",
+                  "anomaly_review=total_mismatch",
+                  "governance=hold_for_review"
+                ],
                 "evidence_points": [
                   "descriptor_reuse=False",
+                  "descriptor_id=none",
                   "anomaly_count=1",
+                  "authority_reviews=1",
                   "workspace_ok=True"
                 ],
-                "summary": "multi_cell_without_bounded_adaptation processed phase7-doc-005 as vendor_invoice with governance action hold_for_review."
+                "summary": "multi_cell_without_bounded_adaptation processed phase7-doc-005 as vendor_invoice and finished hold with governance action hold_for_review."
               },
               "workspace_guard": {
                 "missing_handoffs": [],
@@ -5779,29 +7983,31 @@
         "active_logical_population_ratio": 0.909091,
         "bounded_forgetting": 0.0,
         "descriptor_reuse_rate": 0.0,
-        "governance_success_rate": 0.6,
+        "governance_success_rate": 0.666667,
         "improvement_from_prior_descriptors": 0.0,
         "memory_density_gain": 0.00088968,
         "replay_determinism": 1.0,
         "resource_usage": {
           "active_population": 10,
           "active_population_cost_bytes": 150732.8,
-          "authority_review_count": 10,
+          "authority_review_count": 12,
           "authority_reviews_per_case": 2.0,
+          "average_need_effectiveness": 0.88,
           "estimated_idle_memory_bytes": 28672,
           "estimated_runtime_memory_bytes": 1507328,
+          "governance_overhead_share": 0.171429,
           "logical_population": 11,
           "memory_tier_delta_bytes": {
             "cold": 0,
-            "ephemeral": 20547,
+            "ephemeral": 20752,
             "hot": 1710,
-            "warm": 4215
+            "warm": 5058
           },
           "memory_tier_usage_bytes": {
             "cold": 0,
-            "ephemeral": 20547,
+            "ephemeral": 20752,
             "hot": 2046,
-            "warm": 4215
+            "warm": 5058
           },
           "memory_within_caps": {
             "cold": true,
@@ -5809,11 +8015,13 @@
             "hot": true,
             "warm": true
           },
-          "need_signal_count": 6,
-          "need_signals_per_case": 1.2,
-          "retained_memory_delta_bytes": 4215,
-          "routing_decision_count": 60,
-          "routing_decisions_per_case": 12.0,
+          "need_signal_count": 8,
+          "need_signals_per_case": 1.333333,
+          "retained_memory_delta_bytes": 5058,
+          "retained_memory_delta_per_case_bytes": 843.0,
+          "retained_memory_value_density": 0.000179733,
+          "routing_decision_count": 70,
+          "routing_decisions_per_case": 11.666667,
           "runtime_memory_delta_bytes": 1507328,
           "within_runtime_working_set_cap": true
         },
@@ -5822,15 +8030,19 @@
             "finance_anomaly_reviewer_tissue",
             "finance_workspace_governance_tissue"
           ],
-          "detail": "no governed split or merge executed; reviewer and governance pressure still signaled future split candidates",
+          "detail": "no governed split or merge executed; reviewer and governance pressure appeared, but active population stayed at 10/24 and split counters remained zero",
+          "future_trigger": "governed split becomes relevant when repeated reviewer pressure coincides with active population at or above 24 and lifecycle split counters move above zero",
           "measured": false,
+          "no_action_reason": "pressure stayed bounded inside existing tissues, no lifecycle split/merge action was approved, and authority review volume stayed at 12",
+          "pressure_ratio": 0.416667,
           "structural_signal_cases": [
             "invoice_anomaly_hold",
             "invoice_followup_alias",
             "invoice_followup_alias_repeat",
+            "invoice_high_value_alias_hold",
             "invoice_total_mismatch_hold"
           ],
-          "structural_signal_count": 4,
+          "structural_signal_count": 5,
           "value": 0.0
         },
         "task_accuracy": 0.75,
@@ -5855,11 +8067,20 @@
         "multi_cell_with_adapt_score": 1.0,
         "no_adapt_improved": "improved governance_action",
         "no_adapt_mismatches": [],
+        "no_adapt_route_of_custody": "intake/routing -> extraction -> validation/correction -> anomaly/reviewer -> workspace/governance -> reporting/output; handoffs=5",
+        "outcome_trail": "flat=accepted/clear; no_adapt=accepted/clear; with_adapt=accepted/clear",
         "reason_summary": "real tissues preserved a safer bounded path than the flat baseline",
+        "with_adapt_confidence": "high confidence (0.864) with outcome accepted/clear",
+        "with_adapt_descriptor_detail": "no reviewed descriptor artifact was available",
         "with_adapt_descriptor_reuse": false,
+        "with_adapt_drag_reasons": "",
+        "with_adapt_governance_detail": "bounded release completed without extra authority review",
         "with_adapt_improved": "no material improvement",
         "with_adapt_mismatches": [],
-        "with_adapt_residual_mismatches": "none"
+        "with_adapt_need_resolution": "none",
+        "with_adapt_residual_mismatches": "none",
+        "with_adapt_route_of_custody": "intake/routing -> extraction -> validation/correction -> anomaly/reviewer -> workspace/governance -> reporting/output; handoffs=5",
+        "with_adapt_support_reasons": "extraction tissue had high OCR support; anomaly/reviewer cleared the document; workspace/governance released after clear reviewer state"
       },
       {
         "case_id": "invoice_followup_alias",
@@ -5881,11 +8102,20 @@
           "normalized_vendor",
           "reviewer_status"
         ],
-        "reason_summary": "reviewed descriptor reuse restored vendor or currency context from prior memory",
+        "no_adapt_route_of_custody": "intake/routing -> extraction -> validation/correction -> anomaly/reviewer -> workspace/governance -> reporting/output; handoffs=5",
+        "outcome_trail": "flat=accepted/clear_without_review; no_adapt=hold/review_required; with_adapt=accepted/clear",
+        "reason_summary": "reviewed descriptor reuse restored bounded context from prior memory: desc_0001 from mem_0001; warm tier, 597 bytes; reuse_count=1, trust=0.76; approved by authority_00002; restored normalized_vendor, normalized_currency, derived_due_date",
+        "with_adapt_confidence": "high confidence (0.848) with outcome accepted/clear",
+        "with_adapt_descriptor_detail": "desc_0001 from mem_0001; warm tier, 597 bytes; reuse_count=1, trust=0.76; approved by authority_00002; restored normalized_vendor, normalized_currency, derived_due_date",
         "with_adapt_descriptor_reuse": true,
+        "with_adapt_drag_reasons": "extraction left gaps in currency",
+        "with_adapt_governance_detail": "bounded release completed without extra authority review",
         "with_adapt_improved": "improved final_status, governance_action, normalized_currency, normalized_vendor, reviewer_status",
         "with_adapt_mismatches": [],
-        "with_adapt_residual_mismatches": "none"
+        "with_adapt_need_resolution": "uncertainty -> desc_0001 (resolved_well)",
+        "with_adapt_residual_mismatches": "none",
+        "with_adapt_route_of_custody": "intake/routing -> extraction -> validation/correction -> anomaly/reviewer -> workspace/governance -> reporting/output; handoffs=5",
+        "with_adapt_support_reasons": "extraction tissue had bounded but usable OCR support; validation/correction reused reviewed prior descriptor state; anomaly/reviewer cleared the document; workspace/governance released after clear reviewer state"
       },
       {
         "case_id": "invoice_followup_alias_repeat",
@@ -5907,11 +8137,53 @@
           "normalized_vendor",
           "reviewer_status"
         ],
-        "reason_summary": "reviewed descriptor reuse restored vendor or currency context from prior memory",
+        "no_adapt_route_of_custody": "intake/routing -> extraction -> validation/correction -> anomaly/reviewer -> workspace/governance -> reporting/output; handoffs=5",
+        "outcome_trail": "flat=accepted/clear_without_review; no_adapt=hold/review_required; with_adapt=accepted/clear",
+        "reason_summary": "reviewed descriptor reuse restored bounded context from prior memory: desc_0003 from mem_0003; warm tier, 595 bytes; reuse_count=1, trust=0.76; approved by authority_00004; restored normalized_vendor, normalized_currency, derived_due_date",
+        "with_adapt_confidence": "guarded confidence (0.771) with outcome accepted/clear",
+        "with_adapt_descriptor_detail": "desc_0003 from mem_0003; warm tier, 595 bytes; reuse_count=1, trust=0.76; approved by authority_00004; restored normalized_vendor, normalized_currency, derived_due_date",
         "with_adapt_descriptor_reuse": true,
+        "with_adapt_drag_reasons": "extraction tissue started from low OCR support; extraction left gaps in currency",
+        "with_adapt_governance_detail": "bounded release completed without extra authority review",
         "with_adapt_improved": "improved final_status, governance_action, normalized_currency, normalized_vendor, reviewer_status",
         "with_adapt_mismatches": [],
-        "with_adapt_residual_mismatches": "none"
+        "with_adapt_need_resolution": "uncertainty -> desc_0003 (resolved_well)",
+        "with_adapt_residual_mismatches": "none",
+        "with_adapt_route_of_custody": "intake/routing -> extraction -> validation/correction -> anomaly/reviewer -> workspace/governance -> reporting/output; handoffs=5",
+        "with_adapt_support_reasons": "validation/correction reused reviewed prior descriptor state; anomaly/reviewer cleared the document; workspace/governance released after clear reviewer state"
+      },
+      {
+        "case_id": "invoice_high_value_alias_hold",
+        "flat_baseline_missed": "final_status, governance_action, normalized_currency, normalized_vendor, reviewer_status",
+        "flat_baseline_score": 0.375,
+        "flat_mismatches": [
+          "final_status",
+          "governance_action",
+          "normalized_currency",
+          "normalized_vendor",
+          "reviewer_status"
+        ],
+        "multi_cell_no_adapt_score": 0.75,
+        "multi_cell_with_adapt_score": 1.0,
+        "no_adapt_improved": "improved final_status, governance_action, reviewer_status",
+        "no_adapt_mismatches": [
+          "normalized_currency",
+          "normalized_vendor"
+        ],
+        "no_adapt_route_of_custody": "intake/routing -> extraction -> validation/correction -> anomaly/reviewer -> workspace/governance -> reporting/output; handoffs=5",
+        "outcome_trail": "flat=accepted/clear_without_review; no_adapt=hold/review_required; with_adapt=hold/review_required",
+        "reason_summary": "real tissues kept the document on hold instead of flat auto-release; reviewed descriptor reuse restored bounded context from prior memory: desc_0005 from mem_0005; warm tier, 595 bytes; reuse_count=2, trust=0.76; approved by authority_00006; restored normalized_vendor, normalized_currency, derived_due_date; governance stayed active after correction instead of silently auto-releasing",
+        "with_adapt_confidence": "guarded confidence (0.712) with outcome hold/review_required",
+        "with_adapt_descriptor_detail": "desc_0005 from mem_0005; warm tier, 595 bytes; reuse_count=2, trust=0.76; approved by authority_00006; restored normalized_vendor, normalized_currency, derived_due_date",
+        "with_adapt_descriptor_reuse": true,
+        "with_adapt_drag_reasons": "extraction tissue started from low OCR support; extraction left gaps in currency; anomaly/reviewer raised amount_exceeds_auto_approval_limit",
+        "with_adapt_governance_detail": "hold_for_review via authority_00007 (approved, trust_band=high)",
+        "with_adapt_improved": "improved normalized_currency, normalized_vendor",
+        "with_adapt_mismatches": [],
+        "with_adapt_need_resolution": "trust_risk -> authority_00007 (resolved_well); uncertainty -> desc_0005 (resolved_well)",
+        "with_adapt_residual_mismatches": "none",
+        "with_adapt_route_of_custody": "intake/routing -> extraction -> validation/correction -> anomaly/reviewer -> workspace/governance -> reporting/output; handoffs=5",
+        "with_adapt_support_reasons": "validation/correction reused reviewed prior descriptor state; workspace/governance kept release on hold under anomaly pressure"
       },
       {
         "case_id": "invoice_anomaly_hold",
@@ -5926,11 +8198,20 @@
         "multi_cell_with_adapt_score": 1.0,
         "no_adapt_improved": "improved final_status, governance_action, reviewer_status",
         "no_adapt_mismatches": [],
+        "no_adapt_route_of_custody": "intake/routing -> extraction -> validation/correction -> anomaly/reviewer -> workspace/governance -> reporting/output; handoffs=5",
+        "outcome_trail": "flat=accepted/clear_without_review; no_adapt=hold/review_required; with_adapt=hold/review_required",
         "reason_summary": "real tissues kept the document on hold instead of flat auto-release",
+        "with_adapt_confidence": "guarded confidence (0.744) with outcome hold/review_required",
+        "with_adapt_descriptor_detail": "no reviewed descriptor artifact was available",
         "with_adapt_descriptor_reuse": false,
+        "with_adapt_drag_reasons": "anomaly/reviewer raised amount_exceeds_auto_approval_limit, unknown_cost_center",
+        "with_adapt_governance_detail": "hold_for_review via authority_00009 (approved, trust_band=high)",
         "with_adapt_improved": "no material improvement",
         "with_adapt_mismatches": [],
-        "with_adapt_residual_mismatches": "none"
+        "with_adapt_need_resolution": "trust_risk -> authority_00009 (resolved_well)",
+        "with_adapt_residual_mismatches": "none",
+        "with_adapt_route_of_custody": "intake/routing -> extraction -> validation/correction -> anomaly/reviewer -> workspace/governance -> reporting/output; handoffs=5",
+        "with_adapt_support_reasons": "extraction tissue had high OCR support; workspace/governance kept release on hold under anomaly pressure"
       },
       {
         "case_id": "invoice_total_mismatch_hold",
@@ -5945,24 +8226,53 @@
         "multi_cell_with_adapt_score": 1.0,
         "no_adapt_improved": "improved final_status, governance_action, reviewer_status",
         "no_adapt_mismatches": [],
+        "no_adapt_route_of_custody": "intake/routing -> extraction -> validation/correction -> anomaly/reviewer -> workspace/governance -> reporting/output; handoffs=5",
+        "outcome_trail": "flat=accepted/clear_without_review; no_adapt=hold/review_required; with_adapt=hold/review_required",
         "reason_summary": "real tissues kept the document on hold instead of flat auto-release",
+        "with_adapt_confidence": "high confidence (0.804) with outcome hold/review_required",
+        "with_adapt_descriptor_detail": "no reviewed descriptor artifact was available",
         "with_adapt_descriptor_reuse": false,
+        "with_adapt_drag_reasons": "anomaly/reviewer raised total_mismatch",
+        "with_adapt_governance_detail": "hold_for_review via authority_00011 (approved, trust_band=high)",
         "with_adapt_improved": "no material improvement",
         "with_adapt_mismatches": [],
-        "with_adapt_residual_mismatches": "none"
+        "with_adapt_need_resolution": "trust_risk -> authority_00011 (resolved_well)",
+        "with_adapt_residual_mismatches": "none",
+        "with_adapt_route_of_custody": "intake/routing -> extraction -> validation/correction -> anomaly/reviewer -> workspace/governance -> reporting/output; handoffs=5",
+        "with_adapt_support_reasons": "extraction tissue had high OCR support; workspace/governance kept release on hold under anomaly pressure"
       }
     ],
     "descriptor_change_cases": [
       "invoice_followup_alias",
-      "invoice_followup_alias_repeat"
+      "invoice_followup_alias_repeat",
+      "invoice_high_value_alias_hold"
     ],
     "fabric_beats_baseline_cases": [
       "invoice_seed_reference",
       "invoice_followup_alias",
       "invoice_followup_alias_repeat",
+      "invoice_high_value_alias_hold",
       "invoice_anomaly_hold",
       "invoice_total_mismatch_hold"
     ],
+    "resource_tradeoffs": {
+      "rows": [
+        {
+          "accuracy_gain": 0.166667,
+          "accuracy_gain_per_retained_kib": 0.033741994,
+          "authority_overhead_delta_per_case": 2.0,
+          "comparison": "flat -> no_adapt",
+          "retained_memory_cost_bytes": 5058
+        },
+        {
+          "accuracy_gain": 0.25,
+          "accuracy_gain_per_retained_kib": 0.312576313,
+          "authority_overhead_delta_per_case": 0.333333,
+          "comparison": "no_adapt -> with_adapt",
+          "retained_memory_cost_bytes": 819
+        }
+      ]
+    },
     "usefulness_gate_passed": true
   },
   "suite_id": "phase7_finance_document_benchmark_v1"

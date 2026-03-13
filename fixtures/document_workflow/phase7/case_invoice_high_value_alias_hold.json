@@ -1,0 +1,19 @@
+{
+  "workflow_name": "finance_document_workflow_phase7",
+  "document_id": "phase7-doc-006",
+  "inputs": {
+    "document_type": "invoice",
+    "vendor_name": "N0rthwind Off1ce GMBH",
+    "invoice_number": "NW-2026-099",
+    "invoice_date": "2026-03-12",
+    "due_date": "",
+    "currency": "",
+    "subtotal": "5000.00",
+    "tax": "950.00",
+    "total": "5950.00",
+    "payment_terms": "N14",
+    "cost_center": "FIN-OPS",
+    "ocr_quality": "low",
+    "source_channel": "scan_pdf"
+  }
+}

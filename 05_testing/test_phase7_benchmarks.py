@@ -86,8 +86,10 @@ class Phase7BenchmarksTest(unittest.TestCase):
         self.assertTrue(self.benchmark_results["comparisons"]["usefulness_gate_passed"])
         self.assertIn("invoice_followup_alias", self.benchmark_results["comparisons"]["descriptor_change_cases"])
         self.assertIn("invoice_followup_alias_repeat", self.benchmark_results["comparisons"]["descriptor_change_cases"])
+        self.assertIn("invoice_high_value_alias_hold", self.benchmark_results["comparisons"]["descriptor_change_cases"])
         self.assertIn("invoice_anomaly_hold", self.benchmark_results["comparisons"]["fabric_beats_baseline_cases"])
         self.assertIn("invoice_total_mismatch_hold", self.benchmark_results["comparisons"]["fabric_beats_baseline_cases"])
+        self.assertIn("invoice_high_value_alias_hold", self.benchmark_results["comparisons"]["fabric_beats_baseline_cases"])
 
     def test_metrics_show_determinism_governance_and_descriptor_reuse(self) -> None:
         baseline = self.benchmark_results["classes"]["flat_baseline"]["metrics"]
@@ -103,7 +105,9 @@ class Phase7BenchmarksTest(unittest.TestCase):
         self.assertLessEqual(with_adapt["bounded_forgetting"], 0.1)
         self.assertLess(with_adapt["unsafe_action_rate"], baseline["unsafe_action_rate"])
         self.assertGreater(with_adapt["resource_usage"]["retained_memory_delta_bytes"], 0)
+        self.assertGreater(with_adapt["resource_usage"]["governance_overhead_share"], 0.0)
         self.assertIn("structural_signal_cases", with_adapt["split_merge_efficiency"])
+        self.assertIn("future_trigger", with_adapt["split_merge_efficiency"])
 
     def test_hardening_adds_explanations_and_tissue_analytics(self) -> None:
         with_adapt = self.benchmark_results["classes"]["multi_cell_with_bounded_adaptation"]
@@ -112,6 +116,7 @@ class Phase7BenchmarksTest(unittest.TestCase):
         governance = tissues["finance_workspace_governance_tissue"]
 
         self.assertGreater(validation["reuse_contribution"], 0)
+        self.assertGreater(validation["intervention_case_count"], 0)
         self.assertGreater(governance["governance_burden"], 0)
 
         comparison_rows = {
@@ -120,6 +125,16 @@ class Phase7BenchmarksTest(unittest.TestCase):
         followup = comparison_rows["invoice_followup_alias_repeat"]
         self.assertIn("descriptor", followup["reason_summary"])
         self.assertNotEqual(followup["with_adapt_improved"], "no material improvement")
+        self.assertIn("handoffs=", followup["with_adapt_route_of_custody"])
+        self.assertIn("desc_", followup["with_adapt_descriptor_detail"])
+        self.assertIn("confidence", followup["with_adapt_confidence"])
+
+        high_value_hold = comparison_rows["invoice_high_value_alias_hold"]
+        self.assertIn("governance", high_value_hold["reason_summary"])
+        self.assertIn("hold_for_review", high_value_hold["with_adapt_governance_detail"])
+        self.assertIn("uncertainty", high_value_hold["with_adapt_need_resolution"])
+        self.assertIn("trust_risk", high_value_hold["with_adapt_need_resolution"])
+        self.assertIn("hold/review_required", high_value_hold["outcome_trail"])
 
     def test_result_tables_normalize_ephemeral_fields_for_deterministic_reruns(self) -> None:
         results = json.loads(json.dumps(self.benchmark_results))
@@ -155,6 +170,8 @@ class Phase7BenchmarksTest(unittest.TestCase):
             "<temporary>/phase7_evidence.json",
         )
         self.assertIn("runtime timestamp omitted", first_markdown)
+        self.assertIn("Route Of Custody", first_markdown)
+        self.assertIn("Descriptor Reuse Evidence", first_markdown)
 
 
 if __name__ == "__main__":

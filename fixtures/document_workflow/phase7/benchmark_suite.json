@@ -50,6 +50,22 @@
       "descriptor_opportunity": true
     },
     {
+      "case_id": "invoice_high_value_alias_hold",
+      "payload_path": "case_invoice_high_value_alias_hold.json",
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "5950.00",
+        "reviewer_status": "review_required",
+        "governance_action": "hold_for_review",
+        "final_status": "hold"
+      },
+      "expected_governance": "hold_for_review",
+      "descriptor_opportunity": true
+    },
+    {
       "case_id": "invoice_anomaly_hold",
       "payload_path": "case_invoice_anomaly_hold.json",
       "truth": {

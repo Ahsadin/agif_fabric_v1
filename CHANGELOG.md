@@ -1,5 +1,52 @@
 # Changelog
 
+## 2026-03-13 Phase 7.6 Hardening
+- Hardened the already-closed Phase 7 finance benchmark system without changing the frozen Phase 2 CLI surface or raising project units above `525/600`:
+  - `intelligence/fabric/domain/finance.py`
+  - `intelligence/fabric/benchmarking/phase7.py`
+  - `fixtures/document_workflow/phase7/benchmark_suite.json`
+  - `fixtures/document_workflow/phase7/case_invoice_high_value_alias_hold.json`
+  - `05_testing/test_phase7_benchmarks.py`
+  - `scripts/check_phase7_benchmarks.py`
+- Reconciled a real descriptor-matching weakness in the finance correction-memory path:
+  - stored correction-memory vendor signatures are now normalized with the same bounded OCR alias cleanup used for incoming vendor names
+  - this keeps quantized correction memory reusable across later alias-heavy cases instead of silently dropping reuse after supersession
+- Expanded the deterministic Phase 7 suite with one more bounded governance-sensitive case:
+  - `invoice_high_value_alias_hold`
+  - this case shows reviewed descriptor reuse improving normalized vendor and currency while governance still keeps the workflow on hold
+- Strengthened the Phase 7 benchmark outputs with:
+  - per-case route-of-custody summaries
+  - descriptor and retained-memory detail
+  - confidence-aware outcome summaries
+  - adaptation tradeoff metrics
+  - stronger structural-pressure explanations
+  - richer tissue workload and intervention analytics
+- Added the Phase 7.6 hardening evidence and handoff files:
+  - `05_testing/PHASE76_HARDENING_EVIDENCE.md`
+  - `00_admin/codex_threads/handoffs/phase76-hardening-2026-03-13.md`
+- Regenerated the checked Phase 7 result tables:
+  - `06_outputs/result_tables/phase7_benchmark_results.md`
+  - `06_outputs/result_tables/phase7_benchmark_results.json`
+- Updated the project records:
+  - `DECISIONS.md`
+  - `PROJECT_README.md`
+  - `01_plan/PROGRESS_TRACKER.md`
+  - `01_plan/PHASE_GATE_CHECKLIST.md`
+  - `05_testing/PASS_TOKENS.md`
+  - `00_admin/CODEX_THREAD_MAP.md`
+- Locally verified:
+  - `python3 scripts/check_phase7_benchmarks.py` passes locally
+  - `python3 scripts/check_phase6_routing_authority.py` passes locally through the chained Phase 7 check
+  - `python3 scripts/check_phase5_memory.py` passes locally through the chained Phase 7 check
+  - `python3 scripts/check_phase4_lifecycle.py` passes locally through the chained Phase 7 check
+  - `python3 scripts/check_phase3_foundation.py` passes locally through the chained Phase 7 check
+  - the Phase 7 benchmark suite stays deterministic locally with the added hardening case
+  - route-of-custody, descriptor-reuse, governance, and resource tradeoff reporting are stronger and locally regenerated
+- Assumed only:
+  - governed split or merge usefulness beyond the explicit Phase 7 structural-pressure placeholder
+  - Phase 8 soak completion
+  - Phase 9 paper and reproducibility closure
+
 ## 2026-03-13 Phase 8 Harness Setup
 - Added a bounded Phase 8 long-run harness without changing the frozen `runner/cell fabric` command names or Phase 2 interface shapes:
   - `intelligence/fabric/benchmarking/phase8.py`

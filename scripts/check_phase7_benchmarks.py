@@ -55,8 +55,14 @@ def main() -> int:
     if with_adapt["resource_usage"]["retained_memory_delta_bytes"] <= 0:
         print("Phase 7 retained memory delta check failed.", file=sys.stderr)
         return 1
+    if with_adapt["resource_usage"]["governance_overhead_share"] <= 0.0:
+        print("Phase 7 governance overhead reporting check failed.", file=sys.stderr)
+        return 1
     if "structural_signal_cases" not in with_adapt["split_merge_efficiency"]:
         print("Phase 7 structural signal check failed.", file=sys.stderr)
+        return 1
+    if "future_trigger" not in with_adapt["split_merge_efficiency"]:
+        print("Phase 7 structural future trigger check failed.", file=sys.stderr)
         return 1
     with_adapt_analytics = results["classes"]["multi_cell_with_bounded_adaptation"]["analytics"]["tissues"]
     if with_adapt_analytics["finance_validation_correction_tissue"]["reuse_contribution"] <= 0:
@@ -64,6 +70,20 @@ def main() -> int:
         return 1
     if not any(row.get("reason_summary") for row in results["comparisons"]["case_rows"]):
         print("Phase 7 comparison explanation check failed.", file=sys.stderr)
+        return 1
+    case_rows = {row["case_id"]: row for row in results["comparisons"]["case_rows"]}
+    high_value_hold = case_rows.get("invoice_high_value_alias_hold")
+    if high_value_hold is None:
+        print("Phase 7.6 hardening case is missing.", file=sys.stderr)
+        return 1
+    if "desc_" not in str(high_value_hold.get("with_adapt_descriptor_detail", "")):
+        print("Phase 7 descriptor custody detail check failed.", file=sys.stderr)
+        return 1
+    if "hold_for_review" not in str(high_value_hold.get("with_adapt_governance_detail", "")):
+        print("Phase 7 governance custody detail check failed.", file=sys.stderr)
+        return 1
+    if "handoffs=" not in str(high_value_hold.get("with_adapt_route_of_custody", "")):
+        print("Phase 7 route-of-custody detail check failed.", file=sys.stderr)
         return 1
     print("AGIF_FABRIC_P7_PASS")
     return 0

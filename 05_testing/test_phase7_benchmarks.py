@@ -9,7 +9,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from intelligence.fabric.benchmarking.phase7 import run_phase7_benchmarks
+from intelligence.fabric.benchmarking.phase7 import run_phase7_benchmarks, write_phase7_result_tables
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -120,6 +120,41 @@ class Phase7BenchmarksTest(unittest.TestCase):
         followup = comparison_rows["invoice_followup_alias_repeat"]
         self.assertIn("descriptor", followup["reason_summary"])
         self.assertNotEqual(followup["with_adapt_improved"], "no material improvement")
+
+    def test_result_tables_normalize_ephemeral_fields_for_deterministic_reruns(self) -> None:
+        results = json.loads(json.dumps(self.benchmark_results))
+        no_adapt = results["classes"]["multi_cell_without_bounded_adaptation"]["status_refs"]
+        with_adapt = results["classes"]["multi_cell_with_bounded_adaptation"]["status_refs"]
+
+        with tempfile.TemporaryDirectory() as output_dir:
+            results["created_utc"] = "2099-01-01T00:00:00Z"
+            no_adapt["evidence_path"] = "/tmp/run-one/phase7_evidence.json"
+            with_adapt["evidence_path"] = "/tmp/run-one-alt/phase7_evidence.json"
+            write_phase7_result_tables(results, output_dir=Path(output_dir))
+            first_json = (Path(output_dir) / "phase7_benchmark_results.json").read_text(encoding="utf-8")
+            first_markdown = (Path(output_dir) / "phase7_benchmark_results.md").read_text(encoding="utf-8")
+
+            results["created_utc"] = "2099-01-02T00:00:00Z"
+            no_adapt["evidence_path"] = "/tmp/run-two/phase7_evidence.json"
+            with_adapt["evidence_path"] = "/tmp/run-two-alt/phase7_evidence.json"
+            write_phase7_result_tables(results, output_dir=Path(output_dir))
+            second_json = (Path(output_dir) / "phase7_benchmark_results.json").read_text(encoding="utf-8")
+            second_markdown = (Path(output_dir) / "phase7_benchmark_results.md").read_text(encoding="utf-8")
+
+        self.assertEqual(first_json, second_json)
+        self.assertEqual(first_markdown, second_markdown)
+
+        payload = json.loads(first_json)
+        self.assertNotIn("created_utc", payload)
+        self.assertEqual(
+            payload["classes"]["multi_cell_without_bounded_adaptation"]["status_refs"]["evidence_path"],
+            "<temporary>/phase7_evidence.json",
+        )
+        self.assertEqual(
+            payload["classes"]["multi_cell_with_bounded_adaptation"]["status_refs"]["evidence_path"],
+            "<temporary>/phase7_evidence.json",
+        )
+        self.assertIn("runtime timestamp omitted", first_markdown)
 
 
 if __name__ == "__main__":

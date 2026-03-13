@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026-03-13 Phase 7 Benchmark Stabilization
+- Stabilized the checked-in Phase 7 benchmark artifacts without changing the runtime benchmark logic or frozen CLI commands:
+  - `intelligence/fabric/benchmarking/phase7.py`
+  - `05_testing/test_phase7_benchmarks.py`
+  - `06_outputs/result_tables/phase7_benchmark_results.md`
+  - `06_outputs/result_tables/phase7_benchmark_results.json`
+- The tracked result tables now normalize rerun-only values before writing:
+  - omit the live `created_utc` field from the checked-in artifact
+  - normalize temp `evidence_path` values to `<temporary>/phase7_evidence.json`
+- Added a deterministic writer regression test so timestamp and temp-path churn cannot silently return.
+- Locally verified:
+  - `python3 scripts/check_phase7_benchmarks.py` passes locally
+  - a second rerun of `python3 scripts/check_phase7_benchmarks.py` preserved identical hashes for the two tracked Phase 7 result files locally
+- Assumed only:
+  - none for this stabilization fix
+
 ## 2026-03-13 Phase 7.5 Hardening
 - First recovered the missing committed Phase 7 baseline cleanly as `feat(fabric): add phase 7 tissues benchmarks` after local Git verification was restored.
 - Hardened the existing Phase 7 benchmark suite without changing the frozen Phase 2 CLI surface or increasing project units above `525/600`:

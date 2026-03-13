@@ -3070,7 +3070,7 @@
       },
       "status_refs": {
         "config_path": "/Users/ahsadin/Documents/Projects/ENF/AGIF/agif_fabric_v1/fixtures/document_workflow/phase7/minimal_fabric_config_with_adaptation.json",
-        "evidence_path": "/var/folders/ps/zc8rzkzd4_q98xc3_5v1x9380000gn/T/tmp4x9lbjnz/phase7_evidence.json"
+        "evidence_path": "<temporary>/phase7_evidence.json"
       }
     },
     "multi_cell_without_bounded_adaptation": {
@@ -5838,7 +5838,7 @@
       },
       "status_refs": {
         "config_path": "/Users/ahsadin/Documents/Projects/ENF/AGIF/agif_fabric_v1/fixtures/document_workflow/phase7/minimal_fabric_config_no_adaptation.json",
-        "evidence_path": "/var/folders/ps/zc8rzkzd4_q98xc3_5v1x9380000gn/T/tmpw0mopqhz/phase7_evidence.json"
+        "evidence_path": "<temporary>/phase7_evidence.json"
       }
     }
   },
@@ -5965,6 +5965,5 @@
     ],
     "usefulness_gate_passed": true
   },
-  "created_utc": "2026-03-13T09:05:57Z",
   "suite_id": "phase7_finance_document_benchmark_v1"
 }

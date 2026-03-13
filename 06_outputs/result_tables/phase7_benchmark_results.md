@@ -1,6 +1,6 @@
 # Phase 7 Benchmark Results
 
-- Generated UTC: `2026-03-13T09:05:57Z`
+- Artifact note: runtime timestamp omitted and temp evidence paths normalized for deterministic reruns.
 
 ## Class Metrics
 

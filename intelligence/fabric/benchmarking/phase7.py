@@ -143,10 +143,11 @@ def write_phase7_result_tables(results: dict[str, Any], *, output_dir: Path) -> 
     output_dir.mkdir(parents=True, exist_ok=True)
     json_path = output_dir / "phase7_benchmark_results.json"
     markdown_path = output_dir / "phase7_benchmark_results.md"
-    json_path.write_text(json.dumps(results, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    artifact_results = _normalize_phase7_artifact_results(results)
+    json_path.write_text(json.dumps(artifact_results, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     class_rows = []
-    for class_name, payload in results["classes"].items():
+    for class_name, payload in artifact_results["classes"].items():
         resource_usage = payload["metrics"]["resource_usage"]
         split_merge = payload["metrics"]["split_merge_efficiency"]
         class_rows.append(
@@ -164,7 +165,7 @@ def write_phase7_result_tables(results: dict[str, Any], *, output_dir: Path) -> 
             + " |"
         )
     resource_rows = []
-    for class_name, payload in results["classes"].items():
+    for class_name, payload in artifact_results["classes"].items():
         resource_usage = payload["metrics"]["resource_usage"]
         split_merge = payload["metrics"]["split_merge_efficiency"]
         resource_rows.append(
@@ -183,7 +184,7 @@ def write_phase7_result_tables(results: dict[str, Any], *, output_dir: Path) -> 
             + " |"
         )
     case_rows = []
-    for row in results["comparisons"]["case_rows"]:
+    for row in artifact_results["comparisons"]["case_rows"]:
         case_rows.append(
             "| "
             + " | ".join(
@@ -199,7 +200,7 @@ def write_phase7_result_tables(results: dict[str, Any], *, output_dir: Path) -> 
             + " |"
         )
     counterfactual_rows = []
-    for row in results["comparisons"]["case_rows"]:
+    for row in artifact_results["comparisons"]["case_rows"]:
         counterfactual_rows.append(
             "| "
             + " | ".join(
@@ -214,7 +215,7 @@ def write_phase7_result_tables(results: dict[str, Any], *, output_dir: Path) -> 
         )
     tissue_rows = []
     for class_name in ("multi_cell_without_bounded_adaptation", "multi_cell_with_bounded_adaptation"):
-        tissues = results["classes"][class_name]["analytics"]["tissues"]
+        tissues = artifact_results["classes"][class_name]["analytics"]["tissues"]
         for tissue_id in TISSUE_ORDER:
             payload = tissues[tissue_id]
             tissue_rows.append(
@@ -237,7 +238,7 @@ def write_phase7_result_tables(results: dict[str, Any], *, output_dir: Path) -> 
         [
             "# Phase 7 Benchmark Results",
             "",
-            f"- Generated UTC: `{results['created_utc']}`",
+            "- Artifact note: runtime timestamp omitted and temp evidence paths normalized for deterministic reruns.",
             "",
             "## Class Metrics",
             "",
@@ -269,12 +270,30 @@ def write_phase7_result_tables(results: dict[str, Any], *, output_dir: Path) -> 
             "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |",
             *tissue_rows,
             "",
-            f"- Fabric beats baseline cases: `{', '.join(results['comparisons']['fabric_beats_baseline_cases'])}`",
-            f"- Descriptor-change cases: `{', '.join(results['comparisons']['descriptor_change_cases'])}`",
+            f"- Fabric beats baseline cases: `{', '.join(artifact_results['comparisons']['fabric_beats_baseline_cases'])}`",
+            f"- Descriptor-change cases: `{', '.join(artifact_results['comparisons']['descriptor_change_cases'])}`",
         ]
     )
     markdown_path.write_text(markdown + "\n", encoding="utf-8")
     return {"json": json_path, "markdown": markdown_path}
+
+
+def _normalize_phase7_artifact_results(results: dict[str, Any]) -> dict[str, Any]:
+    normalized = deepcopy(results)
+    normalized.pop("created_utc", None)
+    for payload in normalized.get("classes", {}).values():
+        status_refs = payload.get("status_refs")
+        if not isinstance(status_refs, dict):
+            continue
+        evidence_path = status_refs.get("evidence_path")
+        if evidence_path:
+            status_refs["evidence_path"] = _normalize_phase7_ephemeral_path(evidence_path)
+    return normalized
+
+
+def _normalize_phase7_ephemeral_path(path_value: Any) -> str:
+    basename = Path(str(path_value)).name or "phase7_evidence.json"
+    return f"<temporary>/{basename}"
 
 
 def _load_suite() -> dict[str, Any]:

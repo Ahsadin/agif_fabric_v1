@@ -37,6 +37,7 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Phase 4.5 + 5.5 hardening: complete and locally verified without changing project units
 - Phase 6.5 hardening: complete and locally verified without changing project units
 - Phase 7: complete and locally verified
+- Phase 7.5 hardening: complete and locally verified without changing project units
 
 ## Phase 3 Foundation
 - Local runner entrypoint: `runner/cell`
@@ -101,6 +102,13 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Deterministic Phase 7 fixtures now live under `fixtures/document_workflow/phase7/`.
 - Deterministic local Phase 7 check script: `scripts/check_phase7_benchmarks.py`
 - Current Phase 7 result tables now live under `06_outputs/result_tables/phase7_benchmark_results.md` and `06_outputs/result_tables/phase7_benchmark_results.json`.
+- Phase 7.5 hardening strengthens the same benchmark system with:
+  - two additional deterministic invoice cases
+  - explicit counterfactual comparison notes
+  - tissue usefulness, burden, and reuse analytics
+  - retained-memory and runtime-overhead deltas
+  - explicit structural-pressure signals when split or merge remains unexecuted
+- Phase 7.5 hardening evidence now lives at `05_testing/PHASE75_HARDENING_EVIDENCE.md`.
 
 ## Phase 2 Freeze Set
 - `03_design/AGIF_V1_ARCHITECTURE.md`
@@ -152,5 +160,6 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Hardening verification method: run the Phase 4 and Phase 5 deterministic checks again and confirm `05_testing/PHASE45_HARDENING_EVIDENCE.md`.
 - Phase 6.5 hardening verification method: run `python3 scripts/check_phase6_routing_authority.py` and confirm `05_testing/PHASE65_HARDENING_EVIDENCE.md`.
 - Phase 7 verification method: run `python3 scripts/check_phase7_benchmarks.py` and confirm `05_testing/PHASE7_TISSUES_BENCHMARK_EVIDENCE.md`.
+- Phase 7.5 hardening verification method: run `python3 scripts/check_phase7_benchmarks.py` and confirm `05_testing/PHASE75_HARDENING_EVIDENCE.md`.
 - Local verification status is recorded in `01_plan/PROGRESS_TRACKER.md` and `CHANGELOG.md`.
 - Later long-run growth and paper or reproducibility behavior beyond the Phase 7 deterministic benchmark proof remain assumed only until later phases verify them.

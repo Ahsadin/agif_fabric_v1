@@ -52,6 +52,19 @@ def main() -> int:
     if with_adapt["bounded_forgetting"] > 0.1:
         print("Phase 7 bounded forgetting threshold failed.", file=sys.stderr)
         return 1
+    if with_adapt["resource_usage"]["retained_memory_delta_bytes"] <= 0:
+        print("Phase 7 retained memory delta check failed.", file=sys.stderr)
+        return 1
+    if "structural_signal_cases" not in with_adapt["split_merge_efficiency"]:
+        print("Phase 7 structural signal check failed.", file=sys.stderr)
+        return 1
+    with_adapt_analytics = results["classes"]["multi_cell_with_bounded_adaptation"]["analytics"]["tissues"]
+    if with_adapt_analytics["finance_validation_correction_tissue"]["reuse_contribution"] <= 0:
+        print("Phase 7 tissue reuse analytics check failed.", file=sys.stderr)
+        return 1
+    if not any(row.get("reason_summary") for row in results["comparisons"]["case_rows"]):
+        print("Phase 7 comparison explanation check failed.", file=sys.stderr)
+        return 1
     print("AGIF_FABRIC_P7_PASS")
     return 0
 

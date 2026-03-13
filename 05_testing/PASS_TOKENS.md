@@ -19,6 +19,7 @@
 - `AGIF_FABRIC_P7_PASS`
   - Earned on `2026-03-13`
   - Local verification command: `python3 scripts/check_phase7_benchmarks.py`
+  - Re-verified on `2026-03-13` during the Phase 7.5 hardening pass with the same command
 
 ## Reserved Tokens from the Plan
 - `AGIF_FABRIC_P8_PASS`

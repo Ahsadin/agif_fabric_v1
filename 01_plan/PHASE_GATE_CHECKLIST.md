@@ -82,6 +82,7 @@
 - [x] The benchmark system is active across the frozen benchmark classes.
 - [x] Domain tissue tests pass locally.
 - [x] Benchmark evidence can be generated locally.
+- [x] Phase 7.5 hardening improved benchmark explanations, tissue analytics, bounded resource reporting, and structural-pressure honesty without changing the frozen benchmark classes or project units.
 
 ## Phase 8
 - [ ] Long-run growth stays bounded under repeated local runs.

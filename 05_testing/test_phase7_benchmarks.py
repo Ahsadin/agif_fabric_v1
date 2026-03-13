@@ -85,7 +85,9 @@ class Phase7BenchmarksTest(unittest.TestCase):
         )
         self.assertTrue(self.benchmark_results["comparisons"]["usefulness_gate_passed"])
         self.assertIn("invoice_followup_alias", self.benchmark_results["comparisons"]["descriptor_change_cases"])
+        self.assertIn("invoice_followup_alias_repeat", self.benchmark_results["comparisons"]["descriptor_change_cases"])
         self.assertIn("invoice_anomaly_hold", self.benchmark_results["comparisons"]["fabric_beats_baseline_cases"])
+        self.assertIn("invoice_total_mismatch_hold", self.benchmark_results["comparisons"]["fabric_beats_baseline_cases"])
 
     def test_metrics_show_determinism_governance_and_descriptor_reuse(self) -> None:
         baseline = self.benchmark_results["classes"]["flat_baseline"]["metrics"]
@@ -100,6 +102,24 @@ class Phase7BenchmarksTest(unittest.TestCase):
         self.assertGreater(with_adapt["improvement_from_prior_descriptors"], 0.0)
         self.assertLessEqual(with_adapt["bounded_forgetting"], 0.1)
         self.assertLess(with_adapt["unsafe_action_rate"], baseline["unsafe_action_rate"])
+        self.assertGreater(with_adapt["resource_usage"]["retained_memory_delta_bytes"], 0)
+        self.assertIn("structural_signal_cases", with_adapt["split_merge_efficiency"])
+
+    def test_hardening_adds_explanations_and_tissue_analytics(self) -> None:
+        with_adapt = self.benchmark_results["classes"]["multi_cell_with_bounded_adaptation"]
+        tissues = with_adapt["analytics"]["tissues"]
+        validation = tissues["finance_validation_correction_tissue"]
+        governance = tissues["finance_workspace_governance_tissue"]
+
+        self.assertGreater(validation["reuse_contribution"], 0)
+        self.assertGreater(governance["governance_burden"], 0)
+
+        comparison_rows = {
+            item["case_id"]: item for item in self.benchmark_results["comparisons"]["case_rows"]
+        }
+        followup = comparison_rows["invoice_followup_alias_repeat"]
+        self.assertIn("descriptor", followup["reason_summary"])
+        self.assertNotEqual(followup["with_adapt_improved"], "no material improvement")
 
 
 if __name__ == "__main__":

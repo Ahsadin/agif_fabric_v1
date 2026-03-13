@@ -24,6 +24,11 @@
 - This pass improved routing confidence, need-resolution quality, route-memory feedback, lineage-aware routing, and authority outcome memory inside already-closed Phase 6.
 - The progress units remain `465/600` because the locked plan does not award extra units for hardening inside a closed phase.
 
+## 2026-03-13 Phase 7.5 Hardening Note
+- A Phase 7.5 hardening pass was completed locally.
+- This pass improved benchmark credibility, counterfactual explanations, tissue analytics, retained-memory and runtime-overhead reporting, and explicit structural-pressure signaling inside already-closed Phase 7.
+- The progress units remain `525/600` because the locked plan does not award extra units for hardening inside a closed phase.
+
 ## Verification Status
 - Locally verified:
   - required project directories exist
@@ -76,6 +81,8 @@
   - governed coordination changes at least one deterministic result relative to the flat baseline locally
   - `python3 scripts/check_phase7_benchmarks.py` passes locally
   - `AGIF_FABRIC_P7_PASS` is earned and recorded in `05_testing/PASS_TOKENS.md`
+  - the Phase 7.5 hardening pass strengthens the same benchmark suite without changing the committed project units
+  - the hardened result tables now include counterfactual notes, tissue analytics, bounded resource deltas, and explicit structural-pressure signals locally
 - Assumed only:
   - Phase 8 and Phase 9
   - long-run soak behavior beyond the deterministic Phase 7 suite

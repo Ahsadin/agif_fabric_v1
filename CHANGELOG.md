@@ -1,5 +1,42 @@
 # Changelog
 
+## 2026-03-13 Phase 7.5 Hardening
+- First recovered the missing committed Phase 7 baseline cleanly as `feat(fabric): add phase 7 tissues benchmarks` after local Git verification was restored.
+- Hardened the existing Phase 7 benchmark suite without changing the frozen Phase 2 CLI surface or increasing project units above `525/600`:
+  - added two more deterministic finance cases under `fixtures/document_workflow/phase7/`
+  - strengthened `intelligence/fabric/benchmarking/phase7.py` with:
+    - workspace-backed tissue analytics
+    - counterfactual comparison notes
+    - retained-memory and runtime-overhead deltas
+    - explicit structural-pressure signals when no governed split or merge is executed
+  - strengthened `05_testing/test_phase7_benchmarks.py`
+  - strengthened `scripts/check_phase7_benchmarks.py`
+- Regenerated the Phase 7 benchmark outputs with the hardened suite:
+  - `06_outputs/result_tables/phase7_benchmark_results.md`
+  - `06_outputs/result_tables/phase7_benchmark_results.json`
+- Added the hardening evidence note:
+  - `05_testing/PHASE75_HARDENING_EVIDENCE.md`
+- Updated the project records and admin tracking for the Phase 7.5 hardening pass:
+  - `DECISIONS.md`
+  - `PROJECT_README.md`
+  - `01_plan/PROGRESS_TRACKER.md`
+  - `01_plan/PHASE_GATE_CHECKLIST.md`
+  - `05_testing/PASS_TOKENS.md`
+  - `00_admin/CODEX_THREAD_MAP.md`
+  - `00_admin/codex_threads/handoffs/phase75-hardening-2026-03-13.md`
+- Locally verified:
+  - `python3 scripts/check_phase7_benchmarks.py` passes locally
+  - `python3 scripts/check_phase6_routing_authority.py` passes locally through the chained Phase 7 check
+  - `python3 scripts/check_phase5_memory.py` passes locally through the chained Phase 7 check
+  - `python3 scripts/check_phase4_lifecycle.py` passes locally through the chained Phase 7 check
+  - `python3 scripts/check_phase3_foundation.py` passes locally through the chained Phase 7 check
+  - the hardened benchmark suite stays deterministic locally
+  - the result tables now include clearer case-level explanations, tissue burden and usefulness analytics, and stronger bounded resource measurements locally
+- Assumed only:
+  - actual governed split or merge usefulness beyond the explicit structural-pressure placeholder
+  - Phase 8 soak behavior
+  - Phase 9 paper and reproducibility closure
+
 ## 2026-03-13 Phase 7
 - Added real Phase 7 finance domain assets:
   - `cells/finance_workflow/blueprint_registry_phase7.json`

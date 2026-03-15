@@ -24,6 +24,12 @@
 - This pass adds stronger cycle-health metrics, drift indicators, checkpoint-boundary resume checks, clearer memory and governance quality summaries, a clearer failure taxonomy, and better blocker reporting inside the already-open Phase 8 evidence layer.
 - The progress units remain `525/600` because the locked plan does not award extra units for hardening inside an open phase until the real 24h and 72h evidence closes Phase 8 itself.
 
+## 2026-03-15 Real 24h Soak Note
+- A real `24h` Phase 8 soak is now completed locally and extracted under:
+  - `08_logs/phase8_soak/run_24h/`
+- The completed run was recorded in `05_testing/PHASE8_LONGRUN_EVIDENCE.md`.
+- The progress units still remain `525/600` because the locked plan awards the `45` Phase 8 units only after both the real `24h` and `72h` soak evidence closes the full Phase 8 gate.
+
 ## 2026-03-13 Hardening Note
 - A Phase 4.5 + 5.5 hardening pass was completed locally.
 - This pass improved lifecycle quality and memory quality inside already-closed Phases 4 and 5.

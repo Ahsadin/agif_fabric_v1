@@ -1,5 +1,26 @@
 # Changelog
 
+## 2026-03-15 Real 24h Soak Recorded
+- Recorded the real completed `24h` Phase 8 soak in:
+  - `05_testing/PHASE8_LONGRUN_EVIDENCE.md`
+- The real run is now present locally under:
+  - `08_logs/phase8_soak/run_24h/`
+- Real 24h soak facts now recorded explicitly:
+  - source machine: MSI soak machine
+  - profile: `phase8_soak_24h`
+  - started: `2026-03-13T20:05:45Z`
+  - completed: `2026-03-14T20:08:22Z`
+  - manifest status: `completed`
+  - completed cycles: `989`
+  - resume count: `1`
+  - resume recovery count: `1`
+- Kept Phase 8 open honestly:
+  - `AGIF_FABRIC_P8_PASS` is still not earned
+  - progress remains `525/600`
+  - real `72h` soak still required
+- Cleaned the repo worktree by moving ad hoc paper-draft helper files out of the repo into:
+  - `../agif_fabric_v1_external/2026-03-15_repo_cleanup/`
+
 ## 2026-03-13 Phase 8.5 Hardening
 - First reconciled the already-committed Phase 7.6 state honestly:
   - confirmed the worktree was clean locally before new edits

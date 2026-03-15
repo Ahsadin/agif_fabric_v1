@@ -59,19 +59,44 @@ This note does **not** claim that Phase 8 is fully closed.
   - this is useful evidence for bounded governance pressure
   - it is not yet enough to call Phase 8 complete
 
+## Real 24h Soak Result
+- A real 24h soak run is now present locally under:
+  - `08_logs/phase8_soak/run_24h/`
+- Source machine for this run:
+  - MSI soak machine
+- Run profile:
+  - `phase8_soak_24h`
+- Target duration:
+  - `24` hours
+- Started:
+  - `2026-03-13T20:05:45Z`
+- Completed:
+  - `2026-03-14T20:08:22Z`
+- Final manifest status:
+  - `completed`
+- Completed cycle count:
+  - `989`
+- Resume count:
+  - `1`
+- Resume recovery count:
+  - `1`
+- Result digest:
+  - `7a13490cdf21bf32a88b8a3d664fa43c84587eac01846a11d40680d3252d2575`
+- Failure cases still recorded honestly:
+  - `expected governed failure: AUTHORITY_REACTIVATION_VETO`
+
 ## Why Phase 8 Stays Open
-- Real `24h` soak evidence was not completed locally in this thread.
-- Real `72h` soak evidence was not completed locally in this thread.
+- Real `24h` soak evidence is now completed locally and extracted into the project.
+- Real `72h` soak evidence is still not completed locally.
 - `AGIF_FABRIC_P8_PASS` is therefore not earned.
 - Project progress stays `525/600`.
 
 ## Remaining Weaknesses
-- The current proof is still a bounded short-run validation, not a completed long-duration soak.
+- The current proof now includes a real completed `24h` soak, but not yet the real `72h` soak needed for honest Phase 8 closure.
 - The current bounded summary shows a useful descriptor-reuse trend, but memory density does not yet show a monotonic improvement claim across every repeated cycle.
-- The harness is ready for real long soaks, but lid-close, restart, and multi-day continuity are still assumed until the actual 24h and 72h runs are executed locally.
+- The harness and resume path are now exercised by a completed `24h` run, but multi-day continuity is still not proven until the actual `72h` run completes locally.
 
 ## Assumed Only
-- real 24h soak completion
 - real 72h soak completion
 - full Phase 8 closure against the locked falsification thresholds
 - Phase 9 paper and reproducibility closure

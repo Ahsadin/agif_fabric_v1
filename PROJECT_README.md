@@ -55,6 +55,7 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Root AGIF v1 progress stays fixed at `600/600`.
 - Post-closure publication cleanup may continue as docs and package maintenance only.
 - Any new proof work must live in a separate post-closure initiative rather than reopening the root AGIF v1 phase history.
+- That separate initiative now lives at `projects/agif_v1_postclosure_extensions/` with its own local source-of-truth files and its own fixed denominator `130`.
 - AGIF v2 planning starts only after that separate extension bundle is complete.
 - This does not reopen or weaken the AGIF v1 non-claims.
 
@@ -228,6 +229,8 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
   - `PROJECT_README.md`
   - `DECISIONS.md`
   - `CHANGELOG.md`
+- Separate post-closure extension project:
+  - `projects/agif_v1_postclosure_extensions/`
 - Control and tracking:
   - `00_admin/`
   - `01_plan/`

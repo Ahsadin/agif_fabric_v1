@@ -1,5 +1,23 @@
 # Changelog
 
+## 2026-03-18 Track B Setup
+- Started the separate Track B initiative under `projects/agif_v1_postclosure_extensions/`.
+- Added the local Track B source-of-truth files:
+  - `projects/agif_v1_postclosure_extensions/PROJECT_README.md`
+  - `projects/agif_v1_postclosure_extensions/DECISIONS.md`
+  - `projects/agif_v1_postclosure_extensions/CHANGELOG.md`
+  - `projects/agif_v1_postclosure_extensions/01_plan/PROGRESS_TRACKER.md`
+- Added the local Track B control files:
+  - `projects/agif_v1_postclosure_extensions/01_plan/PHASE_GATE_CHECKLIST.md`
+  - `projects/agif_v1_postclosure_extensions/02_requirements/TRACK_B_SCOPE_AND_GATES.md`
+  - `projects/agif_v1_postclosure_extensions/05_testing/PASS_TOKENS.md`
+  - `projects/agif_v1_postclosure_extensions/00_admin/CODEX_THREAD_MAP.md`
+  - `projects/agif_v1_postclosure_extensions/AGENTS.override.md`
+- Kept the root AGIF v1 record unchanged:
+  - root progress remains `600/600`
+  - no root pass tokens changed
+  - no closed AGIF v1 phase was reopened
+
 ## 2026-03-18 Track A Publication Cleanup
 - Aligned the closed AGIF v1 repo to the final execution plan for Track A publication cleanup.
 - Added a public closed-package release note:

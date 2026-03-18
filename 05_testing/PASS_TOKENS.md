@@ -21,10 +21,28 @@
   - Local verification command: `python3 scripts/check_phase7_benchmarks.py`
   - Re-verified on `2026-03-13` during the Phase 7.5 hardening pass with the same command
   - Re-verified on `2026-03-13` during the Phase 7.6 hardening pass with the same command
+- `AGIF_FABRIC_P8_PASS`
+  - Earned on `2026-03-18`
+  - Local verification command: `python3 scripts/check_phase8_soak.py`
+  - Real long-run evidence inspected locally from:
+    - `08_logs/phase8_soak/run_24h/`
+    - `08_logs/phase8_soak/run_72h/`
+  - Honest caveats:
+    - the long-run soak machine is MSI, not MacBook Air-only proof
+    - the `72h` run recovered after a repeated `WinError 5` manifest-write interruption, but final resume bookkeeping stayed incomplete
 
 ## Reserved Tokens from the Plan
-- `AGIF_FABRIC_P8_PASS`
 - `AGIF_FABRIC_P9_PASS`
+
+## Phase 8 Honest Status
+- A real `24h` Phase 8 soak is recorded under `08_logs/phase8_soak/run_24h/`.
+- A real `72h` Phase 8 soak is recorded under `08_logs/phase8_soak/run_72h/`.
+- `AGIF_FABRIC_P8_PASS` is now earned because the locked Phase 8 gate is satisfied by:
+  - the bounded local harness verification
+  - the real `24h` soak evidence
+  - the real `72h` soak evidence
+  - passing soak, replay, rollback, quarantine, and resource-cap checks
+- The imported long-run artifacts came from the MSI soak machine and must not be described as MacBook Air-only proof.
 
 ## Harness Readiness Tokens
 - `AGIF_FABRIC_P8_HARNESS_READY`

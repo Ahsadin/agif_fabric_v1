@@ -1,0 +1,197 @@
+{
+  "artifact": "phase8_real_72h_soak",
+  "analysis_date": "2026-03-18",
+  "run": {
+    "profile_id": "phase8_soak_72h",
+    "status": "completed",
+    "started_utc": "2026-03-14T23:54:31Z",
+    "completed_utc": "2026-03-17T23:58:40Z",
+    "duration_seconds": 259449,
+    "duration_hms": "72h 4m 9s",
+    "target_duration_hours": 72,
+    "completed_cycle_count": 1690,
+    "evidence_file_count": 1690,
+    "cycle_index_contiguous": true,
+    "resume_count": 1,
+    "resume_recovery_count": 0,
+    "result_digest": "c14c4ab1161a0537045538e081ca595649423177d5829a8652a64a9e5900f469"
+  },
+  "machine": {
+    "role": "MSI soak machine",
+    "project_role": "long-run endurance evidence machine",
+    "not_proved_here": "MacBook Air-only long-run endurance",
+    "basis": [
+      "project verified state says the real 72h soak came from MSI",
+      "imported artifacts use Windows paths such as E:\\AGIF\\agif_fabric_v1 and C:\\Python313"
+    ]
+  },
+  "validity": {
+    "is_valid_completed_run": true,
+    "why_valid": [
+      "manifest status is completed",
+      "1690 evidence files are present for 1690 completed cycles",
+      "cycle indexes are contiguous from 1 through 1690",
+      "all five stress lanes report passed",
+      "the interrupted manifest, stderr logs, and final manifest together show resumed continuation after the cycle 1622 interruption"
+    ],
+    "resume_event_observed": {
+      "cycle_index": 1622,
+      "source_manifest": "run_manifest_interrupt1_1622.json",
+      "source_log": "soak_stderr.log",
+      "detail": "WinError 5 while replacing run_manifest.json.tmp to run_manifest.json"
+    },
+    "resume_bookkeeping_caveat": [
+      "final manifest has resume_count 1",
+      "final manifest leaves resume_events empty",
+      "final manifest leaves resume_recovery_count at 0"
+    ]
+  },
+  "key_metrics": {
+    "approx_cycles_per_hour": 23.45,
+    "approx_cases_per_hour": 46.872,
+    "avg_cycle_score": 0.994434,
+    "accepted_case_count": 1970,
+    "hold_case_count": 1408,
+    "descriptor_opportunity_cases": 1689,
+    "descriptor_reuse_cases": 1688,
+    "descriptor_reuse_avg_correctness": 0.979191,
+    "descriptor_nonreuse_avg_correctness": 0.375,
+    "governed_reuse_hold_total": 281,
+    "runtime_memory_bytes_constant": [
+      1507328
+    ],
+    "final_reviewed_descriptor_count": 7,
+    "final_retained_memory_bytes": 5866,
+    "final_need_signal_count": 7,
+    "final_unresolved_signal_count": 0,
+    "repo_footprint_human": "477M"
+  },
+  "trend_summary": {
+    "first_100_avg_score": 0.98875,
+    "last_100_avg_score": 0.995,
+    "first_100_avg_descriptor_reuse_rate": 0.695,
+    "last_100_avg_descriptor_reuse_rate": 0.71,
+    "first_100_avg_memory_reuse_rate": 2.256531,
+    "last_100_avg_memory_reuse_rate": 2.84478,
+    "first_100_avg_value_per_retained_kib": 0.351529,
+    "last_100_avg_value_per_retained_kib": 0.342129,
+    "cycles_with_unresolved_pressure": 1,
+    "cycles_with_recurring_unresolved_pressure": 0,
+    "first_third_avg_value_per_retained_kib": 0.347138,
+    "middle_third_avg_value_per_retained_kib": 0.344886,
+    "last_third_avg_value_per_retained_kib": 0.345474
+  },
+  "final_runtime_state": {
+    "memory": {
+      "active_descriptor_count": 7,
+      "archived_descriptor_count": 1969,
+      "duplicate_compression_gain_bytes": 5411218,
+      "promotion_rate": 0.369484,
+      "reuse_rate": 2.845142,
+      "supersession_rate": 0.996457,
+      "stale_retirement_rate": 0.0,
+      "tier_usage_bytes": {
+        "cold": 0,
+        "ephemeral": 40833,
+        "hot": 451,
+        "warm": 5866
+      },
+      "tier_caps_bytes": {
+        "cold": 32768,
+        "ephemeral": 131072,
+        "hot": 131072,
+        "warm": 8192
+      },
+      "raw_log_promoted_count": 0
+    },
+    "governance": {
+      "review_count": 7036,
+      "approved_count": 7036,
+      "veto_count": 0,
+      "repeated_veto_pattern_count": 0,
+      "weak_lineage_pattern_count": 0
+    },
+    "needs": {
+      "signal_count": 7,
+      "resolved_signal_count": 7,
+      "active_signal_count": 0,
+      "recurring_unresolved_count": 0,
+      "history_entry_count": 6193
+    },
+    "population": {
+      "active_population": 10,
+      "dormant_population": 1,
+      "logical_population": 11,
+      "active_to_logical_ratio": 0.909091,
+      "lifecycle_event_count": 21,
+      "lineage_count": 11,
+      "within_runtime_working_set_cap": true
+    }
+  },
+  "stress_results": {
+    "memory_pressure": {
+      "headline": "memory pressure triggered consolidation and stayed inside bounded caps",
+      "passed": true
+    },
+    "replay_rollback": {
+      "headline": "replay reproduced the prior run and rollback restored the pre-quarantine lifecycle state",
+      "passed": true,
+      "lifecycle_replay_match": true,
+      "rollback_restored": true
+    },
+    "routing_pressure": {
+      "headline": "routing abstained under full pressure and recovered when capacity returned",
+      "passed": true
+    },
+    "split_merge": {
+      "headline": "governed split and merge both executed with replay-safe lineage tracking",
+      "passed": true,
+      "round_count": 2
+    },
+    "trust_quarantine": {
+      "headline": "authority vetoed risky reactivation and governance quarantined the active low-trust cell",
+      "passed": true,
+      "authority_veto_count": 2,
+      "veto_code": "AUTHORITY_REACTIVATION_VETO"
+    }
+  },
+  "historical_24h_watch_item_outcomes": [
+    "value per retained KiB softened further from 0.351529 over the first 100 cycles to 0.342129 over the last 100 cycles, but the three broad thirds stabilized at 0.347138, 0.344886, and 0.345474 rather than collapsing.",
+    "the manifest-write interruption did repeat once in the 72h run, so it is not an isolated file-system event.",
+    "unresolved pressure stayed near zero after the bootstrap cycle and did not recur across the rest of the run.",
+    "the governed high-value alias hold remained correct without governance becoming more conservative on safe reuse-backed followups."
+  ],
+  "phase8_gate": {
+    "phase_complete": true,
+    "pass_token_earned": "AGIF_FABRIC_P8_PASS",
+    "progress_units_after_close": 570,
+    "closure_basis": [
+      "bounded Phase 8 harness check passes locally",
+      "real 24h soak evidence is complete and analyzed",
+      "real 72h soak evidence is complete and analyzed",
+      "soak, replay, rollback, and quarantine checks pass locally",
+      "runtime working set stayed far below 12 GB",
+      "repo footprint stayed far below 35 GB"
+    ],
+    "honest_caveats": [
+      "this is MSI long-run evidence, not MacBook Air-only long-run proof",
+      "the repeated WinError 5 manifest-write interruption is real and the final resume bookkeeping stayed incomplete"
+    ]
+  },
+  "proved_now": [
+    "A real 72h soak completed on the MSI soak machine and produced a contiguous 1690-cycle evidence set plus passing stress artifacts.",
+    "Descriptor reuse remained useful across the 72h run: reuse-backed descriptor-opportunity cases averaged 0.979191 correctness versus 0.375 for the single cold non-reuse opportunity.",
+    "Governance remained active and bounded: 281 reuse-assisted high-value alias cases stayed on hold instead of bypassing review, while safe follow-up cases were still accepted.",
+    "Memory stayed bounded and disciplined in the observed 72h run: runtime memory stayed at 1507328 bytes, warm memory ended at 5866/8192 bytes, raw logs were never promoted, and duplicate reuse/compression accumulated further.",
+    "Unresolved pressure did not accumulate across the long-run cycle lane: only the bootstrap cycle had unresolved pressure and recurring unresolved count stayed at zero throughout.",
+    "The repeated-cycle fabric remained meaningful rather than merely alive because reviewed memory and governance kept changing case outcomes, not just preserving process uptime.",
+    "The combined bounded harness, 24h soak, and 72h soak evidence closes the recorded Phase 8 gate honestly."
+  ],
+  "still_outside_proof": [
+    "This 72h evidence does not prove MacBook Air-only long-run endurance because the imported long-run artifacts came from the MSI soak machine.",
+    "This 72h evidence does not prove full OS restart or lid-close continuity beyond checkpoint-boundary resume evidence.",
+    "This 72h evidence does not prove spontaneous long-run split/merge usefulness outside the stress lanes.",
+    "This 72h evidence does not prove AGI-like generality or broader open-world capability.",
+    "This 72h evidence does not prove Phase 9 paper or reproducibility closure."
+  ]
+}

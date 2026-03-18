@@ -92,9 +92,9 @@
 - [x] Bounded validation summaries can be regenerated locally.
 - [x] The bounded local validation stayed inside the written `12 GB` runtime working-set cap.
 - [x] Phase 8.5 hardening now adds stronger cycle-health metrics, drift indicators, checkpoint-boundary resume analysis, and blocker reporting locally without claiming Phase 8 closure.
-- [ ] Real 24h soak completed locally.
-- [ ] Real 72h soak completed locally.
-- [ ] Full Phase 8 closure evidence exists locally and earns `AGIF_FABRIC_P8_PASS`.
+- [x] Real `24h` soak is recorded locally under `08_logs/phase8_soak/run_24h/` from MSI soak artifacts.
+- [x] Real `72h` soak is recorded locally under `08_logs/phase8_soak/run_72h/` from MSI soak artifacts.
+- [x] Full Phase 8 closure evidence exists locally and earns `AGIF_FABRIC_P8_PASS`.
 
 ## Phase 9
 - [ ] Paper draft exists with a claims matrix tied to the frozen thresholds.

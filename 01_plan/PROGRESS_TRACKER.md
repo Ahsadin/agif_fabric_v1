@@ -9,10 +9,30 @@
 - Placeholder files created early to satisfy the plan do not count as phase completion by themselves.
 
 ## Current Recorded Progress
-- Completed units: `525`
-- Progress now: `525/600`
-- Percent complete: `87.5%`
-- Basis: Phase 0 bootstrap, Phase 1 requirements freeze, Phase 2 architecture freeze, Phase 3 runner and fabric foundation, Phase 4 elastic lifecycle and lineage, Phase 5 reviewed memory, quantized consolidation, and bounded growth, Phase 6 need signals, routing, utility, and authority, and Phase 7 domain tissues and benchmark system are complete.
+- Completed units: `570`
+- Progress now: `570/600`
+- Percent complete: `95.0%`
+- Basis: Phase 0 bootstrap, Phase 1 requirements freeze, Phase 2 architecture freeze, Phase 3 runner and fabric foundation, Phase 4 elastic lifecycle and lineage, Phase 5 reviewed memory, quantized consolidation, and bounded growth, Phase 6 need signals, routing, utility, and authority, Phase 7 domain tissues and benchmark system, and Phase 8 long-run growth, soak, and evidence capture are complete.
+
+## 2026-03-18 Real 72h Soak Closure Note
+- A real `72h` Phase 8 soak is now completed locally and extracted under:
+  - `08_logs/phase8_soak/run_72h/`
+- Machine role for this evidence:
+  - MSI soak machine
+- Main development and documentation machine remains:
+  - MacBook Air
+- The completed run is now recorded in:
+  - `05_testing/PHASE8_LONGRUN_EVIDENCE.md`
+  - `06_outputs/run_summaries/phase8_real_72h_soak.md`
+  - `06_outputs/run_summaries/phase8_real_72h_soak.json`
+- What this closes honestly:
+  - real `72h` soak evidence is now present and analyzed
+  - the locked Phase 8 gate is now closed
+  - `AGIF_FABRIC_P8_PASS` is now earned
+  - recorded project progress now moves to `570/600`
+- Honest caveats carried forward:
+  - this is MSI long-run evidence, not MacBook Air-only long-run proof
+  - the `72h` run repeated the `WinError 5` manifest-write interruption and finished with incomplete resume bookkeeping fields
 
 ## 2026-03-13 Phase 8 Harness Note
 - A Phase 8 soak harness and bounded local validation pass were implemented locally.
@@ -27,7 +47,20 @@
 ## 2026-03-15 Real 24h Soak Note
 - A real `24h` Phase 8 soak is now completed locally and extracted under:
   - `08_logs/phase8_soak/run_24h/`
+- Machine role for this evidence:
+  - MSI soak machine
+- Main development and documentation machine remains:
+  - MacBook Air
 - The completed run was recorded in `05_testing/PHASE8_LONGRUN_EVIDENCE.md`.
+- The dedicated run summary outputs now exist at:
+  - `06_outputs/run_summaries/phase8_real_24h_soak.md`
+  - `06_outputs/run_summaries/phase8_real_24h_soak.json`
+- What this closes honestly:
+  - real `24h` soak evidence is now present and analyzed
+- What this does not close:
+  - real `72h` soak evidence
+  - `AGIF_FABRIC_P8_PASS`
+  - MacBook Air-only long-run proof
 - The progress units still remain `525/600` because the locked plan awards the `45` Phase 8 units only after both the real `24h` and `72h` soak evidence closes the full Phase 8 gate.
 
 ## 2026-03-13 Hardening Note
@@ -112,7 +145,7 @@
   - the bounded validation now also shows descriptor usefulness drift, one governance-preserved reuse hold case, checkpoint-boundary resume realism, and an explicit failure taxonomy locally
   - split/merge stress, memory saturation pressure, routing pressure, trust/quarantine fault injection, and replay/rollback recovery all execute locally
 - Assumed only:
-  - real 24h and 72h soak completion for Phase 8
+  - MacBook Air-only long-run endurance closure
   - Phase 9
   - benchmark outcomes beyond the committed Phase 7 finance cases
   - paper results
@@ -128,5 +161,5 @@
 | Phase 5 | 95 | Complete and locally verified |
 | Phase 6 | 65 | Complete and locally verified |
 | Phase 7 | 60 | Complete and locally verified |
-| Phase 8 | 45 | Harness implemented, Phase 8.5 hardening locally verified, and full closure still open |
+| Phase 8 | 45 | Complete and locally verified with bounded harness evidence plus real `24h` and real `72h` MSI soak artifacts |
 | Phase 9 | 30 | Not started |

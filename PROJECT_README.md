@@ -26,6 +26,11 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Runtime working set target: `<= 12 GB`
 - Total project and evidence footprint target: `<= 35 GB`
 
+## Machine Roles
+- MacBook Air = main development, working, documentation, and primary target machine.
+- MSI = soak machine for long-run endurance evidence.
+- Imported MSI soak artifacts can provide long-run workload evidence, but they do not by themselves prove MacBook Air-only long-run endurance.
+
 ## Current Verified State
 - Phase 0: complete and locally verified
 - Phase 1: complete and locally verified
@@ -39,8 +44,8 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Phase 7: complete and locally verified
 - Phase 7.5 hardening: complete and locally verified without changing project units
 - Phase 7.6 hardening: complete and locally verified without changing project units
-- Phase 8: harness and bounded local validation implemented; full long-run closure still open pending real 24h and 72h soak evidence
-- Phase 8.5 hardening: complete and locally verified without changing project units or claiming full Phase 8 closure
+- Phase 8: complete and locally verified through bounded harness checks plus real `24h` and real `72h` MSI soak evidence; `AGIF_FABRIC_P8_PASS` is earned
+- Phase 8.5 hardening: complete and locally verified as part of the now-closed Phase 8 evidence layer
 
 ## Phase 3 Foundation
 - Local runner entrypoint: `runner/cell`
@@ -144,13 +149,21 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - The current bounded validation summary lives at:
   - `06_outputs/run_summaries/phase8_bounded_validation.md`
   - `06_outputs/run_summaries/phase8_bounded_validation.json`
+- The current real `24h` soak summary lives at:
+  - `06_outputs/run_summaries/phase8_real_24h_soak.md`
+  - `06_outputs/run_summaries/phase8_real_24h_soak.json`
+- The current real `72h` soak summary lives at:
+  - `06_outputs/run_summaries/phase8_real_72h_soak.md`
+  - `06_outputs/run_summaries/phase8_real_72h_soak.json`
 - The current Phase 8 evidence note lives at `05_testing/PHASE8_LONGRUN_EVIDENCE.md`.
 - The current Phase 8.5 hardening note lives at `05_testing/PHASE85_HARDENING_EVIDENCE.md`.
-- The current Phase 8 state is intentionally open:
-  - the harness and bounded validation are locally verified
-  - real 24h soak evidence is not yet locally complete
-  - real 72h soak evidence is not yet locally complete
-  - `AGIF_FABRIC_P8_PASS` is not earned yet
+- The current Phase 8 state is closed honestly:
+  - the harness and bounded validation are locally verified on the MacBook Air development/documentation machine
+  - real `24h` and real `72h` soak evidence are completed and extracted from the MSI soak machine
+  - `AGIF_FABRIC_P8_PASS` is earned
+  - recorded project progress is now `570/600`
+  - this still does not claim MacBook Air-only long-run endurance
+  - the recurring `WinError 5` manifest-write interruption in the long-run MSI artifacts is documented as an evidence caveat, not hidden
 
 ## Phase 2 Freeze Set
 - `03_design/AGIF_V1_ARCHITECTURE.md`
@@ -206,5 +219,8 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Phase 7.6 hardening verification method: run `python3 scripts/check_phase7_benchmarks.py` and confirm `05_testing/PHASE76_HARDENING_EVIDENCE.md`.
 - Phase 8 harness verification method: run `python3 scripts/check_phase8_soak.py` and confirm the bounded summary under `06_outputs/run_summaries/` plus `05_testing/PHASE8_LONGRUN_EVIDENCE.md` and `05_testing/PHASE85_HARDENING_EVIDENCE.md`.
 - Local verification status is recorded in `01_plan/PROGRESS_TRACKER.md` and `CHANGELOG.md`.
-- Real 24h and 72h soak closure remain assumed only until later work completes them locally.
+- Real `24h` soak evidence is now recorded from imported MSI artifacts under `08_logs/phase8_soak/run_24h/`.
+- Real `72h` soak evidence is now recorded from imported MSI artifacts under `08_logs/phase8_soak/run_72h/`.
+- Phase 8 is now closed honestly through the bounded harness plus the real `24h` and real `72h` MSI soak evidence.
+- MacBook Air-only long-run closure remains assumed only until long-run evidence is captured on that machine.
 - Paper or reproducibility behavior beyond the bounded Phase 8 harness remains assumed only until later phases verify them.

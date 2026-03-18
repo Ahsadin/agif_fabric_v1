@@ -1,0 +1,222 @@
+{
+  "artifact": "phase8_real_24h_soak",
+  "analysis_date": "2026-03-15",
+  "run": {
+    "profile_id": "phase8_soak_24h",
+    "status": "completed",
+    "started_utc": "2026-03-13T20:05:45Z",
+    "completed_utc": "2026-03-14T20:08:22Z",
+    "duration_seconds": 86557,
+    "duration_hms": "24h 2m 37s",
+    "target_duration_hours": 24,
+    "completed_cycle_count": 989,
+    "evidence_file_count": 989,
+    "cycle_index_contiguous": true,
+    "resume_count": 1,
+    "resume_recovery_count": 1,
+    "result_digest": "7a13490cdf21bf32a88b8a3d664fa43c84587eac01846a11d40680d3252d2575"
+  },
+  "machine": {
+    "role": "MSI soak machine",
+    "project_role": "long-run endurance evidence machine",
+    "not_proved_here": "MacBook Air-only long-run endurance",
+    "basis": [
+      "project verified state says the real 24h soak came from MSI",
+      "imported artifacts use Windows paths such as E:\\AGIF\\agif_fabric_v1 and C:\\Python313"
+    ]
+  },
+  "validity": {
+    "is_valid_completed_run": true,
+    "why_valid": [
+      "manifest status is completed",
+      "989 evidence files are present for 989 completed cycles",
+      "cycle indexes are contiguous from 1 through 989",
+      "all five stress lanes report passed",
+      "resume count and resume recovery count are both 1, showing one recovered interruption"
+    ],
+    "resume_event": {
+      "cycle_index": 240,
+      "failure_case_count_before_resume": 0,
+      "operation_id": "seed_refresh",
+      "operation_kind": "cycle",
+      "resume_after_quarantine_or_veto": false,
+      "resume_with_unresolved_pressure": true,
+      "stress_name": null
+    },
+    "resume_failure_observed": {
+      "kind": "manifest_write_permission_error",
+      "source": "soak_stderr_resume1.log",
+      "detail": "WinError 5 while replacing run_manifest.json.tmp to run_manifest.json"
+    }
+  },
+  "key_metrics": {
+    "approx_cycles_per_hour": 41.134,
+    "approx_cases_per_hour": 82.267,
+    "avg_cycle_score": 0.994154,
+    "accepted_case_count": 1153,
+    "hold_case_count": 825,
+    "descriptor_opportunity_cases": 990,
+    "descriptor_reuse_cases": 989,
+    "descriptor_reuse_avg_correctness": 0.979146,
+    "descriptor_nonreuse_avg_correctness": 0.375,
+    "governed_reuse_hold_total": 165,
+    "runtime_memory_bytes_constant": [
+      1507328
+    ],
+    "final_reviewed_descriptor_count": 7,
+    "final_retained_memory_bytes": 5866,
+    "final_need_signal_count": 7,
+    "final_unresolved_signal_count": 0
+  },
+  "trend_summary": {
+    "first_100_avg_score": 0.98875,
+    "last_100_avg_score": 0.994687,
+    "first_100_avg_descriptor_reuse_rate": 0.695,
+    "last_100_avg_descriptor_reuse_rate": 0.7075,
+    "first_100_avg_memory_reuse_rate": 2.256531,
+    "last_100_avg_memory_reuse_rate": 2.839226,
+    "first_100_avg_value_per_retained_kib": 0.351529,
+    "last_100_avg_value_per_retained_kib": 0.347148,
+    "cycles_with_unresolved_pressure": 1,
+    "cycles_with_recurring_unresolved_pressure": 0
+  },
+  "final_runtime_state": {
+    "memory": {
+      "active_descriptor_count": 7,
+      "archived_descriptor_count": 1152,
+      "duplicate_compression_gain_bytes": 3168394,
+      "promotion_rate": 0.370134,
+      "reuse_rate": 2.841242,
+      "supersession_rate": 0.993103,
+      "stale_retirement_rate": 0.0,
+      "tier_usage_bytes": {
+        "cold": 0,
+        "ephemeral": 40833,
+        "hot": 451,
+        "warm": 5866
+      },
+      "tier_caps_bytes": {
+        "cold": 32768,
+        "ephemeral": 131072,
+        "hot": 131072,
+        "warm": 8192
+      },
+      "raw_log_promoted_count": 0
+    },
+    "governance": {
+      "review_count": 4124,
+      "approved_count": 4124,
+      "veto_count": 0,
+      "repeated_veto_pattern_count": 0,
+      "weak_lineage_pattern_count": 0
+    },
+    "needs": {
+      "signal_count": 7,
+      "resolved_signal_count": 7,
+      "active_signal_count": 0,
+      "recurring_unresolved_count": 0,
+      "history_entry_count": 3631
+    },
+    "population": {
+      "active_population": 10,
+      "dormant_population": 1,
+      "logical_population": 11,
+      "active_to_logical_ratio": 0.909091,
+      "lifecycle_event_count": 21,
+      "lineage_count": 11,
+      "within_runtime_working_set_cap": true
+    }
+  },
+  "stress_results": {
+    "memory_pressure": {
+      "cold_bytes_after": 5445,
+      "compressed_memory_count": 11,
+      "headline": "memory pressure triggered consolidation and stayed inside bounded caps",
+      "memory_pressure_signal_count": 0,
+      "passed": true,
+      "retired_memory_count": 0,
+      "triggered": true,
+      "warm_bytes_after": 7981,
+      "warm_bytes_before": 5866,
+      "within_caps_after": {
+        "cold": true,
+        "ephemeral": true,
+        "hot": true,
+        "warm": true
+      }
+    },
+    "replay_rollback": {
+      "headline": "replay reproduced the prior run and rollback restored the pre-quarantine lifecycle state",
+      "lifecycle_replay_match": true,
+      "passed": true,
+      "replay_match": true,
+      "rollback_restored": true,
+      "state_digest_after": "4aec9563d2ee4f215323d6f55c7c1a5419ff67105ddbfedc6ebb7d8caed78229",
+      "state_digest_before": "4aec9563d2ee4f215323d6f55c7c1a5419ff67105ddbfedc6ebb7d8caed78229",
+      "workflow_id": "wf_0e89a3eb810375c7"
+    },
+    "routing_pressure": {
+      "abstained_confidence_band": "low",
+      "abstained_selection_mode": "abstained",
+      "headline": "routing abstained under full pressure and recovered when capacity returned",
+      "passed": true,
+      "recovered_confidence_band": "moderate",
+      "recovered_router": "finance_priority_router"
+    },
+    "split_merge": {
+      "active_to_logical_ratio": 0.125,
+      "headline": "governed split and merge both executed with replay-safe lineage tracking",
+      "passed": true,
+      "replay_match": true,
+      "rounds": [
+        {
+          "merge_event_id": "lifecycle_00012",
+          "retired_cell_id": "finance_intake_router__child_002",
+          "split_event_id": "lifecycle_00007",
+          "survivor_cell_id": "finance_intake_router__child_001"
+        },
+        {
+          "merge_event_id": "lifecycle_00020",
+          "retired_cell_id": "finance_intake_router__child_001__child_004",
+          "split_event_id": "lifecycle_00015",
+          "survivor_cell_id": "finance_intake_router__child_001__child_003"
+        }
+      ],
+      "state_digest": "e0dc3914820b0b25c378438f1ceef17df7b545017f896f5f8121680812b1c286"
+    },
+    "trust_quarantine": {
+      "authority_veto_count": 2,
+      "headline": "authority vetoed risky reactivation and governance quarantined the active low-trust cell",
+      "passed": true,
+      "quarantine_event_id": "lifecycle_00006",
+      "rollback_ref": "08_logs\\phase8_soak\\run_24h\\stress\\trust_quarantine\\runtime_state\\agif-fabric-v1-phase8-stress\\lifecycle\\snapshots\\snapshot_00006_pre.json",
+      "veto_code": "AUTHORITY_REACTIVATION_VETO"
+    }
+  },
+  "proved_now": [
+    "A real 24h soak completed on the MSI soak machine and produced a contiguous 989-cycle evidence set plus passing stress artifacts.",
+    "Descriptor reuse remained useful across the 24h run: reuse-backed descriptor-opportunity cases averaged 0.979146 correctness versus 0.375 for the single cold non-reuse opportunity.",
+    "Governance remained active and bounded: 165 reuse-assisted high-value alias cases stayed on hold instead of bypassing review, while safe follow-up cases were still accepted.",
+    "Memory stayed bounded and disciplined in the observed 24h run: runtime memory stayed at 1507328 bytes, warm memory peaked at 5868/8192 bytes, raw logs were never promoted, and duplicate reuse/compression accumulated.",
+    "Unresolved pressure did not accumulate across the long-run cycle lane: only the bootstrap cycle had unresolved pressure and recurring unresolved count stayed at zero throughout.",
+    "The repeated-cycle fabric remained meaningful rather than merely alive because reviewed memory and governance kept changing case outcomes, not just preserving process uptime."
+  ],
+  "still_open": [
+    "At the time of this 24h analysis, Phase 8 was still open because the real 72h soak was still running or pending final extraction.",
+    "This 24h evidence does not prove MacBook Air-only long-run endurance because the imported long-run artifacts came from the MSI soak machine.",
+    "This 24h evidence does not prove multi-day drift behavior beyond about one day.",
+    "Resume continuity is only proven here for one recovered checkpoint-boundary interruption, not for full OS restart or lid-close recovery.",
+    "Lifecycle elasticity in the repeated-cycle lane should not be overstated: long-run cycles stayed structurally stable, while split/merge proof still comes from the stress lanes."
+  ],
+  "later_closure_note": [
+    "Later update on 2026-03-18: the real 72h soak completed on the MSI soak machine.",
+    "Later update on 2026-03-18: Phase 8 closed honestly and AGIF_FABRIC_P8_PASS was earned.",
+    "Later update on 2026-03-18: recorded project progress moved to 570/600."
+  ],
+  "watch_during_72h_soak": [
+    "watch during 72h soak: value per retained KiB softened slightly from 0.351529 over the first 100 cycles to 0.347148 over the last 100 cycles, so memory usefulness efficiency should be checked for further drift.",
+    "watch during 72h soak: verify that the single recovered manifest-write interruption remains an isolated file-system event and does not repeat under longer runtime.",
+    "watch during 72h soak: keep confirming that unresolved pressure stays near zero and does not begin to recur after the 24h mark.",
+    "watch during 72h soak: confirm the governed high-value alias hold remains correct without governance becoming more conservative on safe reuse-backed followups."
+  ]
+}

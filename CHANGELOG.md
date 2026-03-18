@@ -1,5 +1,61 @@
 # Changelog
 
+## 2026-03-18 Real 72h Soak Closure
+- Added dedicated real `72h` summary outputs:
+  - `06_outputs/run_summaries/phase8_real_72h_soak.md`
+  - `06_outputs/run_summaries/phase8_real_72h_soak.json`
+- Expanded the Phase 8 evidence and status docs to close the phase honestly:
+  - `05_testing/PHASE8_LONGRUN_EVIDENCE.md`
+  - `05_testing/PASS_TOKENS.md`
+  - `01_plan/PROGRESS_TRACKER.md`
+  - `01_plan/PHASE_GATE_CHECKLIST.md`
+  - `PROJECT_README.md`
+  - `DECISIONS.md`
+  - `CHANGELOG.md`
+- Updated the current-facing Phase 8 summary outputs so they no longer report `72h` as pending:
+  - `06_outputs/run_summaries/phase8_real_24h_soak.md`
+  - `06_outputs/run_summaries/phase8_real_24h_soak.json`
+  - `06_outputs/run_summaries/phase8_bounded_validation.md`
+  - `06_outputs/run_summaries/phase8_bounded_validation.json`
+- Locally verified from the completed `72h` artifacts:
+  - final manifest status is `completed`
+  - `1690` cycle evidence files match `1690` completed cycles
+  - cycle indexes are contiguous from `1` through `1690`
+  - all five stress lanes report `passed`
+  - runtime memory stayed at `1,507,328` bytes across the repeated-cycle lane
+  - repo footprint is `477M`, well below the `35 GB` project cap
+  - `python3 scripts/check_phase8_soak.py` passes locally
+- Closed Phase 8 honestly:
+  - `AGIF_FABRIC_P8_PASS` is now earned
+  - recorded progress is now `570/600`
+  - MSI long-run evidence is still not described as MacBook Air-only proof
+  - the repeated `WinError 5` manifest-write interruption in the `72h` run is documented explicitly, along with the incomplete final resume bookkeeping
+
+## 2026-03-15 Real 24h Soak Analysis And Documentation
+- Added dedicated real `24h` summary outputs:
+  - `06_outputs/run_summaries/phase8_real_24h_soak.md`
+  - `06_outputs/run_summaries/phase8_real_24h_soak.json`
+- Expanded the Phase 8 evidence note with:
+  - explicit machine roles
+  - explicit real `24h` validity analysis
+  - explicit proved-vs-open language
+  - explicit `watch during 72h soak` items
+- Updated the root project records so the machine split stays clear:
+  - `PROJECT_README.md`
+  - `DECISIONS.md`
+  - `CHANGELOG.md`
+- Locally verified from imported run files:
+  - final manifest status is `completed`
+  - `989` cycle evidence files match `989` completed cycles
+  - cycle indexes are contiguous from `1` through `989`
+  - one recovered resume is recorded after a `WinError 5` manifest-write interruption at cycle `240`
+  - all five stress lanes report `passed`
+- Kept Phase 8 open honestly:
+  - `AGIF_FABRIC_P8_PASS` is still not earned
+  - progress remains `525/600`
+  - real `72h` soak is still required before Phase 8 can close
+  - MSI soak evidence is not described as MacBook Air-only long-run proof
+
 ## 2026-03-15 Real 24h Soak Recorded
 - Recorded the real completed `24h` Phase 8 soak in:
   - `05_testing/PHASE8_LONGRUN_EVIDENCE.md`

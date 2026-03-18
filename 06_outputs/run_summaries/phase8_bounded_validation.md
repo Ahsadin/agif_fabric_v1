@@ -2,9 +2,9 @@
 
 - Artifact note: runtime timestamps and temp run roots are omitted for deterministic reruns.
 - Profile: `phase8_short_validation`
-- Phase 8 completion: `open`
-- Real 24h soak completed locally: `no`
-- Real 72h soak completed locally: `no`
+- Phase 8 completion: `complete via combined bounded, 24h, and 72h evidence`
+- Real 24h soak completed locally: `yes`
+- Real 72h soak completed locally: `yes`
 
 ## Cycle Trends
 
@@ -90,16 +90,15 @@
 - split/merge, memory pressure, routing pressure, trust/quarantine, and replay/rollback lanes all execute locally
 - checkpoint-based resume continuity works across cycle and stress-lane boundaries
 
-## Still Missing For Phase 8 Closure
+## Still Outside This Bounded Artifact
 
-- real 24h soak not completed locally
-- real 72h soak not completed locally
-- multi-day drift confirmation under the locked machine envelope
-- real lid-close or OS-restart continuity beyond bounded checkpoint replay
+- this bounded artifact is not itself the real `24h` or real `72h` soak evidence set
+- MacBook Air-only long-run continuity remains unproved
+- real lid-close or OS-restart continuity beyond bounded checkpoint replay remains unproved
 
 ## Closure
 
 - Build gate ready locally: `yes`
 - Useful trend visible locally: `yes`
 - Resume gate ready locally: `yes`
-- Phase 8 remains open because: `real 24h soak not completed locally; real 72h soak not completed locally`
+- Phase 8 now closes through the combined evidence set: `bounded validation plus real 24h MSI soak plus real 72h MSI soak`

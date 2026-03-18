@@ -176,8 +176,10 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 
 ## Phase 9 Paper, Claims Matrix, And Reproducibility Package
 - Repo-local paper copies now live under:
-  - `06_outputs/paper_drafts/AGIF_v1_paper_R2_2026-03-18.docx`
-  - `06_outputs/paper_drafts/AGIF_v1_paper_R2_2026-03-18.pdf`
+  - `06_outputs/paper_drafts/AGIF_v1_paper_R4_2026-03-18.docx`
+  - `06_outputs/paper_drafts/AGIF_v1_paper_R4_2026-03-18.pdf`
+- The current GitHub origin remote recorded in the aligned paper package is:
+  - `https://github.com/Ahsadin/agif_fabric_v1`
 - Repo-local claims-to-evidence mapping now lives at:
   - `06_outputs/evidence_bundle_manifests/phase9_claims_to_evidence_matrix.md`
 - Repo-local reproducibility package and final evidence index now live at:

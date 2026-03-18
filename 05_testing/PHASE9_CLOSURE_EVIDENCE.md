@@ -18,7 +18,7 @@ This note records the honest closure of Phase 9 for paper alignment, claims mapp
 | Runnable local AGIF v1 with earlier evidence still passing | already backed by Phase 3 to Phase 8 checks | re-verified locally through `python3 scripts/check_phase9_closure.py` |
 | Paper claims tied to concrete repo artifacts | partially backed in the paper appendix only | now backed by `06_outputs/evidence_bundle_manifests/phase9_claims_to_evidence_matrix.md` |
 | Reviewer-ready reproducibility package and final evidence index in the workspace | missing | now backed by `06_outputs/evidence_bundle_manifests/phase9_reproducibility_package.md` |
-| Research paper deliverable present inside this workspace | missing | now backed by `06_outputs/paper_drafts/AGIF_v1_paper_R2_2026-03-18.docx` and `.pdf` |
+| Research paper deliverable present inside this workspace | missing | now backed by `06_outputs/paper_drafts/AGIF_v1_paper_R4_2026-03-18.docx` and `.pdf` |
 | One-command closure path | missing | now backed by `scripts/check_phase9_closure.py` |
 
 ## Claims Already Backed Before Phase 9 Packaging
@@ -48,8 +48,8 @@ This note records the honest closure of Phase 9 for paper alignment, claims mapp
   - AGI or broad open-world generality claims
 
 ## Artifacts Added Or Aligned In This Thread
-- `06_outputs/paper_drafts/AGIF_v1_paper_R2_2026-03-18.docx`
-- `06_outputs/paper_drafts/AGIF_v1_paper_R2_2026-03-18.pdf`
+- `06_outputs/paper_drafts/AGIF_v1_paper_R4_2026-03-18.docx`
+- `06_outputs/paper_drafts/AGIF_v1_paper_R4_2026-03-18.pdf`
 - `06_outputs/evidence_bundle_manifests/phase9_claims_to_evidence_matrix.md`
 - `06_outputs/evidence_bundle_manifests/phase9_reproducibility_package.md`
 - `scripts/check_phase9_closure.py`

@@ -40,8 +40,8 @@
     - `05_testing/PHASE9_CLOSURE_EVIDENCE.md`
     - `06_outputs/evidence_bundle_manifests/phase9_claims_to_evidence_matrix.md`
     - `06_outputs/evidence_bundle_manifests/phase9_reproducibility_package.md`
-    - `06_outputs/paper_drafts/AGIF_v1_paper_R2_2026-03-18.docx`
-    - `06_outputs/paper_drafts/AGIF_v1_paper_R2_2026-03-18.pdf`
+    - `06_outputs/paper_drafts/AGIF_v1_paper_R4_2026-03-18.docx`
+    - `06_outputs/paper_drafts/AGIF_v1_paper_R4_2026-03-18.pdf`
   - Honest caveats:
     - the long-run soak machine is still MSI, not MacBook Air-only proof
     - the `72h` run still carries the documented `WinError 5` resume-bookkeeping caveat

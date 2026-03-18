@@ -16,8 +16,10 @@
 
 ## 2026-03-18 Phase 9 Closure Note
 - Repo-local paper copies now exist under:
-  - `06_outputs/paper_drafts/AGIF_v1_paper_R2_2026-03-18.docx`
-  - `06_outputs/paper_drafts/AGIF_v1_paper_R2_2026-03-18.pdf`
+  - `06_outputs/paper_drafts/AGIF_v1_paper_R4_2026-03-18.docx`
+  - `06_outputs/paper_drafts/AGIF_v1_paper_R4_2026-03-18.pdf`
+- The aligned paper package records the current GitHub origin remote:
+  - `https://github.com/Ahsadin/agif_fabric_v1`
 - Repo-local package files now exist under:
   - `05_testing/PHASE9_CLOSURE_EVIDENCE.md`
   - `06_outputs/evidence_bundle_manifests/phase9_claims_to_evidence_matrix.md`

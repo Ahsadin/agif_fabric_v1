@@ -8,6 +8,7 @@ This file is the reviewer entrypoint for the final AGIF v1 package in this works
 - MSI = imported long-run soak evidence machine.
 - For AGIF v1, MSI is the final long-run evidence basis and no additional MacBook Air soak is planned or required for closure.
 - The package never treats MSI soak artifacts as MacBook Air-only long-run proof.
+- The aligned GitHub origin remote for this workspace is `https://github.com/Ahsadin/agif_fabric_v1`.
 
 ## Reviewer Quick Start
 1. Read `PROJECT_README.md`, `02_requirements/PROOF_BOUNDARY.md`, and `02_requirements/FALSIFICATION_THRESHOLDS.md`.
@@ -51,8 +52,8 @@ This file is the reviewer entrypoint for the final AGIF v1 package in this works
 | `05_testing/PHASE9_CLOSURE_EVIDENCE.md` | Honest Phase 9 closure note | locally verified |
 | `06_outputs/evidence_bundle_manifests/phase9_claims_to_evidence_matrix.md` | Paper-claim to artifact mapping | locally verified |
 | `06_outputs/evidence_bundle_manifests/phase9_reproducibility_package.md` | This package guide and final evidence index | locally verified |
-| `06_outputs/paper_drafts/AGIF_v1_paper_R2_2026-03-18.docx` | Workspace DOCX paper copy | locally verified |
-| `06_outputs/paper_drafts/AGIF_v1_paper_R2_2026-03-18.pdf` | Workspace PDF paper copy | locally verified |
+| `06_outputs/paper_drafts/AGIF_v1_paper_R4_2026-03-18.docx` | Workspace DOCX paper copy | locally verified |
+| `06_outputs/paper_drafts/AGIF_v1_paper_R4_2026-03-18.pdf` | Workspace PDF paper copy | locally verified |
 | `06_outputs/result_tables/phase7_benchmark_results.md` | Human-readable benchmark tables | locally verified |
 | `06_outputs/result_tables/phase7_benchmark_results.json` | Machine-readable benchmark tables | locally verified |
 | `05_testing/PHASE7_TISSUES_BENCHMARK_EVIDENCE.md` | Phase 7 close evidence | locally verified |

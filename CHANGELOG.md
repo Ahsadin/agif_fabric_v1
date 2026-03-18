@@ -1,5 +1,23 @@
 # Changelog
 
+## 2026-03-18 Paper R4 Alignment
+- Added the aligned `R4` paper pair with the recorded GitHub origin remote and closed Phase 9 wording:
+  - `06_outputs/paper_drafts/AGIF_v1_paper_R4_2026-03-18.docx`
+  - `06_outputs/paper_drafts/AGIF_v1_paper_R4_2026-03-18.pdf`
+- Updated the current source-of-truth package docs to point at the `R4` paper pair instead of the earlier `R2` copy:
+  - `PROJECT_README.md`
+  - `01_plan/PROGRESS_TRACKER.md`
+  - `05_testing/PHASE9_CLOSURE_EVIDENCE.md`
+  - `05_testing/PASS_TOKENS.md`
+  - `06_outputs/evidence_bundle_manifests/phase9_claims_to_evidence_matrix.md`
+  - `06_outputs/evidence_bundle_manifests/phase9_reproducibility_package.md`
+  - `scripts/check_phase9_closure.py`
+  - `00_admin/CODEX_THREAD_MAP.md`
+- Quick audit result:
+  - the current paper package now records `https://github.com/Ahsadin/agif_fabric_v1`
+  - current source-of-truth docs now point at the `R4` paper pair
+  - historical `R2` references remain only as prior closure history, not as the current package target
+
 ## 2026-03-18 Project Closeout
 - Marked AGIF v1 explicitly as closed in the repo docs.
 - Recorded that future expansion work now belongs to AGIF v2, not to unfinished AGIF v1 scope.

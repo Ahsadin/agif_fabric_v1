@@ -36,10 +36,10 @@
 - [x] `AGIF_FABRIC_V1X_G2_PASS` is earned honestly
 
 ## Gap 3 POS Domain
-- [ ] bounded POS domain cases are frozen
-- [ ] transfer-enabled and control runs use the same case suite
-- [ ] finance-origin descriptor causally improves a POS result
-- [ ] `AGIF_FABRIC_V1X_G3_PASS` is earned honestly
+- [x] bounded POS domain cases are frozen
+- [x] transfer-enabled and control runs use the same case suite
+- [x] finance-origin descriptor causally improves a POS result
+- [x] `AGIF_FABRIC_V1X_G3_PASS` is earned honestly
 
 ## Bundle Close
 - [ ] ordered extension chain passes

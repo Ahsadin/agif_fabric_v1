@@ -1,0 +1,62 @@
+{
+  "fabric_id": "agif-fabric-v1x-pos-transfer-enabled",
+  "proof_domain": "document/workflow intelligence",
+  "machine_profile": {
+    "name": "Apple M4 MacBook Air",
+    "ram_gb": 16,
+    "free_disk_gib": 65
+  },
+  "active_population_cap": 24,
+  "logical_population_cap": 128,
+  "memory_caps": {
+    "hot_bytes": 131072,
+    "warm_bytes": 262144,
+    "cold_bytes": 262144,
+    "raw_log_bytes": 131072,
+    "raw_log_entries": 6,
+    "replay_entries": 10,
+    "replay_files": 6
+  },
+  "storage_caps": {
+    "runtime_working_set_gb": 12,
+    "project_footprint_gb": 35
+  },
+  "workspace_policy": {
+    "mode": "bounded_local_workspace_v1"
+  },
+  "governance_policy": {
+    "mode": "phase7_domain_fabric_v1",
+    "human_boundary": "document/workflow intelligence",
+    "default_governance_approver": "governance:phase7_local_board",
+    "default_tissue_coordinator": "tissue:finance_document_workflow:coordinator",
+    "default_memory_reviewer": "governance:phase5_memory_reviewer",
+    "burst_active_population_cap": 48,
+    "descriptor_trust_floor": 0.6,
+    "memory_runtime_trust_floor": 0.6,
+    "risky_reactivation_trust_floor": 0.6,
+    "transfer_quality_floor": 0.72,
+    "transfer_abstain_floor": 0.48,
+    "cross_domain_provenance_floor": 0.45,
+    "cross_domain_transfer_enabled": true
+  },
+  "need_signal_policy": {
+    "allowed_signal_kinds": [
+      "overload",
+      "uncertainty",
+      "novelty",
+      "redundancy",
+      "memory_pressure",
+      "trust_risk",
+      "coordination_gap"
+    ],
+    "default_signal_ttl_seconds": 900
+  },
+  "blueprint_registry_path": "cells/finance_workflow/blueprint_registry_phase7.json",
+  "benchmark_profile": {
+    "name": "phase7_v1x_pos_transfer_enabled",
+    "class_name": "v1x_pos_transfer_enabled",
+    "adaptation_enabled": true,
+    "descriptor_sharing_enabled": true,
+    "tissue_registry_path": "cells/finance_workflow/tissue_registry_phase7.json"
+  }
+}

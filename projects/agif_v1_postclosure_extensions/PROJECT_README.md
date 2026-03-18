@@ -38,7 +38,10 @@
 - `AGIF_FABRIC_V1X_G1_PASS` is earned.
 - Gap 2 skill graph and transfer-governance proof is closed honestly.
 - `AGIF_FABRIC_V1X_G2_PASS` is earned.
-- Current extension progress: `85/130`
+- Gap 3 POS domain and causal cross-domain transfer proof is closed honestly.
+- `AGIF_FABRIC_V1X_G3_PASS` is earned.
+- Current extension progress: `130/130`
+- Final bundle close remains open and was not started in this thread.
 
 ## In Scope
 - project-local planning and freeze records
@@ -84,6 +87,7 @@
 - `python3 scripts/check_v1x_setup.py` passes locally.
 - `python3 scripts/check_v1x_organic_load.py` passes locally.
 - `python3 scripts/check_v1x_skill_graph.py` passes locally.
+- `python3 scripts/check_v1x_pos_domain.py` passes locally.
 - Root AGIF v1 remains closed at `600/600`.
 - Root tracker isolation is explicit in the Track B docs.
 - Gap 1 is now locally verified by:
@@ -106,4 +110,21 @@
   - `1` approved governed cross-domain transfer with explicit provenance
   - `1` low-quality abstain
   - `2` denials, including one missing explicit `transfer_approval` and one authority veto at the boundary
-- Gap 3 start rules remain frozen for later execution work.
+- Gap 3 is now locally verified by:
+  - `fixtures/pos_operations/v1x/gap3_pos_suite.json`
+  - `fixtures/pos_operations/v1x/minimal_fabric_config_transfer_enabled.json`
+  - `fixtures/pos_operations/v1x/minimal_fabric_config_control.json`
+  - `intelligence/fabric/domain/pos_operations.py`
+  - `intelligence/fabric/benchmarking/v1x_pos_domain.py`
+  - `05_testing/V1X_POS_DOMAIN_EVIDENCE.md`
+  - `06_outputs/result_tables/v1x_pos_domain_transfer.md`
+  - `06_outputs/result_tables/v1x_pos_domain_transfer.json`
+  - `scripts/check_v1x_pos_domain.py`
+- Gap 3 current proof result is:
+  - the transfer-enabled and control runs use the same `5` deterministic POS cases in the same order
+  - the transfer-enabled run approves `3` governed cross-domain transfers with explicit provenance
+  - the control run records `3` governance-disabled transfer vetoes and `0` counted cross-domain influence events
+  - finance-origin descriptors causally improve `2` POS results:
+    - `northwind_settlement_alias_hold`
+    - `tailspin_refund_pattern_reused`
+  - `1` missing-explicit-approval denial and `1` low-quality abstain remain non-influential

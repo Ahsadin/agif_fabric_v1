@@ -42,6 +42,7 @@ class AuthorityEngine:
         self.risky_reactivation_trust_floor = float(self.policy.get("risky_reactivation_trust_floor", 0.6))
         self.transfer_quality_floor = float(self.policy.get("transfer_quality_floor", 0.72))
         self.cross_domain_provenance_floor = float(self.policy.get("cross_domain_provenance_floor", 0.45))
+        self.cross_domain_transfer_enabled = bool(self.policy.get("cross_domain_transfer_enabled", True))
         self.ensure_store()
 
     def ensure_store(self) -> None:
@@ -146,6 +147,8 @@ class AuthorityEngine:
             veto_conditions.append("descriptor_low_trust")
         if action == "transfer_approval" and not descriptor_refs:
             veto_conditions.append("missing_transfer_source")
+        if action == "transfer_approval" and cross_domain and not self.cross_domain_transfer_enabled:
+            veto_conditions.append("cross_domain_transfer_disabled_by_governance")
         if action == "transfer_approval" and cross_domain and not explicit_transfer_approval:
             veto_conditions.append("missing_explicit_transfer_approval")
         if action == "transfer_approval" and transfer_quality_score < self.transfer_quality_floor:

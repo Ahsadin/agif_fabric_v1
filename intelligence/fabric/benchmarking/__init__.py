@@ -12,6 +12,10 @@ from intelligence.fabric.benchmarking.v1x_skill_graph import (
     run_v1x_skill_graph_benchmark,
     write_v1x_skill_graph_result_tables,
 )
+from intelligence.fabric.benchmarking.v1x_pos_domain import (
+    run_v1x_pos_domain_benchmark,
+    write_v1x_pos_domain_result_tables,
+)
 
 __all__ = [
     "run_phase7_benchmarks",
@@ -20,4 +24,6 @@ __all__ = [
     "write_v1x_organic_load_result_tables",
     "run_v1x_skill_graph_benchmark",
     "write_v1x_skill_graph_result_tables",
+    "run_v1x_pos_domain_benchmark",
+    "write_v1x_pos_domain_result_tables",
 ]

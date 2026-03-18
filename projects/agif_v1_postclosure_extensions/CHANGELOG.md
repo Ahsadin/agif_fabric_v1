@@ -1,5 +1,27 @@
 # Changelog
 
+## 2026-03-19 Track B Gap 3 POS-Domain Causal Transfer Closure
+- Closed only the Track B Gap 3 bounded POS-domain and causal cross-domain transfer proof.
+- Added the deterministic Gap 3 fixture set under:
+  - `fixtures/pos_operations/v1x/`
+- Added the bounded POS runtime and benchmark path:
+  - `intelligence/fabric/domain/pos_operations.py`
+  - `intelligence/fabric/benchmarking/v1x_pos_domain.py`
+  - `scripts/check_v1x_pos_domain.py`
+- Added the focused Gap 3 test and evidence path:
+  - `05_testing/test_v1x_pos_domain.py`
+  - `05_testing/V1X_POS_DOMAIN_EVIDENCE.md`
+- Added the local Gap 3 result tables:
+  - `06_outputs/result_tables/v1x_pos_domain_transfer.md`
+  - `06_outputs/result_tables/v1x_pos_domain_transfer.json`
+- Added the minimum governance hook needed for a real control run:
+  - `intelligence/fabric/governance/authority.py`
+- Recorded the closed Gap 3 state:
+  - Track B progress is now `130/130`
+  - `AGIF_FABRIC_V1X_G3_PASS` is now earned
+  - root AGIF v1 remains `600/600`
+  - bundle close was not started
+
 ## 2026-03-18 Track B Gap 2 Skill-Graph Transfer-Governance Closure
 - Closed only the Track B Gap 2 skill graph and transfer-governance proof.
 - Added the deterministic Gap 2 fixture set under:

@@ -1,0 +1,265 @@
+{
+  "suite_id": "v1x_gap3_bounded_pos_transfer_suite",
+  "seed_descriptors": [
+    {
+      "seed_id": "finance_northwind_settlement_policy",
+      "source_ref": "gap3:seed:finance_northwind_settlement_policy",
+      "producer_cell_id": "finance_workspace_governor",
+      "descriptor_kind": "policy_settlement_hold",
+      "task_scope": "finance_ap:northwind_settlement_policy",
+      "trust_ref": "trust:policy_finance_v1",
+      "payload": {
+        "schema_version": "agif.fabric.memory.candidate_payload.v1",
+        "workflow_id": "gap3_seed_policy_001",
+        "workflow_name": "document_workflow",
+        "document_id": "gap3_policy_settlement_001",
+        "inputs": {
+          "vendor_name": "Northwind Retail Group",
+          "document_type": "settlement",
+          "currency": "USD",
+          "total": "840.22",
+          "policy_hold_reason": "duplicate_settlement_alias"
+        },
+        "selected_cells": [
+          "finance_workspace_governor",
+          "finance_validation_corrector"
+        ],
+        "selected_roles": [
+          "workspace_governance",
+          "validation_correction"
+        ],
+        "input_digest": "gap3_seed_policy_001",
+        "output_digest": "gap3_seed_policy_001",
+        "source_run_ref": "gap3:seed:finance_northwind_settlement_policy",
+        "source_workspace_ref": "workspace:gap3:policy_seed"
+      }
+    },
+    {
+      "seed_id": "finance_tailspin_refund_pattern",
+      "source_ref": "gap3:seed:finance_tailspin_refund_pattern",
+      "producer_cell_id": "finance_validation_corrector",
+      "descriptor_kind": "refund_pattern",
+      "task_scope": "finance_ap:tailspin_refund_pattern",
+      "trust_ref": "trust:bounded_local_v1",
+      "payload": {
+        "schema_version": "agif.fabric.memory.candidate_payload.v1",
+        "workflow_id": "gap3_seed_pattern_001",
+        "workflow_name": "document_workflow",
+        "document_id": "gap3_refund_pattern_001",
+        "inputs": {
+          "vendor_name": "Tailspin Markets",
+          "document_type": "refund",
+          "currency": "USD",
+          "total": "63.40"
+        },
+        "selected_cells": [
+          "finance_validation_corrector"
+        ],
+        "selected_roles": [
+          "validation_correction"
+        ],
+        "input_digest": "gap3_seed_pattern_001",
+        "output_digest": "gap3_seed_pattern_001",
+        "source_run_ref": "gap3:seed:finance_tailspin_refund_pattern",
+        "source_workspace_ref": "workspace:gap3:pattern_seed"
+      }
+    }
+  ],
+  "cases": [
+    {
+      "sequence_index": 1,
+      "case_id": "northwind_settlement_alias_hold",
+      "operation_type": "settlement_close",
+      "payload": {
+        "vendor_name": "Northwind Retail Group",
+        "document_type": "settlement",
+        "drawer_variance_cents": 180,
+        "duplicate_batch_refs": 1,
+        "manual_override_requested": false,
+        "tender_mismatch": false,
+        "refund_without_receipt": false,
+        "cross_store_reentry_count": 1,
+        "employee_pin_verified": true,
+        "alias_confidence": 0.86
+      },
+      "transfer_request": {
+        "request_id": "northwind_settlement_alias_hold_transfer",
+        "target_domain": "pos_operations",
+        "target_cell_id": "pos_settlement_governor",
+        "target_hints": {
+          "document_type": "settlement",
+          "vendor_token": "northwin"
+        },
+        "cross_domain": true,
+        "explicit_transfer_approval": true,
+        "proposer": "tissue:pos_operations:coordinator",
+        "policy_envelope": {
+          "allowed_actions": [
+            "transfer",
+            "summarize"
+          ],
+          "human_boundary": "document/workflow intelligence"
+        }
+      },
+      "truth": {
+        "final_action": "hold_for_finance_review"
+      }
+    },
+    {
+      "sequence_index": 2,
+      "case_id": "northwind_settlement_known_repeat_hold",
+      "operation_type": "settlement_close",
+      "payload": {
+        "vendor_name": "Northwind Retail Group",
+        "document_type": "settlement",
+        "drawer_variance_cents": 1280,
+        "duplicate_batch_refs": 2,
+        "manual_override_requested": true,
+        "tender_mismatch": true,
+        "refund_without_receipt": false,
+        "cross_store_reentry_count": 2,
+        "employee_pin_verified": false,
+        "alias_confidence": 0.82
+      },
+      "transfer_request": {
+        "request_id": "northwind_settlement_known_repeat_hold_transfer",
+        "target_domain": "pos_operations",
+        "target_cell_id": "pos_settlement_governor",
+        "target_hints": {
+          "document_type": "settlement",
+          "vendor_token": "northwin"
+        },
+        "cross_domain": true,
+        "explicit_transfer_approval": true,
+        "proposer": "tissue:pos_operations:coordinator",
+        "policy_envelope": {
+          "allowed_actions": [
+            "transfer",
+            "summarize"
+          ],
+          "human_boundary": "document/workflow intelligence"
+        }
+      },
+      "truth": {
+        "final_action": "hold_for_finance_review"
+      }
+    },
+    {
+      "sequence_index": 3,
+      "case_id": "tailspin_refund_missing_explicit",
+      "operation_type": "refund_review",
+      "payload": {
+        "vendor_name": "Tailspin Markets",
+        "document_type": "refund",
+        "drawer_variance_cents": 260,
+        "duplicate_batch_refs": 0,
+        "manual_override_requested": true,
+        "tender_mismatch": false,
+        "refund_without_receipt": true,
+        "cross_store_reentry_count": 0,
+        "employee_pin_verified": false,
+        "alias_confidence": 0.36
+      },
+      "transfer_request": {
+        "request_id": "tailspin_refund_missing_explicit_transfer",
+        "target_domain": "pos_operations",
+        "target_cell_id": "pos_refund_reviewer",
+        "target_hints": {
+          "document_type": "refund",
+          "vendor_token": "tailspin"
+        },
+        "cross_domain": true,
+        "explicit_transfer_approval": false,
+        "proposer": "tissue:pos_operations:coordinator",
+        "policy_envelope": {
+          "allowed_actions": [
+            "transfer",
+            "summarize"
+          ],
+          "human_boundary": "document/workflow intelligence"
+        }
+      },
+      "truth": {
+        "final_action": "manual_review"
+      }
+    },
+    {
+      "sequence_index": 4,
+      "case_id": "unknown_vendor_low_quality_abstain",
+      "operation_type": "drawer_close",
+      "payload": {
+        "vendor_name": "Unknown Misc",
+        "document_type": "drawer_close",
+        "drawer_variance_cents": 40,
+        "duplicate_batch_refs": 0,
+        "manual_override_requested": false,
+        "tender_mismatch": false,
+        "refund_without_receipt": false,
+        "cross_store_reentry_count": 0,
+        "employee_pin_verified": true,
+        "alias_confidence": 0.08
+      },
+      "transfer_request": {
+        "request_id": "unknown_vendor_low_quality_abstain_transfer",
+        "target_domain": "pos_operations",
+        "target_cell_id": "pos_drawer_close_reviewer",
+        "target_hints": {
+          "document_type": "inventory",
+          "vendor_token": "unknown"
+        },
+        "cross_domain": true,
+        "explicit_transfer_approval": true,
+        "proposer": "tissue:pos_operations:coordinator",
+        "policy_envelope": {
+          "allowed_actions": [
+            "transfer",
+            "summarize"
+          ],
+          "human_boundary": "document/workflow intelligence"
+        }
+      },
+      "truth": {
+        "final_action": "approve_close"
+      }
+    },
+    {
+      "sequence_index": 5,
+      "case_id": "tailspin_refund_pattern_reused",
+      "operation_type": "refund_review",
+      "payload": {
+        "vendor_name": "Tailspin Markets",
+        "document_type": "refund",
+        "drawer_variance_cents": 540,
+        "duplicate_batch_refs": 0,
+        "manual_override_requested": false,
+        "tender_mismatch": false,
+        "refund_without_receipt": true,
+        "cross_store_reentry_count": 1,
+        "employee_pin_verified": true,
+        "alias_confidence": 0.22
+      },
+      "transfer_request": {
+        "request_id": "tailspin_refund_pattern_reused_transfer",
+        "target_domain": "pos_operations",
+        "target_cell_id": "pos_refund_reviewer",
+        "target_hints": {
+          "document_type": "refund",
+          "vendor_token": "tailspin"
+        },
+        "cross_domain": true,
+        "explicit_transfer_approval": true,
+        "proposer": "tissue:pos_operations:coordinator",
+        "policy_envelope": {
+          "allowed_actions": [
+            "transfer",
+            "summarize"
+          ],
+          "human_boundary": "document/workflow intelligence"
+        }
+      },
+      "truth": {
+        "final_action": "manual_review"
+      }
+    }
+  ]
+}

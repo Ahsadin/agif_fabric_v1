@@ -12,7 +12,7 @@
 - `00_admin/CODEX_THREAD_MAP.md`
 
 ## Audit Checks Run
-- License comparison against `/Users/ahsadin/Documents/Projects/ENF/AGIF/agif-tasklet-cell/LICENSE`
+- License comparison against `agif-tasklet-cell/LICENSE`
 - Secret-pattern scan with `rg` for common API keys and private-key material
 - Ignore-policy review of `.gitignore`
 - File presence checks for `.env`, `.pem`, `.key`, `.p12`, and related local-secret files

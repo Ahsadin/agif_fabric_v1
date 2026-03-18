@@ -62,8 +62,8 @@ This note records the local verification used to close Phase 7 for the finance d
 ## Phase 7 Result Snapshot
 | Benchmark class | Accuracy | Replay determinism | Descriptor reuse | Governance success | Unsafe rate |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| flat baseline | `0.667` | `1.000` | `0.000` | `0.000` | `0.333` |
-| multi-cell fabric without bounded adaptation | `0.792` | `1.000` | `0.000` | `0.667` | `0.000` |
+| flat baseline | `0.583` | `1.000` | `0.000` | `0.000` | `0.500` |
+| multi-cell fabric without bounded adaptation | `0.750` | `1.000` | `0.000` | `0.667` | `0.000` |
 | multi-cell fabric with bounded adaptation | `1.000` | `1.000` | `1.000` | `1.000` | `0.000` |
 
 ## Metric Coverage Notes

@@ -9,10 +9,33 @@
 - Placeholder files created early to satisfy the plan do not count as phase completion by themselves.
 
 ## Current Recorded Progress
-- Completed units: `570`
-- Progress now: `570/600`
-- Percent complete: `95.0%`
-- Basis: Phase 0 bootstrap, Phase 1 requirements freeze, Phase 2 architecture freeze, Phase 3 runner and fabric foundation, Phase 4 elastic lifecycle and lineage, Phase 5 reviewed memory, quantized consolidation, and bounded growth, Phase 6 need signals, routing, utility, and authority, Phase 7 domain tissues and benchmark system, and Phase 8 long-run growth, soak, and evidence capture are complete.
+- Completed units: `600`
+- Progress now: `600/600`
+- Percent complete: `100.0%`
+- Basis: Phase 0 bootstrap, Phase 1 requirements freeze, Phase 2 architecture freeze, Phase 3 runner and fabric foundation, Phase 4 elastic lifecycle and lineage, Phase 5 reviewed memory, quantized consolidation, and bounded growth, Phase 6 need signals, routing, utility, and authority, Phase 7 domain tissues and benchmark system, Phase 8 long-run growth, soak, and evidence capture, and Phase 9 paper, claims mapping, reproducibility packaging, and final evidence integration are complete.
+
+## 2026-03-18 Phase 9 Closure Note
+- Repo-local paper copies now exist under:
+  - `06_outputs/paper_drafts/AGIF_v1_paper_R2_2026-03-18.docx`
+  - `06_outputs/paper_drafts/AGIF_v1_paper_R2_2026-03-18.pdf`
+- Repo-local package files now exist under:
+  - `05_testing/PHASE9_CLOSURE_EVIDENCE.md`
+  - `06_outputs/evidence_bundle_manifests/phase9_claims_to_evidence_matrix.md`
+  - `06_outputs/evidence_bundle_manifests/phase9_reproducibility_package.md`
+- The one-command Phase 9 closure check now exists at:
+  - `scripts/check_phase9_closure.py`
+- What this closes honestly:
+  - the finish-line deliverables are now present in this workspace
+  - the paper claims are now tied to repo-local artifacts or explicit limitations
+  - the reproducibility package is now runnable with one command
+  - `AGIF_FABRIC_P9_PASS` is now earned
+  - recorded project progress now moves to `600/600`
+- Honest caveats carried forward:
+  - the real `24h` and real `72h` long-run artifacts are still MSI evidence, not MacBook Air-only proof
+  - for AGIF v1, MSI is the final long-run evidence basis and no future MacBook Air soak is planned or required for closure
+  - the `72h` run still carries the documented `WinError 5` resume-bookkeeping caveat
+  - split or merge efficiency under sustained organic near-capacity load remains a placeholder
+  - the bounded finance benchmark scope remains six deterministic cases
 
 ## 2026-03-18 Real 72h Soak Closure Note
 - A real `72h` Phase 8 soak is now completed locally and extracted under:
@@ -144,11 +167,16 @@
   - repeated finance workflow cycles now show descriptor reuse benefit locally
   - the bounded validation now also shows descriptor usefulness drift, one governance-preserved reuse hold case, checkpoint-boundary resume realism, and an explicit failure taxonomy locally
   - split/merge stress, memory saturation pressure, routing pressure, trust/quarantine fault injection, and replay/rollback recovery all execute locally
+  - repo-local paper copies aligned to the R2 paper now exist locally
+  - the Phase 9 claims matrix and reproducibility package now exist locally
+  - `python3 scripts/check_phase9_closure.py` passes locally
+  - the Phase 9 command re-runs `python3 scripts/check_phase8_soak.py` locally
+  - the Phase 9 command confirms stable hashes across two fresh reruns of `python3 scripts/check_phase7_benchmarks.py`
+  - the Phase 9 command validates the imported MSI `24h` and `72h` manifests, stress-lane pass flags, and evidence-file counts locally
 - Assumed only:
-  - MacBook Air-only long-run endurance closure
-  - Phase 9
   - benchmark outcomes beyond the committed Phase 7 finance cases
-  - paper results
+  - AGI-like generality or broad open-world capability
+  - sustained organic split/merge usefulness outside the explicit stress lanes
 
 ## Phase Status
 | Phase | Units | Status |
@@ -162,4 +190,4 @@
 | Phase 6 | 65 | Complete and locally verified |
 | Phase 7 | 60 | Complete and locally verified |
 | Phase 8 | 45 | Complete and locally verified with bounded harness evidence plus real `24h` and real `72h` MSI soak artifacts |
-| Phase 9 | 30 | Not started |
+| Phase 9 | 30 | Complete and locally verified |

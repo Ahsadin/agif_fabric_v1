@@ -97,7 +97,8 @@
 - [x] Full Phase 8 closure evidence exists locally and earns `AGIF_FABRIC_P8_PASS`.
 
 ## Phase 9
-- [ ] Paper draft exists with a claims matrix tied to the frozen thresholds.
-- [ ] Reproducibility package exists and reruns locally.
-- [ ] Finish line deliverables are present in this workspace.
-- [ ] Public release packaging remains out of scope.
+- [x] Paper draft exists in this workspace with a repo-local claims matrix tied to the frozen thresholds.
+- [x] Reproducibility package and final evidence index exist in this workspace and rerun locally with one command.
+- [x] Finish line deliverables are present in this workspace.
+- [x] Machine roles stay explicit: MacBook Air is the development, documentation, benchmark, and primary target machine, while MSI is long-run soak evidence only.
+- [x] Public release packaging remains out of scope.

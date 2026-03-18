@@ -1,5 +1,52 @@
 # Changelog
 
+## 2026-03-18 Post-Closure MSI Alignment
+- Updated the wording so the final machine-role position is explicit:
+  - MSI is the final long-run evidence basis for AGIF v1
+  - no future MacBook Air soak is planned or required for AGIF v1 closure
+  - MacBook Air remains the development, documentation, benchmark, and primary target machine
+  - MSI evidence is still not described as MacBook Air-only proof
+- Updated the docs that carried or defined that position:
+  - `PROJECT_README.md`
+  - `DECISIONS.md`
+  - `CHANGELOG.md`
+  - `01_plan/PROGRESS_TRACKER.md`
+  - `05_testing/PHASE9_CLOSURE_EVIDENCE.md`
+  - `06_outputs/evidence_bundle_manifests/phase9_claims_to_evidence_matrix.md`
+  - `06_outputs/evidence_bundle_manifests/phase9_reproducibility_package.md`
+  - `00_admin/CODEX_THREAD_MAP.md`
+- Verified with targeted repo searches that the old future-looking MacBook soak wording was removed from the updated source-of-truth docs.
+
+## 2026-03-18 Phase 9 Closure
+- Added repo-local Phase 9 packaging artifacts:
+  - `05_testing/PHASE9_CLOSURE_EVIDENCE.md`
+  - `06_outputs/evidence_bundle_manifests/phase9_claims_to_evidence_matrix.md`
+  - `06_outputs/evidence_bundle_manifests/phase9_reproducibility_package.md`
+  - `scripts/check_phase9_closure.py`
+- Added repo-local paper copies aligned to the external R2 paper:
+  - `06_outputs/paper_drafts/AGIF_v1_paper_R2_2026-03-18.docx`
+  - `06_outputs/paper_drafts/AGIF_v1_paper_R2_2026-03-18.pdf`
+- Updated the main project records to close Phase 9 honestly:
+  - `PROJECT_README.md`
+  - `DECISIONS.md`
+  - `CHANGELOG.md`
+  - `01_plan/PROGRESS_TRACKER.md`
+  - `01_plan/PHASE_GATE_CHECKLIST.md`
+  - `05_testing/PASS_TOKENS.md`
+  - `05_testing/PHASE7_TISSUES_BENCHMARK_EVIDENCE.md`
+  - `00_admin/CODEX_THREAD_MAP.md`
+- Locally verified:
+  - `python3 scripts/check_phase9_closure.py` passes locally
+  - the Phase 9 command re-runs `python3 scripts/check_phase8_soak.py` and the full Phase 3 to Phase 8 local regression chain
+  - the Phase 9 command re-runs `python3 scripts/check_phase7_benchmarks.py` twice and confirms identical hashes for the tracked Phase 7 result files
+  - the Phase 9 command validates the repo-local package files, the workspace paper copies, the imported MSI `24h` and `72h` manifests, and the expected evidence-file counts
+  - repo footprint remains `477M`, well below the `35 GB` cap
+- Closed Phase 9 honestly:
+  - `AGIF_FABRIC_P9_PASS` is now earned
+  - recorded progress is now `600/600`
+  - MSI soak evidence is still not described as MacBook Air-only proof
+  - split/merge placeholder limits, six-case benchmark scope, and AGI non-claims remain explicit
+
 ## 2026-03-18 Real 72h Soak Closure
 - Added dedicated real `72h` summary outputs:
   - `06_outputs/run_summaries/phase8_real_72h_soak.md`

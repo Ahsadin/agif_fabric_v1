@@ -29,7 +29,8 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 ## Machine Roles
 - MacBook Air = main development, working, documentation, and primary target machine.
 - MSI = soak machine for long-run endurance evidence.
-- Imported MSI soak artifacts can provide long-run workload evidence, but they do not by themselves prove MacBook Air-only long-run endurance.
+- For AGIF v1, the imported MSI soak artifacts are the final long-run evidence basis.
+- Those MSI artifacts do not become MacBook Air-only proof.
 
 ## Current Verified State
 - Phase 0: complete and locally verified
@@ -46,6 +47,7 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Phase 7.6 hardening: complete and locally verified without changing project units
 - Phase 8: complete and locally verified through bounded harness checks plus real `24h` and real `72h` MSI soak evidence; `AGIF_FABRIC_P8_PASS` is earned
 - Phase 8.5 hardening: complete and locally verified as part of the now-closed Phase 8 evidence layer
+- Phase 9: complete and locally verified through repo-local paper copies, a claims-to-evidence matrix, a reproducibility package and evidence index, and a one-command closure check; `AGIF_FABRIC_P9_PASS` is earned
 
 ## Phase 3 Foundation
 - Local runner entrypoint: `runner/cell`
@@ -160,10 +162,33 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - The current Phase 8 state is closed honestly:
   - the harness and bounded validation are locally verified on the MacBook Air development/documentation machine
   - real `24h` and real `72h` soak evidence are completed and extracted from the MSI soak machine
+  - for AGIF v1, MSI is the final long-run evidence basis
   - `AGIF_FABRIC_P8_PASS` is earned
   - recorded project progress is now `570/600`
   - this still does not claim MacBook Air-only long-run endurance
   - the recurring `WinError 5` manifest-write interruption in the long-run MSI artifacts is documented as an evidence caveat, not hidden
+
+## Phase 9 Paper, Claims Matrix, And Reproducibility Package
+- Repo-local paper copies now live under:
+  - `06_outputs/paper_drafts/AGIF_v1_paper_R2_2026-03-18.docx`
+  - `06_outputs/paper_drafts/AGIF_v1_paper_R2_2026-03-18.pdf`
+- Repo-local claims-to-evidence mapping now lives at:
+  - `06_outputs/evidence_bundle_manifests/phase9_claims_to_evidence_matrix.md`
+- Repo-local reproducibility package and final evidence index now live at:
+  - `06_outputs/evidence_bundle_manifests/phase9_reproducibility_package.md`
+- The Phase 9 closure evidence note now lives at:
+  - `05_testing/PHASE9_CLOSURE_EVIDENCE.md`
+- The one-command Phase 9 closure check now lives at:
+  - `scripts/check_phase9_closure.py`
+- The current Phase 9 state is closed honestly:
+  - the earlier Phase 3 to Phase 8 runtime, benchmark, and MSI soak claims are now mapped to repo-local artifacts
+  - the research paper, claims matrix, benchmark evidence, and reproducibility package are now all present inside this workspace
+  - `python3 scripts/check_phase9_closure.py` passes locally
+  - `AGIF_FABRIC_P9_PASS` is earned
+  - recorded project progress is now `600/600`
+  - no future MacBook Air soak is planned or required for AGIF v1 closure
+  - this still does not claim MacBook Air-only long-run endurance
+  - this still does not claim AGI or broad open-world generality
 
 ## Phase 2 Freeze Set
 - `03_design/AGIF_V1_ARCHITECTURE.md`
@@ -218,9 +243,11 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Phase 7.5 hardening verification method: run `python3 scripts/check_phase7_benchmarks.py` and confirm `05_testing/PHASE75_HARDENING_EVIDENCE.md`.
 - Phase 7.6 hardening verification method: run `python3 scripts/check_phase7_benchmarks.py` and confirm `05_testing/PHASE76_HARDENING_EVIDENCE.md`.
 - Phase 8 harness verification method: run `python3 scripts/check_phase8_soak.py` and confirm the bounded summary under `06_outputs/run_summaries/` plus `05_testing/PHASE8_LONGRUN_EVIDENCE.md` and `05_testing/PHASE85_HARDENING_EVIDENCE.md`.
+- Phase 9 closure verification method: run `python3 scripts/check_phase9_closure.py` and confirm the workspace paper copies, the claims matrix, the reproducibility package and evidence index, the Phase 7 deterministic rerun hash check, and the imported MSI `24h` and `72h` artifact counts.
 - Local verification status is recorded in `01_plan/PROGRESS_TRACKER.md` and `CHANGELOG.md`.
 - Real `24h` soak evidence is now recorded from imported MSI artifacts under `08_logs/phase8_soak/run_24h/`.
 - Real `72h` soak evidence is now recorded from imported MSI artifacts under `08_logs/phase8_soak/run_72h/`.
 - Phase 8 is now closed honestly through the bounded harness plus the real `24h` and real `72h` MSI soak evidence.
-- MacBook Air-only long-run closure remains assumed only until long-run evidence is captured on that machine.
-- Paper or reproducibility behavior beyond the bounded Phase 8 harness remains assumed only until later phases verify them.
+- For AGIF v1, MSI remains the final long-run evidence basis and no future MacBook Air soak is planned or required for project closure.
+- Phase 9 is now closed honestly through the repo-local paper copies, the claims matrix, the reproducibility package, the final evidence index, and the one-command closure check.
+- AGI-like generality and broader open-world claims remain outside the locked proof boundary.

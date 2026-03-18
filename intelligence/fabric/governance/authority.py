@@ -18,6 +18,7 @@ HIGH_RISK_ACTIONS = {
     "quarantine_escalation",
     "reactivate",
     "split_follow_through",
+    "transfer_approval",
 }
 
 
@@ -39,6 +40,8 @@ class AuthorityEngine:
         self.descriptor_trust_floor = float(self.policy.get("descriptor_trust_floor", 0.6))
         self.memory_runtime_trust_floor = float(self.policy.get("memory_runtime_trust_floor", 0.6))
         self.risky_reactivation_trust_floor = float(self.policy.get("risky_reactivation_trust_floor", 0.6))
+        self.transfer_quality_floor = float(self.policy.get("transfer_quality_floor", 0.72))
+        self.cross_domain_provenance_floor = float(self.policy.get("cross_domain_provenance_floor", 0.45))
         self.ensure_store()
 
     def ensure_store(self) -> None:
@@ -123,6 +126,9 @@ class AuthorityEngine:
         lineage_id = str(metadata.get("lineage_id", ""))
         lineage_usefulness_score = clamp_score(float(metadata.get("lineage_usefulness_score", 0.0)))
         descriptor_provenance_score = clamp_score(float(metadata.get("descriptor_provenance_score", 0.0)))
+        transfer_quality_score = clamp_score(float(metadata.get("transfer_quality_score", 0.0)))
+        cross_domain = bool(metadata.get("cross_domain", False))
+        explicit_transfer_approval = bool(metadata.get("explicit_transfer_approval", False))
         history_context = self._history_context(
             patterns=patterns,
             action=action,
@@ -138,6 +144,18 @@ class AuthorityEngine:
             veto_conditions.append("missing_rollback_path")
         if action == "descriptor_use" and descriptor_refs and trust_score < self.descriptor_trust_floor:
             veto_conditions.append("descriptor_low_trust")
+        if action == "transfer_approval" and not descriptor_refs:
+            veto_conditions.append("missing_transfer_source")
+        if action == "transfer_approval" and cross_domain and not explicit_transfer_approval:
+            veto_conditions.append("missing_explicit_transfer_approval")
+        if action == "transfer_approval" and transfer_quality_score < self.transfer_quality_floor:
+            veto_conditions.append("transfer_quality_too_low")
+        if (
+            action == "transfer_approval"
+            and cross_domain
+            and descriptor_provenance_score < self.cross_domain_provenance_floor
+        ):
+            veto_conditions.append("cross_domain_transfer_provenance_weak")
         if action == "memory_runtime_influence" and trust_score < self.memory_runtime_trust_floor:
             veto_conditions.append("memory_low_trust")
         if action == "reactivate" and trust_score < self.risky_reactivation_trust_floor:
@@ -178,6 +196,7 @@ class AuthorityEngine:
             history_context=history_context,
             descriptor_provenance_score=descriptor_provenance_score,
             lineage_usefulness_score=lineage_usefulness_score,
+            transfer_quality_score=transfer_quality_score,
             trust_band=trust_band,
             rollback_ref=rollback_ref,
         )
@@ -277,6 +296,7 @@ class AuthorityEngine:
         history_context: dict[str, Any],
         descriptor_provenance_score: float,
         lineage_usefulness_score: float,
+        transfer_quality_score: float,
         trust_band: str,
         rollback_ref: str | None,
     ) -> list[str]:
@@ -293,6 +313,8 @@ class AuthorityEngine:
             notes.append(f"descriptor_provenance={descriptor_provenance_score}")
         if lineage_usefulness_score > 0.0 or history_context["lineage_veto_count"] > 0:
             notes.append(f"lineage_usefulness={lineage_usefulness_score}")
+        if transfer_quality_score > 0.0 or action == "transfer_approval":
+            notes.append(f"transfer_quality={transfer_quality_score}")
         return notes
 
     def _history_context(

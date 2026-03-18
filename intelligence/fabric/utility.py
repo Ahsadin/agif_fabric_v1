@@ -57,6 +57,8 @@ def policy_risk_from_envelope(policy_envelope: dict[str, Any], *, action: str) -
         return 1.0
     if action in {"route", "descriptor_use"} and "route" not in allowed_actions and "summarize" not in allowed_actions:
         return 0.85
+    if action == "transfer_approval" and "transfer" not in allowed_actions and "summarize" not in allowed_actions:
+        return 0.85
     if action in {"report", "audit"} and "report" not in allowed_actions and "summarize" not in allowed_actions:
         return 0.85
     return 0.05

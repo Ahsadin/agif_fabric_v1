@@ -1,5 +1,24 @@
 # Changelog
 
+## 2026-03-18 Track B Gap 2 Skill-Graph Transfer-Governance Closure
+- Closed only the Track B Gap 2 skill graph and transfer-governance proof.
+- Added the deterministic Gap 2 fixture set under:
+  - `fixtures/document_workflow/v1x/skill_graph/`
+- Added the bounded descriptor-graph runtime and benchmark path:
+  - `intelligence/fabric/descriptors/graph.py`
+  - `intelligence/fabric/benchmarking/v1x_skill_graph.py`
+  - `scripts/check_v1x_skill_graph.py`
+- Added the local Gap 2 evidence and result tables:
+  - `05_testing/V1X_SKILL_GRAPH_EVIDENCE.md`
+  - `06_outputs/result_tables/v1x_skill_graph_transfer.md`
+  - `06_outputs/result_tables/v1x_skill_graph_transfer.json`
+- Added the focused Gap 2 test path:
+  - `05_testing/test_v1x_skill_graph.py`
+- Recorded the closed Gap 2 state:
+  - Track B progress is now `85/130`
+  - `AGIF_FABRIC_V1X_G2_PASS` is now earned
+  - root AGIF v1 remains `600/600`
+
 ## 2026-03-18 Track B Gap 1 Organic Split-Merge Closure
 - Closed only the Track B Gap 1 organic split or merge proof.
 - Added the deterministic Gap 1 fixture set under:

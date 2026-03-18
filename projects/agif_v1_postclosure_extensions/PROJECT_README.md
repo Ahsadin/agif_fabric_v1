@@ -36,7 +36,9 @@
 - `AGIF_FABRIC_V1X_SETUP_PASS` is earned.
 - Gap 1 organic split or merge proof is closed honestly.
 - `AGIF_FABRIC_V1X_G1_PASS` is earned.
-- Current extension progress: `50/130`
+- Gap 2 skill graph and transfer-governance proof is closed honestly.
+- `AGIF_FABRIC_V1X_G2_PASS` is earned.
+- Current extension progress: `85/130`
 
 ## In Scope
 - project-local planning and freeze records
@@ -81,6 +83,7 @@
 ## Current Verification
 - `python3 scripts/check_v1x_setup.py` passes locally.
 - `python3 scripts/check_v1x_organic_load.py` passes locally.
+- `python3 scripts/check_v1x_skill_graph.py` passes locally.
 - Root AGIF v1 remains closed at `600/600`.
 - Root tracker isolation is explicit in the Track B docs.
 - Gap 1 is now locally verified by:
@@ -89,4 +92,18 @@
   - `06_outputs/result_tables/v1x_finance_organic_load.md`
   - `06_outputs/result_tables/v1x_finance_organic_load.json`
   - `scripts/check_v1x_organic_load.py`
+- Gap 2 is now locally verified by:
+  - `fixtures/document_workflow/v1x/skill_graph/minimal_fabric_config.json`
+  - `fixtures/document_workflow/v1x/skill_graph/transfer_suite.json`
+  - `intelligence/fabric/descriptors/graph.py`
+  - `05_testing/V1X_SKILL_GRAPH_EVIDENCE.md`
+  - `06_outputs/result_tables/v1x_skill_graph_transfer.md`
+  - `06_outputs/result_tables/v1x_skill_graph_transfer.json`
+  - `scripts/check_v1x_skill_graph.py`
+- Gap 2 current proof result is:
+  - `3` source descriptors in the graph
+  - `1` retired source descriptor still visible
+  - `1` approved governed cross-domain transfer with explicit provenance
+  - `1` low-quality abstain
+  - `2` denials, including one missing explicit `transfer_approval` and one authority veto at the boundary
 - Gap 3 start rules remain frozen for later execution work.

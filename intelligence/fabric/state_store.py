@@ -44,6 +44,7 @@ class FabricStateStore:
         (fabric_dir / "needs").mkdir(parents=True, exist_ok=True)
         (fabric_dir / "routing").mkdir(parents=True, exist_ok=True)
         (fabric_dir / "memory").mkdir(parents=True, exist_ok=True)
+        (fabric_dir / "descriptors").mkdir(parents=True, exist_ok=True)
         (fabric_dir / "memory" / "hot" / "payloads").mkdir(parents=True, exist_ok=True)
         (fabric_dir / "memory" / "warm" / "payloads").mkdir(parents=True, exist_ok=True)
         (fabric_dir / "memory" / "cold" / "payloads").mkdir(parents=True, exist_ok=True)
@@ -173,6 +174,15 @@ class FabricStateStore:
 
     def memory_dir(self, fabric_id: str) -> Path:
         return self.fabric_dir(fabric_id) / "memory"
+
+    def descriptor_dir(self, fabric_id: str) -> Path:
+        return self.fabric_dir(fabric_id) / "descriptors"
+
+    def descriptor_graph_path(self, fabric_id: str) -> Path:
+        return self.descriptor_dir(fabric_id) / "skill_graph.json"
+
+    def descriptor_transfer_log_path(self, fabric_id: str) -> Path:
+        return self.descriptor_dir(fabric_id) / "transfer_log.json"
 
     def hot_memory_index_path(self, fabric_id: str) -> Path:
         return self.memory_dir(fabric_id) / "hot_index.json"

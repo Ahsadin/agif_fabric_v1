@@ -1,0 +1,179 @@
+{
+  "suite_id": "v1x_skill_graph_transfer_suite",
+  "seed_descriptors": [
+    {
+      "seed_id": "finance_policy_northwind_invoice",
+      "source_ref": "gap2:seed:finance_policy_northwind_invoice",
+      "producer_cell_id": "finance_workspace_governor",
+      "descriptor_kind": "policy_invoice_hold",
+      "task_scope": "finance_ap:northwind_invoice_policy",
+      "trust_ref": "trust:policy_finance_v1",
+      "payload": {
+        "schema_version": "agif.fabric.memory.candidate_payload.v1",
+        "workflow_id": "gap2_seed_policy_001",
+        "workflow_name": "document_workflow",
+        "document_id": "gap2_policy_invoice_001",
+        "inputs": {
+          "vendor_name": "Northwind Holdings",
+          "document_type": "invoice",
+          "currency": "USD",
+          "total": "12500.00",
+          "policy_hold_reason": "high_value_alias_match"
+        },
+        "selected_cells": [
+          "finance_workspace_governor",
+          "finance_validation_corrector"
+        ],
+        "selected_roles": [
+          "workspace_governance",
+          "validation_correction"
+        ],
+        "input_digest": "gap2_seed_policy_001",
+        "output_digest": "gap2_seed_policy_001",
+        "source_run_ref": "gap2:seed:finance_policy_northwind_invoice",
+        "source_workspace_ref": "workspace:gap2:policy_seed"
+      }
+    },
+    {
+      "seed_id": "finance_receipt_pattern",
+      "source_ref": "gap2:seed:finance_receipt_pattern",
+      "producer_cell_id": "finance_extraction_specialist",
+      "descriptor_kind": "receipt_pattern",
+      "task_scope": "finance_ap:tailspin_receipt_pattern",
+      "trust_ref": "trust:bounded_local_v1",
+      "payload": {
+        "schema_version": "agif.fabric.memory.candidate_payload.v1",
+        "workflow_id": "gap2_seed_pattern_001",
+        "workflow_name": "document_workflow",
+        "document_id": "gap2_receipt_pattern_001",
+        "inputs": {
+          "vendor_name": "Tailspin Foods",
+          "document_type": "receipt",
+          "currency": "USD",
+          "total": "48.90"
+        },
+        "selected_cells": [
+          "finance_extraction_specialist"
+        ],
+        "selected_roles": [
+          "extraction"
+        ],
+        "input_digest": "gap2_seed_pattern_001",
+        "output_digest": "gap2_seed_pattern_001",
+        "source_run_ref": "gap2:seed:finance_receipt_pattern",
+        "source_workspace_ref": "workspace:gap2:receipt_seed"
+      }
+    },
+    {
+      "seed_id": "finance_legacy_invoice_pattern",
+      "source_ref": "gap2:seed:finance_legacy_invoice_pattern",
+      "producer_cell_id": "finance_validation_corrector",
+      "descriptor_kind": "invoice_pattern",
+      "task_scope": "finance_ap:fabrikam_invoice_pattern",
+      "trust_ref": "trust:bounded_local_v1",
+      "payload": {
+        "schema_version": "agif.fabric.memory.candidate_payload.v1",
+        "workflow_id": "gap2_seed_legacy_001",
+        "workflow_name": "document_workflow",
+        "document_id": "gap2_legacy_invoice_001",
+        "inputs": {
+          "vendor_name": "Fabrikam Services",
+          "document_type": "invoice",
+          "currency": "EUR",
+          "total": "995.10"
+        },
+        "selected_cells": [
+          "finance_validation_corrector"
+        ],
+        "selected_roles": [
+          "validation_correction"
+        ],
+        "input_digest": "gap2_seed_legacy_001",
+        "output_digest": "gap2_seed_legacy_001",
+        "source_run_ref": "gap2:seed:finance_legacy_invoice_pattern",
+        "source_workspace_ref": "workspace:gap2:legacy_seed"
+      }
+    }
+  ],
+  "retire_after_seed": [
+    "finance_legacy_invoice_pattern"
+  ],
+  "transfer_requests": [
+    {
+      "request_id": "approved_cross_domain_invoice_transfer",
+      "target_domain": "document_compliance",
+      "target_cell_id": "document_compliance_reviewer",
+      "target_hints": {
+        "document_type": "invoice",
+        "vendor_token": "northwin"
+      },
+      "cross_domain": true,
+      "explicit_transfer_approval": true,
+      "proposer": "tissue:finance_document_workflow:coordinator",
+      "policy_envelope": {
+        "allowed_actions": [
+          "transfer",
+          "summarize"
+        ],
+        "human_boundary": "document/workflow intelligence"
+      }
+    },
+    {
+      "request_id": "abstained_low_quality_transfer",
+      "target_domain": "document_compliance",
+      "target_cell_id": "document_compliance_reviewer",
+      "target_hints": {
+        "document_type": "credit",
+        "vendor_token": "unknown"
+      },
+      "cross_domain": true,
+      "explicit_transfer_approval": true,
+      "proposer": "tissue:finance_document_workflow:coordinator",
+      "policy_envelope": {
+        "allowed_actions": [
+          "transfer",
+          "summarize"
+        ],
+        "human_boundary": "document/workflow intelligence"
+      }
+    },
+    {
+      "request_id": "denied_missing_explicit_transfer_approval",
+      "target_domain": "vendor_onboarding",
+      "target_cell_id": "vendor_onboarding_reviewer",
+      "target_hints": {
+        "document_type": "invoice",
+        "vendor_token": "northwin"
+      },
+      "cross_domain": true,
+      "explicit_transfer_approval": false,
+      "proposer": "tissue:finance_document_workflow:coordinator",
+      "policy_envelope": {
+        "allowed_actions": [
+          "transfer",
+          "summarize"
+        ],
+        "human_boundary": "document/workflow intelligence"
+      }
+    },
+    {
+      "request_id": "denied_out_of_boundary_transfer",
+      "target_domain": "external_vendor_ops",
+      "target_cell_id": "external_vendor_ops_reviewer",
+      "target_hints": {
+        "document_type": "invoice",
+        "vendor_token": "northwin"
+      },
+      "cross_domain": true,
+      "explicit_transfer_approval": true,
+      "proposer": "tissue:finance_document_workflow:coordinator",
+      "policy_envelope": {
+        "allowed_actions": [
+          "transfer",
+          "summarize"
+        ],
+        "human_boundary": "external/vendor operations"
+      }
+    }
+  ]
+}

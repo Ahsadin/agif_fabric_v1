@@ -1,0 +1,372 @@
+{
+  "acceptance": {
+    "authority_veto_visible": true,
+    "cross_domain_requires_explicit_transfer_approval": true,
+    "descriptor_graph_exists": true,
+    "low_quality_transfer_abstains_or_denied": true,
+    "passed": true,
+    "provenance_explicit": true,
+    "retirement_visibility": true,
+    "transfer_approval_path_exists": true,
+    "useful_and_auditable": true
+  },
+  "config_ref": "fixtures/document_workflow/v1x/skill_graph/minimal_fabric_config.json",
+  "graph_summary": {
+    "abstained_transfer_count": 1,
+    "active_source_descriptor_count": 2,
+    "approved_transfer_count": 1,
+    "denied_transfer_count": 2,
+    "edge_count": 2,
+    "explicit_provenance_count": 1,
+    "latest_transfer_ref": "denied_out_of_boundary_transfer",
+    "relation_counts": {
+      "shared_document_type": 1,
+      "transfer_approval": 1
+    },
+    "retired_source_descriptor_count": 1,
+    "retired_source_descriptor_ids": [
+      "desc_0003"
+    ],
+    "source_descriptor_count": 3,
+    "transfer_request_count": 4,
+    "transferred_descriptor_count": 1
+  },
+  "retired_descriptors": [
+    {
+      "decision_ref": "memory/decisions.json",
+      "descriptor_id": "desc_0003",
+      "memory_id": "mem_0003",
+      "seed_id": "finance_legacy_invoice_pattern"
+    }
+  ],
+  "seeded_descriptors": [
+    {
+      "candidate_id": "cand_0001",
+      "descriptor_id": "desc_0001",
+      "memory_class": "policy_useful_memory",
+      "memory_id": "mem_0001",
+      "provenance_score": 0.915385,
+      "seed_id": "finance_policy_northwind_invoice",
+      "source_domain": "finance_ap",
+      "trust_score": 0.95
+    },
+    {
+      "candidate_id": "cand_0002",
+      "descriptor_id": "desc_0002",
+      "memory_class": "pattern_memory",
+      "memory_id": "mem_0002",
+      "provenance_score": 0.840142,
+      "seed_id": "finance_receipt_pattern",
+      "source_domain": "finance_ap",
+      "trust_score": 0.76
+    },
+    {
+      "candidate_id": "cand_0003",
+      "descriptor_id": "desc_0003",
+      "memory_class": "pattern_memory",
+      "memory_id": "mem_0003",
+      "provenance_score": 0.840374,
+      "seed_id": "finance_legacy_invoice_pattern",
+      "source_domain": "finance_ap",
+      "trust_score": 0.76
+    }
+  ],
+  "suite_id": "v1x_skill_graph_transfer_suite",
+  "transfer_requests": [
+    {
+      "approval_required": true,
+      "audit_ready": true,
+      "authority_decision": "approved",
+      "authority_review_id": "authority_00004",
+      "baseline_support_score": 0.25,
+      "cross_domain": true,
+      "decision_reason": "transfer_approved",
+      "explicit_transfer_approval": true,
+      "materialized_transfer": {
+        "baseline_support_score": 0.25,
+        "provenance_bundle": {
+          "cross_domain": true,
+          "explicit_transfer_approval": true,
+          "reuse_hints": {
+            "document_type": "invoice",
+            "routing_hint": "local",
+            "vendor_token": "northwin"
+          },
+          "source_descriptor_id": "desc_0001",
+          "source_log_refs": [],
+          "source_memory_id": "mem_0001",
+          "source_payload_ref": "memory/warm/payloads/mem_0001.json",
+          "source_ref": "gap2:seed:finance_policy_northwind_invoice",
+          "source_review_scores": {
+            "compression_gain": 0.553544,
+            "conflict_risk": 0.0,
+            "novelty_score": 0.9,
+            "reuse_potential": 0.75,
+            "trust_score": 0.95,
+            "usefulness_score": 1.0
+          },
+          "source_trust_ref": "trust:policy_finance_v1",
+          "source_trust_score": 0.95,
+          "summary_vector": [
+            "northwind holdings",
+            "invoice",
+            "usd",
+            "12500.00"
+          ],
+          "target_cell_id": "document_compliance_reviewer",
+          "target_domain": "document_compliance",
+          "transfer_approval_ref": "authority_00004",
+          "transfer_descriptor_id": "tdesc_0001",
+          "transfer_request_id": "approved_cross_domain_invoice_transfer"
+        },
+        "source_descriptor_id": "desc_0001",
+        "source_domain": "finance_ap",
+        "source_memory_id": "mem_0001",
+        "status": "active",
+        "target_cell_id": "document_compliance_reviewer",
+        "target_domain": "document_compliance",
+        "target_support_score": 0.955116,
+        "transfer_approval_ref": "authority_00004",
+        "transfer_descriptor_id": "tdesc_0001",
+        "transfer_id": "transfer_0001",
+        "transfer_quality_score": 0.940154
+      },
+      "materialized_transfer_id": "transfer_0001",
+      "provenance_bundle": {
+        "cross_domain": true,
+        "explicit_transfer_approval": true,
+        "reuse_hints": {
+          "document_type": "invoice",
+          "routing_hint": "local",
+          "vendor_token": "northwin"
+        },
+        "source_descriptor_id": "desc_0001",
+        "source_log_refs": [],
+        "source_memory_id": "mem_0001",
+        "source_payload_ref": "memory/warm/payloads/mem_0001.json",
+        "source_ref": "gap2:seed:finance_policy_northwind_invoice",
+        "source_review_scores": {
+          "compression_gain": 0.553544,
+          "conflict_risk": 0.0,
+          "novelty_score": 0.9,
+          "reuse_potential": 0.75,
+          "trust_score": 0.95,
+          "usefulness_score": 1.0
+        },
+        "source_trust_ref": "trust:policy_finance_v1",
+        "source_trust_score": 0.95,
+        "summary_vector": [
+          "northwind holdings",
+          "invoice",
+          "usd",
+          "12500.00"
+        ],
+        "target_cell_id": "document_compliance_reviewer",
+        "target_domain": "document_compliance",
+        "transfer_approval_ref": "authority_00004",
+        "transfer_descriptor_id": "tdesc_0001",
+        "transfer_request_id": "approved_cross_domain_invoice_transfer"
+      },
+      "quality_breakdown": {
+        "confidence_score": 0.8,
+        "cross_domain_readiness": 1.0,
+        "document_match": 1.0,
+        "policy_readiness": 1.0,
+        "reuse_signal": 0.0,
+        "trust_score": 0.95,
+        "value_score": 0.914425,
+        "vendor_match": 1.0
+      },
+      "request_id": "approved_cross_domain_invoice_transfer",
+      "requested_source_descriptor_id": null,
+      "required_action": "transfer_approval",
+      "selected_source_descriptor_id": "desc_0001",
+      "source_domain": "finance_ap",
+      "status": "approved",
+      "target_cell_id": "document_compliance_reviewer",
+      "target_domain": "document_compliance",
+      "target_support_score": 0.955116,
+      "transfer_quality_score": 0.940154
+    },
+    {
+      "approval_required": true,
+      "audit_ready": false,
+      "authority_decision": null,
+      "authority_review_id": null,
+      "baseline_support_score": 0.25,
+      "cross_domain": true,
+      "decision_reason": "transfer_quality_below_abstain_floor",
+      "explicit_transfer_approval": true,
+      "materialized_transfer": null,
+      "materialized_transfer_id": null,
+      "provenance_bundle": {
+        "reuse_hints": {
+          "document_type": "invoice",
+          "routing_hint": "local",
+          "vendor_token": "northwin"
+        },
+        "source_descriptor_id": "desc_0001",
+        "source_log_refs": [],
+        "source_memory_id": "mem_0001",
+        "source_payload_ref": "memory/warm/payloads/mem_0001.json",
+        "source_ref": "gap2:seed:finance_policy_northwind_invoice",
+        "source_review_scores": {
+          "compression_gain": 0.553544,
+          "conflict_risk": 0.0,
+          "novelty_score": 0.9,
+          "reuse_potential": 0.75,
+          "trust_score": 0.95,
+          "usefulness_score": 1.0
+        },
+        "source_trust_ref": "trust:policy_finance_v1",
+        "source_trust_score": 0.95,
+        "summary_vector": [
+          "northwind holdings",
+          "invoice",
+          "usd",
+          "12500.00"
+        ]
+      },
+      "quality_breakdown": {
+        "confidence_score": 0.8,
+        "cross_domain_readiness": 1.0,
+        "document_match": 0.0,
+        "policy_readiness": 1.0,
+        "reuse_signal": 0.0,
+        "trust_score": 0.95,
+        "value_score": 0.914425,
+        "vendor_match": 0.0
+      },
+      "request_id": "abstained_low_quality_transfer",
+      "requested_source_descriptor_id": null,
+      "required_action": "transfer_approval",
+      "selected_source_descriptor_id": "desc_0001",
+      "source_domain": "finance_ap",
+      "status": "abstained",
+      "target_cell_id": "document_compliance_reviewer",
+      "target_domain": "document_compliance",
+      "target_support_score": 0.25,
+      "transfer_quality_score": 0.440154
+    },
+    {
+      "approval_required": true,
+      "audit_ready": false,
+      "authority_decision": null,
+      "authority_review_id": null,
+      "baseline_support_score": 0.25,
+      "cross_domain": true,
+      "decision_reason": "missing_explicit_transfer_approval",
+      "explicit_transfer_approval": false,
+      "materialized_transfer": null,
+      "materialized_transfer_id": null,
+      "provenance_bundle": {
+        "reuse_hints": {
+          "document_type": "invoice",
+          "routing_hint": "local",
+          "vendor_token": "northwin"
+        },
+        "source_descriptor_id": "desc_0001",
+        "source_log_refs": [],
+        "source_memory_id": "mem_0001",
+        "source_payload_ref": "memory/warm/payloads/mem_0001.json",
+        "source_ref": "gap2:seed:finance_policy_northwind_invoice",
+        "source_review_scores": {
+          "compression_gain": 0.553544,
+          "conflict_risk": 0.0,
+          "novelty_score": 0.9,
+          "reuse_potential": 0.75,
+          "trust_score": 0.95,
+          "usefulness_score": 1.0
+        },
+        "source_trust_ref": "trust:policy_finance_v1",
+        "source_trust_score": 0.95,
+        "summary_vector": [
+          "northwind holdings",
+          "invoice",
+          "usd",
+          "12500.00"
+        ]
+      },
+      "quality_breakdown": {
+        "confidence_score": 0.8,
+        "cross_domain_readiness": 1.0,
+        "document_match": 1.0,
+        "policy_readiness": 1.0,
+        "reuse_signal": 0.0,
+        "trust_score": 0.95,
+        "value_score": 0.914425,
+        "vendor_match": 1.0
+      },
+      "request_id": "denied_missing_explicit_transfer_approval",
+      "requested_source_descriptor_id": null,
+      "required_action": "transfer_approval",
+      "selected_source_descriptor_id": "desc_0001",
+      "source_domain": "finance_ap",
+      "status": "denied",
+      "target_cell_id": "vendor_onboarding_reviewer",
+      "target_domain": "vendor_onboarding",
+      "target_support_score": 0.25,
+      "transfer_quality_score": 0.940154
+    },
+    {
+      "approval_required": true,
+      "audit_ready": false,
+      "authority_decision": "vetoed",
+      "authority_review_id": "authority_00005",
+      "baseline_support_score": 0.25,
+      "cross_domain": true,
+      "decision_reason": "authority_vetoed_transfer",
+      "explicit_transfer_approval": true,
+      "materialized_transfer": null,
+      "materialized_transfer_id": null,
+      "provenance_bundle": {
+        "reuse_hints": {
+          "document_type": "invoice",
+          "routing_hint": "local",
+          "vendor_token": "northwin"
+        },
+        "source_descriptor_id": "desc_0001",
+        "source_log_refs": [],
+        "source_memory_id": "mem_0001",
+        "source_payload_ref": "memory/warm/payloads/mem_0001.json",
+        "source_ref": "gap2:seed:finance_policy_northwind_invoice",
+        "source_review_scores": {
+          "compression_gain": 0.553544,
+          "conflict_risk": 0.0,
+          "novelty_score": 0.9,
+          "reuse_potential": 0.75,
+          "trust_score": 0.95,
+          "usefulness_score": 1.0
+        },
+        "source_trust_ref": "trust:policy_finance_v1",
+        "source_trust_score": 0.95,
+        "summary_vector": [
+          "northwind holdings",
+          "invoice",
+          "usd",
+          "12500.00"
+        ]
+      },
+      "quality_breakdown": {
+        "confidence_score": 0.8,
+        "cross_domain_readiness": 1.0,
+        "document_match": 1.0,
+        "policy_readiness": 1.0,
+        "reuse_signal": 0.0,
+        "trust_score": 0.95,
+        "value_score": 0.914425,
+        "vendor_match": 1.0
+      },
+      "request_id": "denied_out_of_boundary_transfer",
+      "requested_source_descriptor_id": null,
+      "required_action": "transfer_approval",
+      "selected_source_descriptor_id": "desc_0001",
+      "source_domain": "finance_ap",
+      "status": "denied",
+      "target_cell_id": "external_vendor_ops_reviewer",
+      "target_domain": "external_vendor_ops",
+      "target_support_score": 0.25,
+      "transfer_quality_score": 0.940154
+    }
+  ]
+}

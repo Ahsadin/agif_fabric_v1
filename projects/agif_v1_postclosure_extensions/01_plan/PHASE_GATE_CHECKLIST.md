@@ -28,10 +28,12 @@
 - [x] `AGIF_FABRIC_V1X_G1_PASS` is earned honestly
 
 ## Gap 2 Skill Graph
-- [ ] descriptor graph and transfer-approval path exist
-- [ ] provenance is explicit for transferred descriptors
-- [ ] low-quality transfers abstain or are denied
-- [ ] `AGIF_FABRIC_V1X_G2_PASS` is earned honestly
+- [x] descriptor graph and transfer-approval path exist
+- [x] provenance is explicit for transferred descriptors
+- [x] low-quality transfers abstain or are denied
+- [x] cross-domain influence uses explicit `transfer_approval`
+- [x] Gap 2 is useful and auditable, not just a stub
+- [x] `AGIF_FABRIC_V1X_G2_PASS` is earned honestly
 
 ## Gap 3 POS Domain
 - [ ] bounded POS domain cases are frozen

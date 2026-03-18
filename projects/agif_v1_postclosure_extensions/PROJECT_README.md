@@ -7,6 +7,7 @@
 - Root AGIF v1 remains closed at `600/600`.
 - Root AGIF v1 source-of-truth files remain the closed v1 record.
 - This project tracks only the separate post-closure extension work.
+- Track B progress must never be counted inside the root AGIF v1 tracker.
 
 ## Fixed Denominator
 - Total extension denominator: `130`
@@ -27,12 +28,13 @@
 1. Setup pass must be earned first.
 2. Organic load proof must pass before skill-graph proof is treated as complete.
 3. Skill-graph proof must pass before POS-domain proof is accepted.
-4. Final bundle closure must re-check the root AGIF v1 closure path and confirm root progress still reads `600/600`.
+4. Final bundle verifier must run in order: Gap 1, then Gap 2, then Gap 3.
+5. Final bundle closure must re-check the root AGIF v1 closure path and confirm root progress still reads `600/600`.
 
 ## Current Status
-- Project scaffold created.
-- No extension tokens earned yet.
-- Current extension progress: `0/130`
+- Setup-and-freeze gate is closed.
+- `AGIF_FABRIC_V1X_SETUP_PASS` is earned.
+- Current extension progress: `15/130`
 
 ## In Scope
 - project-local planning and freeze records
@@ -46,6 +48,24 @@
 - claiming AGI or broad open-world generality
 - silently replacing the closed AGIF v1 finance-only proof with extension claims
 
+## Root Tracker Isolation
+- Root `01_plan/PROGRESS_TRACKER.md` remains frozen at `600/600`.
+- Track B progress is recorded only in `projects/agif_v1_postclosure_extensions/01_plan/PROGRESS_TRACKER.md`.
+- Root AGIF v1 pass tokens remain unchanged during Track B work.
+
+## Frozen Gap 1 Start Rules
+- Gap 1 uses one deterministic fixed stream of `40` cases.
+- The elastic run and the no-split control run must use the same `40`-case sequence in the same order.
+- No fake stress-mode switch is allowed inside the stream to force the result.
+- The control run disables split at the governance level.
+- If no organic split occurs inside the `40`-case stream, the Gap 1 acceptance gate fails.
+
+## Frozen Gap 3 Start Rules
+- Gap 3 uses the same `5` deterministic POS cases for both comparison runs.
+- The control run disables cross-domain transfer at the governance level.
+- The transfer-enabled run uses the same suite and the same order.
+- Cross-domain influence counts only when there is explicit `transfer_approval`.
+
 ## Expected Root-Level Runtime Touch Points Later
 - `fixtures/document_workflow/v1x/finance_organic_load/`
 - `fixtures/pos_operations/v1x/`
@@ -57,7 +77,7 @@
 - `scripts/check_v1x_bundle.py`
 
 ## Current Verification
-- Confirm this project folder exists with its local source-of-truth files.
-- Confirm root AGIF v1 remains closed at `600/600`.
-- Confirm no extension tokens are recorded as earned yet.
-
+- `python3 scripts/check_v1x_setup.py` passes locally.
+- Root AGIF v1 remains closed at `600/600`.
+- Root tracker isolation is explicit in the Track B docs.
+- Gap 1 and Gap 3 start rules are frozen for later execution work.

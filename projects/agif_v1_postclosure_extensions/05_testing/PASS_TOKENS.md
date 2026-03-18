@@ -8,9 +8,9 @@
 - `AGIF_FABRIC_V1X_PASS`
 
 ## Current Earned Tokens
-- None yet.
+- `AGIF_FABRIC_V1X_SETUP_PASS`
 
 ## Notes
 - These tokens are local to `projects/agif_v1_postclosure_extensions/`.
 - Root AGIF v1 earned tokens remain unchanged.
-
+- `AGIF_FABRIC_V1X_SETUP_PASS` was locally verified with `python3 scripts/check_v1x_setup.py`.

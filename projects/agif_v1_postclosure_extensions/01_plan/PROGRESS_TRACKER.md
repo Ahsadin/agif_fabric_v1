@@ -6,7 +6,7 @@
 ## Phase Weights
 | Extension gate | Units | Status |
 | --- | --- | --- |
-| Setup and freeze | 15 | Not yet earned |
+| Setup and freeze | 15 | Complete and locally verified |
 | Gap 1 organic split or merge proof | 35 | Not yet earned |
 | Gap 2 skill graph and transfer-governance proof | 35 | Not yet earned |
 | Gap 3 POS domain and cross-domain transfer proof | 45 | Not yet earned |
@@ -17,13 +17,13 @@
 - Root AGIF v1 progress remains frozen at `600/600` and must not be changed by this tracker.
 
 ## Current Recorded Progress
-- Completed units: `0`
-- Progress now: `0/130`
-- Percent complete: `0.0%`
-- Basis: project setup has started, but the setup-and-freeze gate is not yet closed.
+- Completed units: `15`
+- Progress now: `15/130`
+- Percent complete: `11.5%`
+- Basis: the setup-and-freeze gate is closed because the Track B docs now freeze the denominator, token set, dependency order, root tracker isolation, Gap 1 start rules, and Gap 3 comparison rules, and `python3 scripts/check_v1x_setup.py` passes locally.
 
 ## Current Status
 - Project scaffold exists.
-- Local source-of-truth files exist.
-- No extension pass tokens are earned yet.
-
+- Local source-of-truth files are mutually consistent.
+- `AGIF_FABRIC_V1X_SETUP_PASS` is earned.
+- Root AGIF v1 remains frozen at `600/600`.

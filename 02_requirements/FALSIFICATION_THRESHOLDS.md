@@ -11,7 +11,7 @@ If any hard-fail threshold below is missed at project finish, AGIF v1 must not b
 AGIF v1 fails if there is no runnable local system in this standalone workspace.
 
 ### F2. Old Repo Runtime Dependence
-AGIF v1 fails if the final runnable system depends at runtime on `/Users/ahsadin/Documents/Projects/ENF/AGIF/agif-tasklet-cell`.
+AGIF v1 fails if the final runnable system depends at runtime on `agif-tasklet-cell`.
 
 ### F3. No Real Multi-Cell Fabric
 AGIF v1 fails if the final system is effectively a flat single-component workflow with AGIF names added on top.

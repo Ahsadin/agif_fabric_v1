@@ -4224,7 +4224,7 @@
         "unsafe_action_rate": 0.0
       },
       "status_refs": {
-        "config_path": "/Users/ahsadin/Documents/Projects/ENF/AGIF/agif_fabric_v1/fixtures/document_workflow/phase7/minimal_fabric_config_with_adaptation.json",
+        "config_path": "fixtures/document_workflow/phase7/minimal_fabric_config_with_adaptation.json",
         "evidence_path": "<temporary>/phase7_evidence.json"
       }
     },
@@ -8049,7 +8049,7 @@
         "unsafe_action_rate": 0.0
       },
       "status_refs": {
-        "config_path": "/Users/ahsadin/Documents/Projects/ENF/AGIF/agif_fabric_v1/fixtures/document_workflow/phase7/minimal_fabric_config_no_adaptation.json",
+        "config_path": "fixtures/document_workflow/phase7/minimal_fabric_config_no_adaptation.json",
         "evidence_path": "<temporary>/phase7_evidence.json"
       }
     }

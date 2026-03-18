@@ -15,9 +15,8 @@
 - Basis: Phase 0 bootstrap, Phase 1 requirements freeze, Phase 2 architecture freeze, Phase 3 runner and fabric foundation, Phase 4 elastic lifecycle and lineage, Phase 5 reviewed memory, quantized consolidation, and bounded growth, Phase 6 need signals, routing, utility, and authority, Phase 7 domain tissues and benchmark system, Phase 8 long-run growth, soak, and evidence capture, and Phase 9 paper, claims mapping, reproducibility packaging, and final evidence integration are complete.
 
 ## 2026-03-18 Phase 9 Closure Note
-- Repo-local paper copies now exist under:
-  - `06_outputs/paper_drafts/AGIF_v1_paper_R4_2026-03-18.docx`
-  - `06_outputs/paper_drafts/AGIF_v1_paper_R4_2026-03-18.pdf`
+- The public repo now carries the paper-draft status note under:
+  - `06_outputs/paper_drafts/README.md`
 - The aligned paper package records the current GitHub origin remote:
   - `https://github.com/Ahsadin/agif_fabric_v1`
 - Repo-local package files now exist under:
@@ -27,7 +26,7 @@
 - The one-command Phase 9 closure check now exists at:
   - `scripts/check_phase9_closure.py`
 - What this closes honestly:
-  - the finish-line deliverables are now present in this workspace
+  - the public repo documents the unpublished paper status explicitly while keeping the non-paper evidence package present
   - the paper claims are now tied to repo-local artifacts or explicit limitations
   - the reproducibility package is now runnable with one command
   - `AGIF_FABRIC_P9_PASS` is now earned

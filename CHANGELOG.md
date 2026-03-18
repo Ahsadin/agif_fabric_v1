@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-03-18 Public Paper Withdrawal
+- Removed the unpublished paper draft files from the public repo.
+- Added `06_outputs/paper_drafts/README.md` to explain that the draft is intentionally withheld pending later publication.
+- Updated the current Phase 9 docs and verifier so the public repo no longer claims that the unpublished draft is included.
+- Continued the public-polish pass by replacing local absolute-path references in the active docs and the Phase 7 result writer.
+
 ## 2026-03-18 Public Release Audit
 - Added `LICENSE` with the same MIT text used in `agif-tasklet-cell`.
 - Verified no tracked `.env`, key, token, or private-key files are present in this repo.
@@ -7,7 +13,7 @@
 - Recorded the public-readiness result in `PROJECT_README.md`:
   - the repo is license-ready and secret-scan clean
   - current source-of-truth docs stay aligned to the closed AGIF v1 package
-  - local filesystem paths still remain in some docs and generated evidence artifacts as reproducibility-context caveats, not secret material
+  - remaining machine-specific path references were then sanitized from the public-facing docs and benchmark artifacts
 
 ## 2026-03-18 Paper R4 Alignment
 - Added the aligned `R4` paper pair with the recorded GitHub origin remote and closed Phase 9 wording:
@@ -416,7 +422,7 @@
   - long-duration soak behavior beyond the current proof
 
 ## 2026-03-12
-- Created the standalone AGIF v1 project bootstrap in `/Users/ahsadin/Documents/Projects/ENF/AGIF/agif_fabric_v1`.
+- Created the standalone AGIF v1 project bootstrap in the `agif_fabric_v1` workspace.
 - Added the required root source-of-truth files:
   - `AGENTS.md`
   - `PROJECT_README.md`
@@ -455,7 +461,7 @@
   - future benchmark performance
 
 ## 2026-03-12 Plan Reconciliation
-- Marked `/Users/ahsadin/Downloads/PLAN.md` as the authoritative execution plan in the local rules and project readme.
+- Marked the external `PLAN.md` as the authoritative execution plan in the local rules and project readme.
 - Added the plan-required placeholder design files in `03_design/`.
 - Added the plan-required placeholder testing files in `05_testing/`.
 - Added the plan-expected admin thread paths under `00_admin/codex_threads/`.

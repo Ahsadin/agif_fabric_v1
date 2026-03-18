@@ -16,7 +16,7 @@ This file is the reviewer entrypoint for the final AGIF v1 package in this works
 3. Read `06_outputs/evidence_bundle_manifests/phase9_claims_to_evidence_matrix.md`.
 4. Review `06_outputs/result_tables/phase7_benchmark_results.md`.
 5. Review `05_testing/PHASE8_LONGRUN_EVIDENCE.md`, `06_outputs/run_summaries/phase8_real_24h_soak.md`, and `06_outputs/run_summaries/phase8_real_72h_soak.md`.
-6. Open the workspace paper copies under `06_outputs/paper_drafts/`.
+6. Read the paper-draft status note under `06_outputs/paper_drafts/README.md`.
 
 ## One-Command Verification Path
 - Command:
@@ -26,7 +26,7 @@ This file is the reviewer entrypoint for the final AGIF v1 package in this works
   - `python3 scripts/check_phase7_benchmarks.py` twice for deterministic hash confirmation
 - What the command validates without launching a new soak:
   - package files exist and contain the required machine-role and limitation language
-  - workspace paper copies exist
+  - the paper-draft status note exists
   - imported MSI `24h` and `72h` manifests are present
   - imported MSI evidence-file counts and stress-lane pass flags match the recorded summaries
   - repo footprint stays below the locked `35 GB` cap
@@ -52,8 +52,7 @@ This file is the reviewer entrypoint for the final AGIF v1 package in this works
 | `05_testing/PHASE9_CLOSURE_EVIDENCE.md` | Honest Phase 9 closure note | locally verified |
 | `06_outputs/evidence_bundle_manifests/phase9_claims_to_evidence_matrix.md` | Paper-claim to artifact mapping | locally verified |
 | `06_outputs/evidence_bundle_manifests/phase9_reproducibility_package.md` | This package guide and final evidence index | locally verified |
-| `06_outputs/paper_drafts/AGIF_v1_paper_R4_2026-03-18.docx` | Workspace DOCX paper copy | locally verified |
-| `06_outputs/paper_drafts/AGIF_v1_paper_R4_2026-03-18.pdf` | Workspace PDF paper copy | locally verified |
+| `06_outputs/paper_drafts/README.md` | Public note explaining why the unpublished paper draft is omitted | locally verified |
 | `06_outputs/result_tables/phase7_benchmark_results.md` | Human-readable benchmark tables | locally verified |
 | `06_outputs/result_tables/phase7_benchmark_results.json` | Machine-readable benchmark tables | locally verified |
 | `05_testing/PHASE7_TISSUES_BENCHMARK_EVIDENCE.md` | Phase 7 close evidence | locally verified |
@@ -70,7 +69,7 @@ This file is the reviewer entrypoint for the final AGIF v1 package in this works
 - The full Phase 3 to Phase 8 bounded runtime and benchmark chain.
 - The Phase 7 result tables stay stable across repeated fresh reruns.
 - The Phase 8 bounded validation summaries regenerate locally.
-- The paper copies, claims matrix, and reproducibility package now exist inside this workspace.
+- The paper-draft status note, claims matrix, and reproducibility package now exist inside this workspace.
 - The repo footprint stays well below the locked `35 GB` cap.
 
 ## What Is MSI Evidence
@@ -83,4 +82,4 @@ This file is the reviewer entrypoint for the final AGIF v1 package in this works
 - Full OS-restart or lid-close continuity beyond the documented checkpoint-boundary resume evidence.
 - Split or merge efficiency under sustained organic near-capacity normal load.
 - AGI, broad open-world generality, or unrestricted self-improvement.
-- Public release packaging.
+- The unpublished paper draft itself, which is intentionally withheld from this public repo pending later publication.

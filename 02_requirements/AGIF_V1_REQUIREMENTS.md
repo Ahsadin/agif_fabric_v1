@@ -3,7 +3,7 @@
 ## Purpose
 AGIF v1 is a standalone software project that must prove the AGIF architecture in a bounded, local, resource-aware form.
 
-This project must not depend at runtime on the old repo at `/Users/ahsadin/Documents/Projects/ENF/AGIF/agif-tasklet-cell`. That repo is reference-only.
+This project must not depend at runtime on the old repo `agif-tasklet-cell`. That repo is reference-only.
 
 ## Locked Outcome
 AGIF v1 must finish with:

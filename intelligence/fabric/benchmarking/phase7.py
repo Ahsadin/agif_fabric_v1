@@ -10,7 +10,7 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
-from intelligence.fabric.common import utc_now_iso
+from intelligence.fabric.common import repo_relative, utc_now_iso
 from intelligence.fabric.domain.finance import run_flat_baseline_workflow
 from intelligence.fabric.governance.authority import AuthorityEngine
 from intelligence.fabric.lifecycle import FabricLifecycleManager
@@ -1069,7 +1069,7 @@ def _summarize_fabric_runs(
             "tissues": _tissue_analytics(case_results=case_results, suite_cases=suite["cases"]),
         },
         "status_refs": {
-            "config_path": str(config_path),
+            "config_path": repo_relative(config_path),
             "evidence_path": str(pass_one["evidence_path"]),
         },
     }

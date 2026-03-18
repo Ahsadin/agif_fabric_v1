@@ -26,8 +26,7 @@ REQUIRED_FILES = [
     REPO_ROOT / "05_testing" / "PHASE9_CLOSURE_EVIDENCE.md",
     REPO_ROOT / "06_outputs" / "evidence_bundle_manifests" / "phase9_claims_to_evidence_matrix.md",
     REPO_ROOT / "06_outputs" / "evidence_bundle_manifests" / "phase9_reproducibility_package.md",
-    REPO_ROOT / "06_outputs" / "paper_drafts" / "AGIF_v1_paper_R4_2026-03-18.docx",
-    REPO_ROOT / "06_outputs" / "paper_drafts" / "AGIF_v1_paper_R4_2026-03-18.pdf",
+    REPO_ROOT / "06_outputs" / "paper_drafts" / "README.md",
     REPO_ROOT / "06_outputs" / "run_summaries" / "phase8_bounded_validation.md",
     REPO_ROOT / "06_outputs" / "run_summaries" / "phase8_bounded_validation.json",
     REPO_ROOT / "06_outputs" / "run_summaries" / "phase8_real_24h_soak.md",
@@ -52,6 +51,10 @@ TEXT_CHECKS = {
         "MacBook Air = development, documentation, benchmark, and primary target machine.",
         "MSI = imported long-run soak evidence machine.",
         "https://github.com/Ahsadin/agif_fabric_v1",
+    ],
+    REPO_ROOT / "06_outputs" / "paper_drafts" / "README.md": [
+        "intentionally omitted from this public repo",
+        "published later",
     ],
 }
 IMPORTED_RUN_EXPECTATIONS = {

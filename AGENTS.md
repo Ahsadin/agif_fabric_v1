@@ -2,9 +2,9 @@
 
 ## Project Identity
 - This folder is the standalone root for AGIF v1.
-- The authoritative execution plan for this repo is `/Users/ahsadin/Downloads/PLAN.md`.
+- The authoritative execution plan for this repo is the external `PLAN.md` provided for this workspace.
 - Do not treat this work as a sub-initiative inside `agif-tasklet-cell`.
-- The old repo at `/Users/ahsadin/Documents/Projects/ENF/AGIF/agif-tasklet-cell` is reference-only.
+- The old repo `agif-tasklet-cell` is reference-only.
 - Never create a runtime dependency on the old repo. If anything is reused later, copy or adapt it into this workspace with provenance.
 
 ## Locked Mission

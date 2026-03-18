@@ -49,6 +49,12 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Phase 8.5 hardening: complete and locally verified as part of the now-closed Phase 8 evidence layer
 - Phase 9: complete and locally verified through repo-local paper copies, a claims-to-evidence matrix, a reproducibility package and evidence index, and a one-command closure check; `AGIF_FABRIC_P9_PASS` is earned
 
+## Project Closure Status
+- AGIF v1 is closed in this repo.
+- The locked AGIF v1 finish line is complete.
+- Future expansion work belongs to AGIF v2, not to additional AGIF v1 scope in this workspace history.
+- This does not reopen or weaken the AGIF v1 non-claims.
+
 ## Phase 3 Foundation
 - Local runner entrypoint: `runner/cell`
 - Frozen commands now implemented:

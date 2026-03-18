@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-03-18 Project Closeout
+- Marked AGIF v1 explicitly as closed in the repo docs.
+- Recorded that future expansion work now belongs to AGIF v2, not to unfinished AGIF v1 scope.
+- Updated:
+  - `PROJECT_README.md`
+  - `DECISIONS.md`
+  - `CHANGELOG.md`
+  - `00_admin/CODEX_THREAD_MAP.md`
+
 ## 2026-03-18 Post-Closure MSI Alignment
 - Updated the wording so the final machine-role position is explicit:
   - MSI is the final long-run evidence basis for AGIF v1

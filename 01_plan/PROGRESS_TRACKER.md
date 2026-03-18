@@ -15,7 +15,13 @@
 - Basis: Phase 0 bootstrap, Phase 1 requirements freeze, Phase 2 architecture freeze, Phase 3 runner and fabric foundation, Phase 4 elastic lifecycle and lineage, Phase 5 reviewed memory, quantized consolidation, and bounded growth, Phase 6 need signals, routing, utility, and authority, Phase 7 domain tissues and benchmark system, Phase 8 long-run growth, soak, and evidence capture, and Phase 9 paper, claims mapping, reproducibility packaging, and final evidence integration are complete.
 
 ## 2026-03-18 Phase 9 Closure Note
-- The public repo now carries the paper-draft status note under:
+- The public repo now carries the working paper draft package under:
+  - `06_outputs/paper_drafts/AGIF_v1_paper_R5_2026-03-18.docx`
+  - `06_outputs/paper_drafts/AGIF_v1_paper_R5_2026-03-18.pdf`
+  - `06_outputs/paper_drafts/README.md`
+- The canonical MSI soak-machine provenance note now lives at:
+  - `05_testing/MSI_SOAK_MACHINE_NOTE.md`
+- The public repo also carries the paper-draft status note under:
   - `06_outputs/paper_drafts/README.md`
 - The aligned paper package records the current GitHub origin remote:
   - `https://github.com/Ahsadin/agif_fabric_v1`
@@ -26,7 +32,7 @@
 - The one-command Phase 9 closure check now exists at:
   - `scripts/check_phase9_closure.py`
 - What this closes honestly:
-  - the public repo documents the unpublished paper status explicitly while keeping the non-paper evidence package present
+  - the public repo now includes the working `R5` paper draft while still marking it clearly as non-final
   - the paper claims are now tied to repo-local artifacts or explicit limitations
   - the reproducibility package is now runnable with one command
   - `AGIF_FABRIC_P9_PASS` is now earned
@@ -168,7 +174,7 @@
   - repeated finance workflow cycles now show descriptor reuse benefit locally
   - the bounded validation now also shows descriptor usefulness drift, one governance-preserved reuse hold case, checkpoint-boundary resume realism, and an explicit failure taxonomy locally
   - split/merge stress, memory saturation pressure, routing pressure, trust/quarantine fault injection, and replay/rollback recovery all execute locally
-  - repo-local paper copies aligned to the R2 paper now exist locally
+  - the repo-local `R5` working paper draft and the canonical MSI soak-machine note now exist locally
   - the Phase 9 claims matrix and reproducibility package now exist locally
   - `python3 scripts/check_phase9_closure.py` passes locally
   - the Phase 9 command re-runs `python3 scripts/check_phase8_soak.py` locally

@@ -14,6 +14,11 @@ This note now supports honest Phase 8 closure.
 - The real `24h` and real `72h` soak evidence in this repo came from MSI artifacts.
 - Do not describe the imported `24h` or `72h` soak as MacBook Air-only long-run proof.
 
+## Canonical MSI Soak Machine Note
+- The explicit machine provenance for the imported long-run runs now lives at `05_testing/MSI_SOAK_MACHINE_NOTE.md`.
+- That note records the MSI hardware, Windows environment, Python version, power settings, before-soak verification facts, run roots, artifact sizes, and honest limits.
+- It also records the Windows project path `E:\AGIF\agif_fabric_v1` as provenance evidence only, not as a MacBook claim.
+
 ## Deterministic Harness Check
 - Command run locally: `python3 scripts/check_phase8_soak.py`
 - Result: pass
@@ -61,8 +66,8 @@ This note now supports honest Phase 8 closure.
 - Dedicated real `24h` summary outputs:
   - `06_outputs/run_summaries/phase8_real_24h_soak.md`
   - `06_outputs/run_summaries/phase8_real_24h_soak.json`
-- Context or inference:
-  - the MSI machine label is supported by the verified project state plus Windows paths in the imported artifacts, such as `E:\AGIF\agif_fabric_v1` and `C:\Python313`
+- Canonical provenance note:
+  - `05_testing/MSI_SOAK_MACHINE_NOTE.md` records the explicit MSI hardware, Windows, interpreter, and power-setting details for this imported run
 
 ## Real 24h Soak Validity
 - Run profile: `phase8_soak_24h`
@@ -114,8 +119,8 @@ This note now supports honest Phase 8 closure.
 - Dedicated real `72h` summary outputs:
   - `06_outputs/run_summaries/phase8_real_72h_soak.md`
   - `06_outputs/run_summaries/phase8_real_72h_soak.json`
-- Context or inference:
-  - the MSI machine label is supported by the verified project state plus Windows paths in the imported artifacts, such as `E:\AGIF\agif_fabric_v1` and `C:\Python313`
+- Canonical provenance note:
+  - `05_testing/MSI_SOAK_MACHINE_NOTE.md` records the explicit MSI hardware, Windows, interpreter, and power-setting details for this imported run
 
 ## Real 72h Soak Validity
 - Run profile: `phase8_soak_72h`
@@ -256,9 +261,9 @@ This note now supports honest Phase 8 closure.
 - full lid-close or OS-restart continuity beyond checkpoint-boundary resume evidence
 - spontaneous long-run split/merge usefulness outside the stress lanes
 - AGI-like generality or broad open-world capability
-- Phase 9 paper or reproducibility closure
+- final published paper status
 
 ## Assumed Only
 - MacBook Air-only long-run endurance
-- Phase 9 paper and reproducibility closure
+- final published paper status
 - benchmark outcomes beyond the committed finance-domain proof set

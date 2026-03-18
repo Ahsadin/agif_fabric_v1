@@ -33,8 +33,8 @@
   - `08_logs/phase8_soak/run_72h/evidence/`
   - `08_logs/phase8_soak/run_72h/stress/`
   - `08_logs/phase8_soak/run_72h/longrun_runtime_state/`
-- Context or inference:
-  - "MSI soak machine" comes from the verified project state plus the Windows artifact paths captured in the run files, such as `E:\AGIF\agif_fabric_v1` and `C:\Python313`.
+- Canonical provenance note:
+  - `05_testing/MSI_SOAK_MACHINE_NOTE.md` records the explicit MSI hardware, Windows environment, Python version, power settings, and honest limits for this run family.
 
 ## Validity
 - The run is valid as a completed real `72h` soak artifact set.
@@ -174,4 +174,4 @@
 - full OS restart or lid-close continuity beyond checkpoint-boundary resume evidence
 - spontaneous long-run split/merge usefulness outside the stress lanes
 - AGI-like generality or broad open-world capability
-- Phase 9 paper or reproducibility closure
+- final published paper status

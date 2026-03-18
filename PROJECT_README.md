@@ -47,7 +47,7 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Phase 7.6 hardening: complete and locally verified without changing project units
 - Phase 8: complete and locally verified through bounded harness checks plus real `24h` and real `72h` MSI soak evidence; `AGIF_FABRIC_P8_PASS` is earned
 - Phase 8.5 hardening: complete and locally verified as part of the now-closed Phase 8 evidence layer
-- Phase 9: complete and locally verified through repo-local paper copies, a claims-to-evidence matrix, a reproducibility package and evidence index, and a one-command closure check; `AGIF_FABRIC_P9_PASS` is earned
+- Phase 9: complete and locally verified through the repo-local `R5` working paper draft, a claims-to-evidence matrix, a reproducibility package and evidence index, and a one-command closure check; `AGIF_FABRIC_P9_PASS` is earned
 
 ## Project Closure Status
 - AGIF v1 is closed in this repo.
@@ -62,7 +62,7 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
   - no tracked `.env`, key, token, or private-key files were found
   - `.gitignore` already excludes `.env`, local temp files, and runtime state
   - current source-of-truth docs are aligned to the closed AGIF v1 package
-  - public-facing docs and generated benchmark artifacts were sanitized to remove machine-specific absolute paths
+  - public-facing docs and generated benchmark artifacts were sanitized to remove personal home-directory paths, while the explicit MSI soak-machine project path is retained only where it is needed as provenance evidence
 
 ## Phase 3 Foundation
 - Local runner entrypoint: `runner/cell`
@@ -173,6 +173,7 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
   - `06_outputs/run_summaries/phase8_real_72h_soak.md`
   - `06_outputs/run_summaries/phase8_real_72h_soak.json`
 - The current Phase 8 evidence note lives at `05_testing/PHASE8_LONGRUN_EVIDENCE.md`.
+- The canonical MSI soak-machine provenance note lives at `05_testing/MSI_SOAK_MACHINE_NOTE.md`.
 - The current Phase 8.5 hardening note lives at `05_testing/PHASE85_HARDENING_EVIDENCE.md`.
 - The current Phase 8 state is closed honestly:
   - the harness and bounded validation are locally verified on the MacBook Air development/documentation machine
@@ -184,7 +185,9 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
   - the recurring `WinError 5` manifest-write interruption in the long-run MSI artifacts is documented as an evidence caveat, not hidden
 
 ## Phase 9 Paper, Claims Matrix, And Reproducibility Package
-- The unpublished paper draft is intentionally omitted from this public repo pending later publication.
+- The current working paper draft lives at:
+  - `06_outputs/paper_drafts/AGIF_v1_paper_R5_2026-03-18.docx`
+  - `06_outputs/paper_drafts/AGIF_v1_paper_R5_2026-03-18.pdf`
 - The current paper-draft status note lives at:
   - `06_outputs/paper_drafts/README.md`
 - The current GitHub origin remote recorded in the aligned paper package is:
@@ -199,10 +202,11 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
   - `scripts/check_phase9_closure.py`
 - The current Phase 9 state is closed honestly:
   - the earlier Phase 3 to Phase 8 runtime, benchmark, and MSI soak claims are now mapped to repo-local artifacts
-  - this public repo now contains the claims matrix, benchmark evidence, reproducibility package, and an explicit paper-draft status note
+  - this public repo now contains the working `R5` paper draft, the claims matrix, benchmark evidence, reproducibility package, and an explicit paper-draft status note
+  - the canonical MSI soak-machine provenance note is now included in the repo package
   - `python3 scripts/check_phase9_closure.py` passes locally
   - `AGIF_FABRIC_P9_PASS` is earned
-  - the unpublished paper draft is intentionally withheld from the public repo pending later publication
+  - the included `R5` paper draft is a working draft, not a final publication
   - recorded project progress is now `600/600`
   - no future MacBook Air soak is planned or required for AGIF v1 closure
   - this still does not claim MacBook Air-only long-run endurance
@@ -261,11 +265,11 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Phase 7.5 hardening verification method: run `python3 scripts/check_phase7_benchmarks.py` and confirm `05_testing/PHASE75_HARDENING_EVIDENCE.md`.
 - Phase 7.6 hardening verification method: run `python3 scripts/check_phase7_benchmarks.py` and confirm `05_testing/PHASE76_HARDENING_EVIDENCE.md`.
 - Phase 8 harness verification method: run `python3 scripts/check_phase8_soak.py` and confirm the bounded summary under `06_outputs/run_summaries/` plus `05_testing/PHASE8_LONGRUN_EVIDENCE.md` and `05_testing/PHASE85_HARDENING_EVIDENCE.md`.
-- Phase 9 closure verification method: run `python3 scripts/check_phase9_closure.py` and confirm the paper-draft status note, the claims matrix, the reproducibility package and evidence index, the Phase 7 deterministic rerun hash check, and the imported MSI `24h` and `72h` artifact counts.
+- Phase 9 closure verification method: run `python3 scripts/check_phase9_closure.py` and confirm the working `R5` paper draft, the paper-draft status note, the MSI soak-machine note, the claims matrix, the reproducibility package and evidence index, the Phase 7 deterministic rerun hash check, and the imported MSI `24h` and `72h` artifact counts.
 - Local verification status is recorded in `01_plan/PROGRESS_TRACKER.md` and `CHANGELOG.md`.
 - Real `24h` soak evidence is now recorded from imported MSI artifacts under `08_logs/phase8_soak/run_24h/`.
 - Real `72h` soak evidence is now recorded from imported MSI artifacts under `08_logs/phase8_soak/run_72h/`.
 - Phase 8 is now closed honestly through the bounded harness plus the real `24h` and real `72h` MSI soak evidence.
 - For AGIF v1, MSI remains the final long-run evidence basis and no future MacBook Air soak is planned or required for project closure.
-- Phase 9 is now closed honestly through the public paper-draft status note, the claims matrix, the reproducibility package, the final evidence index, and the one-command closure check.
+- Phase 9 is now closed honestly through the working `R5` paper draft, the paper-draft status note, the claims matrix, the reproducibility package, the final evidence index, and the one-command closure check.
 - AGI-like generality and broader open-world claims remain outside the locked proof boundary.

@@ -1,5 +1,28 @@
 # Changelog
 
+## 2026-03-18 Paper R5 MSI Provenance Alignment
+- Added the canonical MSI soak-machine provenance note:
+  - `05_testing/MSI_SOAK_MACHINE_NOTE.md`
+- Reintroduced the public working paper draft as `R5`:
+  - `06_outputs/paper_drafts/AGIF_v1_paper_R5_2026-03-18.docx`
+  - `06_outputs/paper_drafts/AGIF_v1_paper_R5_2026-03-18.pdf`
+- Updated the active package docs and verifier so they now point at the included `R5` working draft and the MSI provenance note:
+  - `PROJECT_README.md`
+  - `01_plan/PROGRESS_TRACKER.md`
+  - `05_testing/PASS_TOKENS.md`
+  - `05_testing/PHASE8_LONGRUN_EVIDENCE.md`
+  - `05_testing/PHASE9_CLOSURE_EVIDENCE.md`
+  - `06_outputs/run_summaries/phase8_real_24h_soak.md`
+  - `06_outputs/run_summaries/phase8_real_72h_soak.md`
+  - `06_outputs/evidence_bundle_manifests/phase9_claims_to_evidence_matrix.md`
+  - `06_outputs/evidence_bundle_manifests/phase9_reproducibility_package.md`
+  - `06_outputs/paper_drafts/README.md`
+  - `scripts/check_phase9_closure.py`
+- Kept the paper status honest:
+  - the public repo now includes a working `R5` draft
+  - the draft is still not the final publication
+  - MSI remains the final AGIF v1 long-run evidence basis and still does not become MacBook Air-only proof
+
 ## 2026-03-18 Public Paper Withdrawal
 - Removed the unpublished paper draft files from the public repo.
 - Added `06_outputs/paper_drafts/README.md` to explain that the draft is intentionally withheld pending later publication.

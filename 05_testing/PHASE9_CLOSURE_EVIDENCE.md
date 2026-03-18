@@ -18,7 +18,7 @@ This note records the honest closure of Phase 9 for paper alignment, claims mapp
 | Runnable local AGIF v1 with earlier evidence still passing | already backed by Phase 3 to Phase 8 checks | re-verified locally through `python3 scripts/check_phase9_closure.py` |
 | Paper claims tied to concrete repo artifacts | partially backed in the paper appendix only | now backed by `06_outputs/evidence_bundle_manifests/phase9_claims_to_evidence_matrix.md` |
 | Reviewer-ready reproducibility package and final evidence index in the workspace | missing | now backed by `06_outputs/evidence_bundle_manifests/phase9_reproducibility_package.md` |
-| Public paper status documented inside this workspace | missing | now backed by `06_outputs/paper_drafts/README.md` |
+| Working paper draft and paper status documented inside this workspace | missing | now backed by `06_outputs/paper_drafts/AGIF_v1_paper_R5_2026-03-18.docx`, `06_outputs/paper_drafts/AGIF_v1_paper_R5_2026-03-18.pdf`, and `06_outputs/paper_drafts/README.md` |
 | One-command closure path | missing | now backed by `scripts/check_phase9_closure.py` |
 
 ## Claims Already Backed Before Phase 9 Packaging
@@ -30,12 +30,14 @@ This note records the honest closure of Phase 9 for paper alignment, claims mapp
 ## Claims That Needed Tighter Mapping
 - The paper-level claim that the evidence base is reproducible needed a repo-local package, not only an appendix inside the paper.
 - The paper-level claim that every major result is auditable needed a repo-local claims-to-evidence matrix.
-- The finish-line paper status needed an explicit repo-local note once the unpublished draft was intentionally withheld from the public repo.
+- The finish-line paper package needed an explicit repo-local working draft, a status note, and a current GitHub reference inside the public repo.
+- The MSI soak evidence needed one canonical repo-local provenance note so the paper and package stop relying on path inference alone.
 - The final closure claim needed one command that a reviewer can run without guessing the order.
 
 ## Scope For This Closure
 - In scope:
-  - repo-local paper status note
+  - repo-local working paper draft and paper status note
+  - canonical MSI soak-machine provenance note
   - claims-to-evidence mapping
   - reproducibility package and final evidence index
   - one-command verification glue
@@ -48,6 +50,9 @@ This note records the honest closure of Phase 9 for paper alignment, claims mapp
   - AGI or broad open-world generality claims
 
 ## Artifacts Added Or Aligned In This Thread
+- `05_testing/MSI_SOAK_MACHINE_NOTE.md`
+- `06_outputs/paper_drafts/AGIF_v1_paper_R5_2026-03-18.docx`
+- `06_outputs/paper_drafts/AGIF_v1_paper_R5_2026-03-18.pdf`
 - `06_outputs/paper_drafts/README.md`
 - `06_outputs/evidence_bundle_manifests/phase9_claims_to_evidence_matrix.md`
 - `06_outputs/evidence_bundle_manifests/phase9_reproducibility_package.md`
@@ -58,7 +63,7 @@ This note records the honest closure of Phase 9 for paper alignment, claims mapp
 - What it does:
   - re-runs `python3 scripts/check_phase8_soak.py`
   - re-runs `python3 scripts/check_phase7_benchmarks.py` twice and confirms stable hashes for the tracked Phase 7 result files
-  - validates the repo-local package files and paper-draft status note
+  - validates the repo-local package files, the working `R5` paper draft, the MSI soak-machine note, and the paper-draft status note
   - validates the imported MSI `24h` and `72h` manifests, evidence-file counts, and stress-lane pass flags
   - checks that repo footprint stays inside the locked `35 GB` cap
 - Important:
@@ -77,7 +82,7 @@ This note records the honest closure of Phase 9 for paper alignment, claims mapp
   - `python3 scripts/check_phase3_foundation.py`
 
 ## Honest Caveats That Remain After Phase 9 Closure
-- The unpublished paper draft is intentionally omitted from this public repo pending later publication.
+- The included `R5` paper draft is a working draft, not the final publication.
 - MacBook Air remains the development, documentation, benchmark, and primary target machine; MSI remains the imported long-run soak evidence machine.
 - For AGIF v1, MSI is the final long-run evidence basis; no future MacBook Air soak is planned or required for project closure.
 - The real `72h` MSI run still carries the documented `WinError 5` manifest-write interruption and incomplete final resume bookkeeping.

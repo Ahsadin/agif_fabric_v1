@@ -32,8 +32,8 @@
   - `08_logs/phase8_soak/run_24h/soak_stderr_resume1.log`
   - `08_logs/phase8_soak/run_24h/evidence/`
   - `08_logs/phase8_soak/run_24h/stress/`
-- Context or inference:
-  - "MSI soak machine" comes from the verified project state plus the Windows artifact paths captured in the run files, such as `E:\AGIF\agif_fabric_v1` and `C:\Python313`.
+- Canonical provenance note:
+  - `05_testing/MSI_SOAK_MACHINE_NOTE.md` records the explicit MSI hardware, Windows environment, Python version, power settings, and honest limits for this run family.
 
 ## Validity
 - The run is valid as a completed real `24h` soak artifact set.
@@ -168,6 +168,7 @@
   - Phase 8 closed honestly
   - `AGIF_FABRIC_P8_PASS` was earned
   - recorded progress moved to `570/600`
+  - the canonical machine-provenance note now lives at `05_testing/MSI_SOAK_MACHINE_NOTE.md`
 
 ## 72h Watch Items That Were Later Checked
 - watch during `72h` soak: memory value per retained KiB

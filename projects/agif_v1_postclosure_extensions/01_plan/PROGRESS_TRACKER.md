@@ -15,6 +15,7 @@
 - Units are awarded only when the full gate for that extension block is closed.
 - Creating scaffolding and plans does not earn units by itself.
 - Root AGIF v1 progress remains frozen at `600/600` and must not be changed by this tracker.
+- The bundle-close verifier may earn `AGIF_FABRIC_V1X_PASS`, but it does not add units beyond the already closed `130/130`.
 
 ## Current Recorded Progress
 - Completed units: `130`
@@ -29,5 +30,6 @@
 - `AGIF_FABRIC_V1X_G1_PASS` is earned.
 - `AGIF_FABRIC_V1X_G2_PASS` is earned.
 - `AGIF_FABRIC_V1X_G3_PASS` is earned.
+- `AGIF_FABRIC_V1X_PASS` is earned.
 - Root AGIF v1 remains frozen at `600/600`.
-- Bundle close remains open.
+- Bundle close is complete and locally verified.

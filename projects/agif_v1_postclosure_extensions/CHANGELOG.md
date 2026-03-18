@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026-03-19 Track B Bundle Closure
+- Closed only the Track B post-closure extension bundle.
+- Added the ordered bundle verifier and summary helper:
+  - `intelligence/fabric/benchmarking/v1x_bundle.py`
+  - `scripts/check_v1x_bundle.py`
+- Added the focused bundle test and evidence path:
+  - `05_testing/test_v1x_bundle.py`
+  - `05_testing/V1X_BUNDLE_CLOSURE_EVIDENCE.md`
+- Added the local bundle result tables:
+  - `06_outputs/result_tables/v1x_bundle_closure.md`
+  - `06_outputs/result_tables/v1x_bundle_closure.json`
+- Recorded the closed bundle state:
+  - Track B progress remains `130/130`
+  - `AGIF_FABRIC_V1X_PASS` is now earned
+  - root AGIF v1 remains `600/600`
+  - Gap 1, Gap 2, and Gap 3 claims remain unchanged
+
 ## 2026-03-19 Track B Gap 3 POS-Domain Causal Transfer Closure
 - Closed only the Track B Gap 3 bounded POS-domain and causal cross-domain transfer proof.
 - Added the deterministic Gap 3 fixture set under:

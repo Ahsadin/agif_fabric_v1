@@ -1,0 +1,186 @@
+{
+  "acceptance": {
+    "ordered_command_chain_passed": true,
+    "ordered_gap_chain_passed": true,
+    "passed": true,
+    "root_closure_rechecked": true,
+    "root_progress_still_600_of_600": true,
+    "root_tokens_still_isolated": true,
+    "setup_prerequisite_recorded": true,
+    "track_b_closure_record_complete": true,
+    "track_b_progress_still_130_of_130": true
+  },
+  "bundle_id": "agif_fabric_v1x_bundle",
+  "command_chain": [
+    {
+      "command": "python3 scripts/check_v1x_setup.py",
+      "expected_command": "python3 scripts/check_v1x_setup.py",
+      "expected_token": "AGIF_FABRIC_V1X_SETUP_PASS",
+      "expected_token_present": true,
+      "label": "Setup prerequisite",
+      "last_stdout_line": "AGIF_FABRIC_V1X_SETUP_PASS",
+      "matched_expected_order": true,
+      "order": 1,
+      "returncode": 0,
+      "stderr_last_line": null,
+      "stdout_token_lines": [
+        "AGIF_FABRIC_V1X_SETUP_PASS"
+      ],
+      "step_id": "setup_prerequisite"
+    },
+    {
+      "command": "python3 scripts/check_v1x_organic_load.py",
+      "expected_command": "python3 scripts/check_v1x_organic_load.py",
+      "expected_token": "AGIF_FABRIC_V1X_G1_PASS",
+      "expected_token_present": true,
+      "label": "Gap 1 organic load",
+      "last_stdout_line": "AGIF_FABRIC_V1X_G1_PASS",
+      "matched_expected_order": true,
+      "order": 2,
+      "returncode": 0,
+      "stderr_last_line": "OK",
+      "stdout_token_lines": [
+        "AGIF_FABRIC_V1X_G1_PASS"
+      ],
+      "step_id": "gap_1"
+    },
+    {
+      "command": "python3 scripts/check_v1x_skill_graph.py",
+      "expected_command": "python3 scripts/check_v1x_skill_graph.py",
+      "expected_token": "AGIF_FABRIC_V1X_G2_PASS",
+      "expected_token_present": true,
+      "label": "Gap 2 skill graph",
+      "last_stdout_line": "AGIF_FABRIC_V1X_G2_PASS",
+      "matched_expected_order": true,
+      "order": 3,
+      "returncode": 0,
+      "stderr_last_line": "OK",
+      "stdout_token_lines": [
+        "AGIF_FABRIC_V1X_G2_PASS"
+      ],
+      "step_id": "gap_2"
+    },
+    {
+      "command": "python3 scripts/check_v1x_pos_domain.py",
+      "expected_command": "python3 scripts/check_v1x_pos_domain.py",
+      "expected_token": "AGIF_FABRIC_V1X_G3_PASS",
+      "expected_token_present": true,
+      "label": "Gap 3 POS domain",
+      "last_stdout_line": "AGIF_FABRIC_V1X_G3_PASS",
+      "matched_expected_order": true,
+      "order": 4,
+      "returncode": 0,
+      "stderr_last_line": "OK",
+      "stdout_token_lines": [
+        "AGIF_FABRIC_V1X_G3_PASS"
+      ],
+      "step_id": "gap_3"
+    },
+    {
+      "command": "python3 scripts/check_phase9_closure.py",
+      "expected_command": "python3 scripts/check_phase9_closure.py",
+      "expected_token": "AGIF_FABRIC_P9_PASS",
+      "expected_token_present": true,
+      "label": "Root Phase 9 closure re-check",
+      "last_stdout_line": "AGIF_FABRIC_P9_PASS",
+      "matched_expected_order": true,
+      "order": 5,
+      "returncode": 0,
+      "stderr_last_line": "OK",
+      "stdout_token_lines": [
+        "AGIF_FABRIC_P5_PASS",
+        "AGIF_FABRIC_P4_PASS",
+        "AGIF_FABRIC_P3_PASS",
+        "AGIF_FABRIC_P6_PASS",
+        "AGIF_FABRIC_P5_PASS",
+        "AGIF_FABRIC_P4_PASS",
+        "AGIF_FABRIC_P3_PASS",
+        "AGIF_FABRIC_P7_PASS",
+        "AGIF_FABRIC_P8_HARNESS_READY",
+        "AGIF_FABRIC_P5_PASS",
+        "AGIF_FABRIC_P4_PASS",
+        "AGIF_FABRIC_P3_PASS",
+        "AGIF_FABRIC_P6_PASS",
+        "AGIF_FABRIC_P5_PASS",
+        "AGIF_FABRIC_P4_PASS",
+        "AGIF_FABRIC_P3_PASS",
+        "AGIF_FABRIC_P7_PASS",
+        "AGIF_FABRIC_P5_PASS",
+        "AGIF_FABRIC_P4_PASS",
+        "AGIF_FABRIC_P3_PASS",
+        "AGIF_FABRIC_P6_PASS",
+        "AGIF_FABRIC_P5_PASS",
+        "AGIF_FABRIC_P4_PASS",
+        "AGIF_FABRIC_P3_PASS",
+        "AGIF_FABRIC_P7_PASS",
+        "AGIF_FABRIC_P9_PASS"
+      ],
+      "step_id": "root_phase9"
+    }
+  ],
+  "gap_chain": [
+    {
+      "accepted": true,
+      "evidence_ref": "05_testing/V1X_ORGANIC_LOAD_EVIDENCE.md",
+      "gate_id": "gap_1",
+      "label": "Gap 1 organic load",
+      "order": 1,
+      "required_token": "AGIF_FABRIC_V1X_G1_PASS",
+      "result_ref": "06_outputs/result_tables/v1x_finance_organic_load.json",
+      "support": {
+        "case_count": 40,
+        "latency_gain_vs_control": 16.5,
+        "merge_event_count": 1,
+        "queue_age_gain_vs_control": 16.5,
+        "split_event_count": 1
+      }
+    },
+    {
+      "accepted": true,
+      "evidence_ref": "05_testing/V1X_SKILL_GRAPH_EVIDENCE.md",
+      "gate_id": "gap_2",
+      "label": "Gap 2 skill graph",
+      "order": 2,
+      "required_token": "AGIF_FABRIC_V1X_G2_PASS",
+      "result_ref": "06_outputs/result_tables/v1x_skill_graph_transfer.json",
+      "support": {
+        "abstained_transfer_count": 1,
+        "approved_transfer_count": 1,
+        "denied_transfer_count": 2,
+        "explicit_provenance_count": 1,
+        "retired_source_descriptor_count": 1,
+        "source_descriptor_count": 3
+      }
+    },
+    {
+      "accepted": true,
+      "evidence_ref": "05_testing/V1X_POS_DOMAIN_EVIDENCE.md",
+      "gate_id": "gap_3",
+      "label": "Gap 3 POS domain",
+      "order": 3,
+      "required_token": "AGIF_FABRIC_V1X_G3_PASS",
+      "result_ref": "06_outputs/result_tables/v1x_pos_domain_transfer.json",
+      "support": {
+        "approved_transfer_count": 3,
+        "case_count": 5,
+        "control_governance_disabled_veto_count": 3,
+        "counted_influence_count": 2,
+        "improved_case_ids": "northwind_settlement_alias_hold,tailspin_refund_pattern_reused"
+      }
+    }
+  ],
+  "root_recheck": {
+    "phase9_evidence_mentions_command": true,
+    "phase9_token_recorded": true,
+    "progress_value": "600/600",
+    "root_progress_still_600_of_600": true,
+    "root_tokens_exclude_track_b_tokens": true
+  },
+  "track_b_record_status": {
+    "all_track_b_tokens_recorded": true,
+    "bundle_checklist_closed": true,
+    "bundle_evidence_recorded": true,
+    "bundle_readme_closed": true,
+    "progress_still_130_of_130": true
+  }
+}

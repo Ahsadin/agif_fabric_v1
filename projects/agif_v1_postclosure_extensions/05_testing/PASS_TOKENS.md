@@ -12,6 +12,7 @@
 - `AGIF_FABRIC_V1X_G1_PASS`
 - `AGIF_FABRIC_V1X_G2_PASS`
 - `AGIF_FABRIC_V1X_G3_PASS`
+- `AGIF_FABRIC_V1X_PASS`
 
 ## Notes
 - These tokens are local to `projects/agif_v1_postclosure_extensions/`.
@@ -20,3 +21,4 @@
 - `AGIF_FABRIC_V1X_G1_PASS` was locally verified with `python3 scripts/check_v1x_organic_load.py`.
 - `AGIF_FABRIC_V1X_G2_PASS` was locally verified with `python3 scripts/check_v1x_skill_graph.py`.
 - `AGIF_FABRIC_V1X_G3_PASS` was locally verified with `python3 scripts/check_v1x_pos_domain.py`.
+- `AGIF_FABRIC_V1X_PASS` was locally verified with `python3 scripts/check_v1x_bundle.py`.

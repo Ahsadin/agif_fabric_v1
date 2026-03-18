@@ -42,7 +42,7 @@
 - [x] `AGIF_FABRIC_V1X_G3_PASS` is earned honestly
 
 ## Bundle Close
-- [ ] ordered extension chain passes
-- [ ] root AGIF v1 closure still passes
-- [ ] root AGIF v1 progress still reads `600/600`
-- [ ] `AGIF_FABRIC_V1X_PASS` is earned honestly
+- [x] ordered extension chain passes
+- [x] root AGIF v1 closure still passes
+- [x] root AGIF v1 progress still reads `600/600`
+- [x] `AGIF_FABRIC_V1X_PASS` is earned honestly

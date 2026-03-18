@@ -41,7 +41,9 @@
 - Gap 3 POS domain and causal cross-domain transfer proof is closed honestly.
 - `AGIF_FABRIC_V1X_G3_PASS` is earned.
 - Current extension progress: `130/130`
-- Final bundle close remains open and was not started in this thread.
+- Final bundle close is now locally verified.
+- `AGIF_FABRIC_V1X_PASS` is earned honestly.
+- Current extension progress remains `130/130`.
 
 ## In Scope
 - project-local planning and freeze records
@@ -88,6 +90,7 @@
 - `python3 scripts/check_v1x_organic_load.py` passes locally.
 - `python3 scripts/check_v1x_skill_graph.py` passes locally.
 - `python3 scripts/check_v1x_pos_domain.py` passes locally.
+- `python3 scripts/check_v1x_bundle.py` passes locally.
 - Root AGIF v1 remains closed at `600/600`.
 - Root tracker isolation is explicit in the Track B docs.
 - Gap 1 is now locally verified by:
@@ -128,3 +131,13 @@
     - `northwind_settlement_alias_hold`
     - `tailspin_refund_pattern_reused`
   - `1` missing-explicit-approval denial and `1` low-quality abstain remain non-influential
+- Bundle closure is now locally verified by:
+  - `05_testing/V1X_BUNDLE_CLOSURE_EVIDENCE.md`
+  - `06_outputs/result_tables/v1x_bundle_closure.md`
+  - `06_outputs/result_tables/v1x_bundle_closure.json`
+  - `scripts/check_v1x_bundle.py`
+- Bundle closure current proof result is:
+  - the verifier re-runs setup, Gap 1, Gap 2, Gap 3, and root Phase 9 closure in order
+  - root AGIF v1 still reads `600/600`
+  - root pass tokens still exclude all Track B tokens
+  - Track B still reads `130/130`

@@ -55,6 +55,16 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Future expansion work belongs to AGIF v2, not to additional AGIF v1 scope in this workspace history.
 - This does not reopen or weaken the AGIF v1 non-claims.
 
+## License And Public Readiness
+- License: MIT. See `LICENSE`.
+- This repo now uses the same license text as `agif-tasklet-cell`.
+- Public-readiness audit result:
+  - no tracked `.env`, key, token, or private-key files were found
+  - `.gitignore` already excludes `.env`, local temp files, and runtime state
+  - current source-of-truth docs are aligned to the closed AGIF v1 package
+- Remaining public-facing caveat:
+  - some docs and generated evidence artifacts still contain local filesystem paths as part of the reproducibility record
+
 ## Phase 3 Foundation
 - Local runner entrypoint: `runner/cell`
 - Frozen commands now implemented:

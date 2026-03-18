@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-03-18 Public Release Audit
+- Added `LICENSE` with the same MIT text used in `agif-tasklet-cell`.
+- Verified no tracked `.env`, key, token, or private-key files are present in this repo.
+- Confirmed `.gitignore` already excludes local secret files, temp files, and runtime-state files.
+- Recorded the public-readiness result in `PROJECT_README.md`:
+  - the repo is license-ready and secret-scan clean
+  - current source-of-truth docs stay aligned to the closed AGIF v1 package
+  - local filesystem paths still remain in some docs and generated evidence artifacts as reproducibility-context caveats, not secret material
+
 ## 2026-03-18 Paper R4 Alignment
 - Added the aligned `R4` paper pair with the recorded GitHub origin remote and closed Phase 9 wording:
   - `06_outputs/paper_drafts/AGIF_v1_paper_R4_2026-03-18.docx`

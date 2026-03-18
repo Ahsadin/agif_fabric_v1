@@ -35,7 +35,6 @@ TEXT_CHECKS = {
         "If no organic split occurs inside the `40`-case stream, the Gap 1 acceptance gate fails.",
         "Cross-domain influence counts only when there is explicit `transfer_approval`.",
         "`AGIF_FABRIC_V1X_SETUP_PASS` is earned.",
-        "Current extension progress: `15/130`",
     ],
     TRACK_B_ROOT / "02_requirements" / "TRACK_B_SCOPE_AND_GATES.md": [
         "Bundle close must run the proofs in order: Gap 1, then Gap 2, then Gap 3.",
@@ -47,10 +46,9 @@ TEXT_CHECKS = {
         "explicit `transfer_approval`",
     ],
     TRACK_B_ROOT / "01_plan" / "PROGRESS_TRACKER.md": [
-        "Completed units: `15`",
-        "Progress now: `15/130`",
-        "Percent complete: `11.5%`",
-        "`python3 scripts/check_v1x_setup.py` passes locally.",
+        "Total extension denominator: `130`",
+        "| Setup and freeze | 15 | Complete and locally verified |",
+        "`AGIF_FABRIC_V1X_SETUP_PASS` is earned.",
         "Root AGIF v1 remains frozen at `600/600`.",
     ],
     TRACK_B_ROOT / "01_plan" / "PHASE_GATE_CHECKLIST.md": [

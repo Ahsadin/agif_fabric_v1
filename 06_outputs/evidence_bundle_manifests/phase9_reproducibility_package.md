@@ -13,10 +13,11 @@ This file is the reviewer entrypoint for the final AGIF v1 package in this works
 ## Reviewer Quick Start
 1. Read `PROJECT_README.md`, `02_requirements/PROOF_BOUNDARY.md`, and `02_requirements/FALSIFICATION_THRESHOLDS.md`.
 2. Run `python3 scripts/check_phase9_closure.py` from the repo root.
-3. Read `06_outputs/evidence_bundle_manifests/phase9_claims_to_evidence_matrix.md`.
-4. Review `06_outputs/result_tables/phase7_benchmark_results.md`.
-5. Review `05_testing/MSI_SOAK_MACHINE_NOTE.md`, `05_testing/PHASE8_LONGRUN_EVIDENCE.md`, `06_outputs/run_summaries/phase8_real_24h_soak.md`, and `06_outputs/run_summaries/phase8_real_72h_soak.md`.
-6. Read the paper-draft status note under `06_outputs/paper_drafts/README.md`.
+3. Read `06_outputs/evidence_bundle_manifests/agif_v1_release_note.md`.
+4. Read `06_outputs/evidence_bundle_manifests/phase9_claims_to_evidence_matrix.md`.
+5. Review `06_outputs/result_tables/phase7_benchmark_results.md`.
+6. Review `05_testing/MSI_SOAK_MACHINE_NOTE.md`, `05_testing/PHASE8_LONGRUN_EVIDENCE.md`, `06_outputs/run_summaries/phase8_real_24h_soak.md`, and `06_outputs/run_summaries/phase8_real_72h_soak.md`.
+7. Read the paper-draft status note under `06_outputs/paper_drafts/README.md`.
 
 ## One-Command Verification Path
 - Command:
@@ -51,6 +52,7 @@ This file is the reviewer entrypoint for the final AGIF v1 package in this works
 | `02_requirements/FALSIFICATION_THRESHOLDS.md` | Frozen hard-fail and support thresholds | locally verified |
 | `05_testing/PHASE9_CLOSURE_EVIDENCE.md` | Honest Phase 9 closure note | locally verified |
 | `05_testing/MSI_SOAK_MACHINE_NOTE.md` | Canonical MSI soak-machine provenance, before-soak checks, and honest limits | locally verified with MSI artifact inspection |
+| `06_outputs/evidence_bundle_manifests/agif_v1_release_note.md` | Public release note for the closed AGIF v1 package | locally verified |
 | `06_outputs/evidence_bundle_manifests/phase9_claims_to_evidence_matrix.md` | Paper-claim to artifact mapping | locally verified |
 | `06_outputs/evidence_bundle_manifests/phase9_reproducibility_package.md` | This package guide and final evidence index | locally verified |
 | `06_outputs/paper_drafts/README.md` | Public note explaining why the unpublished paper draft is omitted | locally verified |
@@ -70,7 +72,7 @@ This file is the reviewer entrypoint for the final AGIF v1 package in this works
 - The full Phase 3 to Phase 8 bounded runtime and benchmark chain.
 - The Phase 7 result tables stay stable across repeated fresh reruns.
 - The Phase 8 bounded validation summaries regenerate locally.
-- The paper-draft status note, MSI soak-machine note, claims matrix, and reproducibility package now exist inside this workspace.
+- The release note, paper-draft status note, MSI soak-machine note, claims matrix, and reproducibility package now exist inside this workspace.
 - The repo footprint stays well below the locked `35 GB` cap.
 
 ## What Is MSI Evidence

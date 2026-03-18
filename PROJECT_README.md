@@ -17,7 +17,7 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
   - research paper
   - benchmark evidence
   - reproducibility package
-- Public release packaging is out of scope for this initiative.
+- Public release packaging is not part of the closed phase denominator. Later publication cleanup may proceed as docs and package maintenance without reopening AGIF v1 proof work.
 
 ## Resource Targets
 - Target machine: Apple M4 MacBook Air
@@ -52,7 +52,10 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 ## Project Closure Status
 - AGIF v1 is closed in this repo.
 - The locked AGIF v1 finish line is complete.
-- Future expansion work belongs to AGIF v2, not to additional AGIF v1 scope in this workspace history.
+- Root AGIF v1 progress stays fixed at `600/600`.
+- Post-closure publication cleanup may continue as docs and package maintenance only.
+- Any new proof work must live in a separate post-closure initiative rather than reopening the root AGIF v1 phase history.
+- AGIF v2 planning starts only after that separate extension bundle is complete.
 - This does not reopen or weaken the AGIF v1 non-claims.
 
 ## License And Public Readiness
@@ -188,6 +191,8 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - The unpublished paper draft is intentionally omitted from this public repo pending later publication.
 - The current paper-draft status note lives at:
   - `06_outputs/paper_drafts/README.md`
+- The current public release note for the closed AGIF v1 package lives at:
+  - `06_outputs/evidence_bundle_manifests/agif_v1_release_note.md`
 - The current GitHub origin remote recorded in the aligned paper package is:
   - `https://github.com/Ahsadin/agif_fabric_v1`
 - Repo-local claims-to-evidence mapping now lives at:
@@ -200,7 +205,7 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
   - `scripts/check_phase9_closure.py`
 - The current Phase 9 state is closed honestly:
   - the earlier Phase 3 to Phase 8 runtime, benchmark, and MSI soak claims are now mapped to repo-local artifacts
-  - this public repo now contains the claims matrix, benchmark evidence, reproducibility package, the canonical MSI soak-machine note, and an explicit paper-draft status note
+  - this public repo now contains the release note, the claims matrix, benchmark evidence, reproducibility package, the canonical MSI soak-machine note, and an explicit paper-draft status note
   - the canonical MSI soak-machine provenance note is now included in the repo package
   - `python3 scripts/check_phase9_closure.py` passes locally
   - `AGIF_FABRIC_P9_PASS` is earned
@@ -270,4 +275,5 @@ Build AGIF v1 as a software-first, architecturally complete, resource-aware inte
 - Phase 8 is now closed honestly through the bounded harness plus the real `24h` and real `72h` MSI soak evidence.
 - For AGIF v1, MSI remains the final long-run evidence basis and no future MacBook Air soak is planned or required for project closure.
 - Phase 9 is now closed honestly through the public paper-draft status note, the claims matrix, the reproducibility package, the final evidence index, and the one-command closure check.
+- Any post-closure proof extension work must be tracked separately and must not change the root AGIF v1 `600/600` status.
 - AGI-like generality and broader open-world claims remain outside the locked proof boundary.

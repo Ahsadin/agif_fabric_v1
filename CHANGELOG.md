@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-03-18 Track A Publication Cleanup
+- Aligned the closed AGIF v1 repo to the final execution plan for Track A publication cleanup.
+- Added a public closed-package release note:
+  - `06_outputs/evidence_bundle_manifests/agif_v1_release_note.md`
+- Refined the root source-of-truth wording so it now states:
+  - AGIF v1 stays closed at `600/600`
+  - post-closure publication cleanup is docs and package maintenance only
+  - any future proof work must live in a separate post-closure initiative before AGIF v2 planning starts
+- Updated the current package docs to reference the new release note while keeping the unpublished paper draft out of the public repo.
+
 ## 2026-03-18 Paper R5 Local-Only MSI Alignment
 - Added the canonical MSI soak-machine provenance note:
   - `05_testing/MSI_SOAK_MACHINE_NOTE.md`

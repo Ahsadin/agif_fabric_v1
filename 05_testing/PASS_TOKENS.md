@@ -72,6 +72,8 @@
   - benchmark evidence
   - reproducibility package
   - public paper-draft status note
+  - public closed-package release note
 - The unpublished paper draft itself is intentionally omitted from this public repo pending later publication.
 - The imported `24h` and `72h` long-run artifacts still come from the MSI soak machine and must not be described as MacBook Air-only proof.
 - Phase 9 closure does not remove the explicit non-claims around AGI, broad open-world generality, or the split/merge placeholder limits.
+- Post-closure publication cleanup does not change `AGIF_FABRIC_P9_PASS` and does not move the root AGIF v1 tracker away from `600/600`.

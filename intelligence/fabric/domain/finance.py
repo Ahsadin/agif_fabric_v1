@@ -73,6 +73,44 @@ def load_phase7_tissue_registry(config: dict[str, Any]) -> tuple[dict[str, Any],
     return payload, path
 
 
+def is_v1x_organic_load_profile(config: dict[str, Any]) -> bool:
+    profile = config.get("benchmark_profile", {}).get("organic_load_profile", {})
+    return bool(profile.get("enabled", False))
+
+
+def _resolve_runtime_blueprint(
+    *,
+    blueprint_map: dict[str, dict[str, Any]],
+    lifecycle: Any,
+    cell_id: str,
+) -> dict[str, Any]:
+    blueprint = blueprint_map.get(cell_id)
+    if blueprint is not None:
+        return blueprint
+    record = lifecycle.get_cell_record(cell_id)
+    runtime_blueprint = record.get("blueprint")
+    if not isinstance(runtime_blueprint, dict):
+        raise FabricError("STATE_INVALID", f"Runtime blueprint is missing for {cell_id}.")
+    return runtime_blueprint
+
+
+def _organic_stage_candidate_override(
+    *,
+    config: dict[str, Any],
+    lifecycle: Any,
+    stage_id: str,
+) -> list[str] | None:
+    if not is_v1x_organic_load_profile(config) or stage_id != "correction":
+        return None
+    organic_profile = dict(config.get("benchmark_profile", {}).get("organic_load_profile", {}))
+    parent_cell_id = str(organic_profile.get("split_parent_cell_id", "")).strip()
+    if not parent_cell_id:
+        return None
+    prefix = f"{parent_cell_id}__child_"
+    active_children = sorted(cell_id for cell_id in lifecycle.list_active_cells() if cell_id.startswith(prefix))
+    return active_children or None
+
+
 def execute_phase7_workflow(
     *,
     workflow_payload: dict[str, Any],
@@ -283,8 +321,18 @@ def execute_phase7_workflow(
         workflow_payload=workflow_payload,
         workspace_context=context,
         need_manager=need_manager,
+        candidate_cell_ids=_organic_stage_candidate_override(
+            config=config,
+            lifecycle=lifecycle,
+            stage_id="correction",
+        ),
     )
     correction_cell = _require_selected_cell(correction_decision, stage_id="correction")
+    correction_blueprint = _resolve_runtime_blueprint(
+        blueprint_map=blueprint_map,
+        lifecycle=lifecycle,
+        cell_id=correction_cell,
+    )
     _activate_stage_cell(
         lifecycle=lifecycle,
         authority_engine=authority_engine,
@@ -300,21 +348,21 @@ def execute_phase7_workflow(
         memory_manager=memory_manager,
         authority_engine=authority_engine,
         proposer_cell_id=correction_cell,
-        policy_envelope=blueprint_map[correction_cell]["policy_envelope"],
-        trust_ref=str(blueprint_map[correction_cell]["trust_profile"].get("baseline")),
+        policy_envelope=correction_blueprint["policy_envelope"],
+        trust_ref=str(correction_blueprint["trust_profile"].get("baseline")),
         workflow_id=workflow_id,
         triggering_signal=uncertainty_signal,
     )
     context["normalized_fields"] = correction["normalized_fields"]
     context["descriptor_reuse"] = correction["descriptor_reuse"]
     selected_cells.append(correction_cell)
-    selected_roles.append(str(blueprint_map[correction_cell]["role_name"]))
+    selected_roles.append(str(correction_blueprint["role_name"]))
     workspace = record_phase7_stage(
         workspace,
         stage_id="correction",
         tissue_id=stage_to_tissue["correction"],
         cell_id=correction_cell,
-        role_name=str(blueprint_map[correction_cell]["role_name"]),
+        role_name=str(correction_blueprint["role_name"]),
         output=correction,
         notes=[correction_decision["decision_reason"]],
     )

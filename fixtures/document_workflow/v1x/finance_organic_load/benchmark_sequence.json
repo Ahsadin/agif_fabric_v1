@@ -1,0 +1,1018 @@
+{
+  "suite_id": "v1x_finance_organic_load_v1",
+  "proof_goal": "deterministic near-capacity finance stream for organic split usefulness proof",
+  "case_count": 40,
+  "composition": {
+    "alias_heavy": 20,
+    "novelty_heavy": 10,
+    "recovery_tail": 10
+  },
+  "queue_model": {
+    "tracked_stage": "correction",
+    "unit_label": "queue_tick",
+    "base_end_to_end_units": 5,
+    "normal_load_note": "Arrival timing stays fixed across elastic and no-split control. Only governance-approved elastic split may add correction-stage worker capacity."
+  },
+  "cases": [
+    {
+      "sequence_index": 1,
+      "case_id": "recovery_001_seed_northwind",
+      "load_band": "recovery_tail",
+      "arrival_tick": 0,
+      "correction_service_units": 1,
+      "payload_path": "case_recovery_seed_northwind.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-001",
+        "inputs": {
+          "invoice_number": "NW-2026-201"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "1200.50",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release"
+    },
+    {
+      "sequence_index": 2,
+      "case_id": "alias_002_northwind_followup_a",
+      "load_band": "alias_heavy",
+      "arrival_tick": 2,
+      "correction_service_units": 3,
+      "payload_path": "case_alias_followup_northwind.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-002",
+        "inputs": {
+          "invoice_number": "NW-2026-202"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "761.60",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release"
+    },
+    {
+      "sequence_index": 3,
+      "case_id": "alias_003_northwind_followup_b",
+      "load_band": "alias_heavy",
+      "arrival_tick": 4,
+      "correction_service_units": 3,
+      "payload_path": "case_alias_followup_northwind_repeat.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-003",
+        "inputs": {
+          "invoice_number": "NW-2026-203"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "481.95",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release"
+    },
+    {
+      "sequence_index": 4,
+      "case_id": "alias_004_northwind_followup_c",
+      "load_band": "alias_heavy",
+      "arrival_tick": 6,
+      "correction_service_units": 3,
+      "payload_path": "case_alias_followup_northwind.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-004",
+        "inputs": {
+          "invoice_number": "NW-2026-204"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "761.60",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release"
+    },
+    {
+      "sequence_index": 5,
+      "case_id": "alias_005_northwind_followup_d",
+      "load_band": "alias_heavy",
+      "arrival_tick": 8,
+      "correction_service_units": 3,
+      "payload_path": "case_alias_followup_northwind_repeat.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-005",
+        "inputs": {
+          "invoice_number": "NW-2026-205"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "481.95",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release"
+    },
+    {
+      "sequence_index": 6,
+      "case_id": "alias_006_northwind_high_value_a",
+      "load_band": "alias_heavy",
+      "arrival_tick": 10,
+      "correction_service_units": 3,
+      "payload_path": "case_alias_high_value_hold.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-006",
+        "inputs": {
+          "invoice_number": "NW-2026-206"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "5950.00",
+        "reviewer_status": "review_required",
+        "governance_action": "hold_for_review",
+        "final_status": "hold"
+      },
+      "expected_governance": "hold_for_review"
+    },
+    {
+      "sequence_index": 7,
+      "case_id": "alias_007_northwind_followup_e",
+      "load_band": "alias_heavy",
+      "arrival_tick": 12,
+      "correction_service_units": 3,
+      "payload_path": "case_alias_followup_northwind.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-007",
+        "inputs": {
+          "invoice_number": "NW-2026-207"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "761.60",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release"
+    },
+    {
+      "sequence_index": 8,
+      "case_id": "alias_008_northwind_followup_f",
+      "load_band": "alias_heavy",
+      "arrival_tick": 14,
+      "correction_service_units": 3,
+      "payload_path": "case_alias_followup_northwind_repeat.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-008",
+        "inputs": {
+          "invoice_number": "NW-2026-208"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "481.95",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release"
+    },
+    {
+      "sequence_index": 9,
+      "case_id": "alias_009_northwind_high_value_b",
+      "load_band": "alias_heavy",
+      "arrival_tick": 16,
+      "correction_service_units": 3,
+      "payload_path": "case_alias_high_value_hold.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-009",
+        "inputs": {
+          "invoice_number": "NW-2026-209"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "5950.00",
+        "reviewer_status": "review_required",
+        "governance_action": "hold_for_review",
+        "final_status": "hold"
+      },
+      "expected_governance": "hold_for_review"
+    },
+    {
+      "sequence_index": 10,
+      "case_id": "alias_010_northwind_followup_g",
+      "load_band": "alias_heavy",
+      "arrival_tick": 18,
+      "correction_service_units": 3,
+      "payload_path": "case_alias_followup_northwind.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-010",
+        "inputs": {
+          "invoice_number": "NW-2026-210"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "761.60",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release"
+    },
+    {
+      "sequence_index": 11,
+      "case_id": "alias_011_northwind_followup_h",
+      "load_band": "alias_heavy",
+      "arrival_tick": 20,
+      "correction_service_units": 3,
+      "payload_path": "case_alias_followup_northwind_repeat.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-011",
+        "inputs": {
+          "invoice_number": "NW-2026-211"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "481.95",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release"
+    },
+    {
+      "sequence_index": 12,
+      "case_id": "novelty_012_orbit_a",
+      "load_band": "novelty_heavy",
+      "arrival_tick": 22,
+      "correction_service_units": 4,
+      "payload_path": "case_novelty_orbit_hold.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-012",
+        "inputs": {
+          "invoice_number": "ORBIT-2026-212"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Orbit Travel Claims Ltd",
+        "normalized_currency": "EUR",
+        "normalized_total": "9500.00",
+        "reviewer_status": "review_required",
+        "governance_action": "hold_for_review",
+        "final_status": "hold"
+      },
+      "expected_governance": "hold_for_review"
+    },
+    {
+      "sequence_index": 13,
+      "case_id": "novelty_013_fabrikam_a",
+      "load_band": "novelty_heavy",
+      "arrival_tick": 24,
+      "correction_service_units": 4,
+      "payload_path": "case_novelty_fabrikam_mismatch_hold.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-013",
+        "inputs": {
+          "invoice_number": "FAB-2026-213"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Fabrikam Stationery GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "140.00",
+        "reviewer_status": "review_required",
+        "governance_action": "hold_for_review",
+        "final_status": "hold"
+      },
+      "expected_governance": "hold_for_review"
+    },
+    {
+      "sequence_index": 14,
+      "case_id": "novelty_014_orbit_b",
+      "load_band": "novelty_heavy",
+      "arrival_tick": 26,
+      "correction_service_units": 4,
+      "payload_path": "case_novelty_orbit_hold.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-014",
+        "inputs": {
+          "invoice_number": "ORBIT-2026-214"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Orbit Travel Claims Ltd",
+        "normalized_currency": "EUR",
+        "normalized_total": "9500.00",
+        "reviewer_status": "review_required",
+        "governance_action": "hold_for_review",
+        "final_status": "hold"
+      },
+      "expected_governance": "hold_for_review"
+    },
+    {
+      "sequence_index": 15,
+      "case_id": "novelty_015_fabrikam_b",
+      "load_band": "novelty_heavy",
+      "arrival_tick": 28,
+      "correction_service_units": 4,
+      "payload_path": "case_novelty_fabrikam_mismatch_hold.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-015",
+        "inputs": {
+          "invoice_number": "FAB-2026-215"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Fabrikam Stationery GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "140.00",
+        "reviewer_status": "review_required",
+        "governance_action": "hold_for_review",
+        "final_status": "hold"
+      },
+      "expected_governance": "hold_for_review"
+    },
+    {
+      "sequence_index": 16,
+      "case_id": "novelty_016_orbit_c",
+      "load_band": "novelty_heavy",
+      "arrival_tick": 30,
+      "correction_service_units": 4,
+      "payload_path": "case_novelty_orbit_hold.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-016",
+        "inputs": {
+          "invoice_number": "ORBIT-2026-216"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Orbit Travel Claims Ltd",
+        "normalized_currency": "EUR",
+        "normalized_total": "9500.00",
+        "reviewer_status": "review_required",
+        "governance_action": "hold_for_review",
+        "final_status": "hold"
+      },
+      "expected_governance": "hold_for_review"
+    },
+    {
+      "sequence_index": 17,
+      "case_id": "alias_017_northwind_followup_i",
+      "load_band": "alias_heavy",
+      "arrival_tick": 32,
+      "correction_service_units": 3,
+      "payload_path": "case_alias_followup_northwind.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-017",
+        "inputs": {
+          "invoice_number": "NW-2026-217"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "761.60",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release"
+    },
+    {
+      "sequence_index": 18,
+      "case_id": "alias_018_northwind_followup_j",
+      "load_band": "alias_heavy",
+      "arrival_tick": 34,
+      "correction_service_units": 3,
+      "payload_path": "case_alias_followup_northwind_repeat.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-018",
+        "inputs": {
+          "invoice_number": "NW-2026-218"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "481.95",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release"
+    },
+    {
+      "sequence_index": 19,
+      "case_id": "alias_019_northwind_followup_k",
+      "load_band": "alias_heavy",
+      "arrival_tick": 36,
+      "correction_service_units": 3,
+      "payload_path": "case_alias_followup_northwind.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-019",
+        "inputs": {
+          "invoice_number": "NW-2026-219"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "761.60",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release"
+    },
+    {
+      "sequence_index": 20,
+      "case_id": "alias_020_northwind_high_value_c",
+      "load_band": "alias_heavy",
+      "arrival_tick": 38,
+      "correction_service_units": 3,
+      "payload_path": "case_alias_high_value_hold.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-020",
+        "inputs": {
+          "invoice_number": "NW-2026-220"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "5950.00",
+        "reviewer_status": "review_required",
+        "governance_action": "hold_for_review",
+        "final_status": "hold"
+      },
+      "expected_governance": "hold_for_review"
+    },
+    {
+      "sequence_index": 21,
+      "case_id": "alias_021_northwind_followup_l",
+      "load_band": "alias_heavy",
+      "arrival_tick": 40,
+      "correction_service_units": 3,
+      "payload_path": "case_alias_followup_northwind_repeat.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-021",
+        "inputs": {
+          "invoice_number": "NW-2026-221"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "481.95",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release"
+    },
+    {
+      "sequence_index": 22,
+      "case_id": "alias_022_northwind_followup_m",
+      "load_band": "alias_heavy",
+      "arrival_tick": 42,
+      "correction_service_units": 3,
+      "payload_path": "case_alias_followup_northwind.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-022",
+        "inputs": {
+          "invoice_number": "NW-2026-222"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "761.60",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release"
+    },
+    {
+      "sequence_index": 23,
+      "case_id": "alias_023_northwind_followup_n",
+      "load_band": "alias_heavy",
+      "arrival_tick": 44,
+      "correction_service_units": 3,
+      "payload_path": "case_alias_followup_northwind_repeat.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-023",
+        "inputs": {
+          "invoice_number": "NW-2026-223"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "481.95",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release"
+    },
+    {
+      "sequence_index": 24,
+      "case_id": "alias_024_northwind_high_value_d",
+      "load_band": "alias_heavy",
+      "arrival_tick": 46,
+      "correction_service_units": 3,
+      "payload_path": "case_alias_high_value_hold.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-024",
+        "inputs": {
+          "invoice_number": "NW-2026-224"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "5950.00",
+        "reviewer_status": "review_required",
+        "governance_action": "hold_for_review",
+        "final_status": "hold"
+      },
+      "expected_governance": "hold_for_review"
+    },
+    {
+      "sequence_index": 25,
+      "case_id": "alias_025_northwind_followup_o",
+      "load_band": "alias_heavy",
+      "arrival_tick": 48,
+      "correction_service_units": 3,
+      "payload_path": "case_alias_followup_northwind.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-025",
+        "inputs": {
+          "invoice_number": "NW-2026-225"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "761.60",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release"
+    },
+    {
+      "sequence_index": 26,
+      "case_id": "alias_026_northwind_followup_p",
+      "load_band": "alias_heavy",
+      "arrival_tick": 50,
+      "correction_service_units": 3,
+      "payload_path": "case_alias_followup_northwind_repeat.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-026",
+        "inputs": {
+          "invoice_number": "NW-2026-226"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "481.95",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release"
+    },
+    {
+      "sequence_index": 27,
+      "case_id": "novelty_027_fabrikam_c",
+      "load_band": "novelty_heavy",
+      "arrival_tick": 52,
+      "correction_service_units": 4,
+      "payload_path": "case_novelty_fabrikam_mismatch_hold.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-027",
+        "inputs": {
+          "invoice_number": "FAB-2026-227"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Fabrikam Stationery GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "140.00",
+        "reviewer_status": "review_required",
+        "governance_action": "hold_for_review",
+        "final_status": "hold"
+      },
+      "expected_governance": "hold_for_review"
+    },
+    {
+      "sequence_index": 28,
+      "case_id": "novelty_028_orbit_d",
+      "load_band": "novelty_heavy",
+      "arrival_tick": 56,
+      "correction_service_units": 4,
+      "payload_path": "case_novelty_orbit_hold.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-028",
+        "inputs": {
+          "invoice_number": "ORBIT-2026-228"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Orbit Travel Claims Ltd",
+        "normalized_currency": "EUR",
+        "normalized_total": "9500.00",
+        "reviewer_status": "review_required",
+        "governance_action": "hold_for_review",
+        "final_status": "hold"
+      },
+      "expected_governance": "hold_for_review"
+    },
+    {
+      "sequence_index": 29,
+      "case_id": "novelty_029_fabrikam_d",
+      "load_band": "novelty_heavy",
+      "arrival_tick": 60,
+      "correction_service_units": 4,
+      "payload_path": "case_novelty_fabrikam_mismatch_hold.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-029",
+        "inputs": {
+          "invoice_number": "FAB-2026-229"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Fabrikam Stationery GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "140.00",
+        "reviewer_status": "review_required",
+        "governance_action": "hold_for_review",
+        "final_status": "hold"
+      },
+      "expected_governance": "hold_for_review"
+    },
+    {
+      "sequence_index": 30,
+      "case_id": "novelty_030_orbit_e",
+      "load_band": "novelty_heavy",
+      "arrival_tick": 64,
+      "correction_service_units": 4,
+      "payload_path": "case_novelty_orbit_hold.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-030",
+        "inputs": {
+          "invoice_number": "ORBIT-2026-230"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Orbit Travel Claims Ltd",
+        "normalized_currency": "EUR",
+        "normalized_total": "9500.00",
+        "reviewer_status": "review_required",
+        "governance_action": "hold_for_review",
+        "final_status": "hold"
+      },
+      "expected_governance": "hold_for_review"
+    },
+    {
+      "sequence_index": 31,
+      "case_id": "novelty_031_fabrikam_e",
+      "load_band": "novelty_heavy",
+      "arrival_tick": 68,
+      "correction_service_units": 4,
+      "payload_path": "case_novelty_fabrikam_mismatch_hold.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-031",
+        "inputs": {
+          "invoice_number": "FAB-2026-231"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Fabrikam Stationery GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "140.00",
+        "reviewer_status": "review_required",
+        "governance_action": "hold_for_review",
+        "final_status": "hold"
+      },
+      "expected_governance": "hold_for_review"
+    },
+    {
+      "sequence_index": 32,
+      "case_id": "recovery_032_northwind_clear_a",
+      "load_band": "recovery_tail",
+      "arrival_tick": 72,
+      "correction_service_units": 1,
+      "payload_path": "case_recovery_seed_northwind.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-032",
+        "inputs": {
+          "invoice_number": "NW-2026-232"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "1200.50",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release"
+    },
+    {
+      "sequence_index": 33,
+      "case_id": "recovery_033_fabrikam_clear_a",
+      "load_band": "recovery_tail",
+      "arrival_tick": 76,
+      "correction_service_units": 1,
+      "payload_path": "case_recovery_fabrikam_clear.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-033",
+        "inputs": {
+          "invoice_number": "FAB-2026-233"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Fabrikam Stationery GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "240.00",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release"
+    },
+    {
+      "sequence_index": 34,
+      "case_id": "recovery_034_northwind_clear_b",
+      "load_band": "recovery_tail",
+      "arrival_tick": 80,
+      "correction_service_units": 1,
+      "payload_path": "case_recovery_seed_northwind.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-034",
+        "inputs": {
+          "invoice_number": "NW-2026-234"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "1200.50",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release"
+    },
+    {
+      "sequence_index": 35,
+      "case_id": "recovery_035_fabrikam_clear_b",
+      "load_band": "recovery_tail",
+      "arrival_tick": 84,
+      "correction_service_units": 1,
+      "payload_path": "case_recovery_fabrikam_clear.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-035",
+        "inputs": {
+          "invoice_number": "FAB-2026-235"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Fabrikam Stationery GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "240.00",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release"
+    },
+    {
+      "sequence_index": 36,
+      "case_id": "recovery_036_northwind_clear_c",
+      "load_band": "recovery_tail",
+      "arrival_tick": 88,
+      "correction_service_units": 1,
+      "payload_path": "case_recovery_seed_northwind.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-036",
+        "inputs": {
+          "invoice_number": "NW-2026-236"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "1200.50",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release"
+    },
+    {
+      "sequence_index": 37,
+      "case_id": "recovery_037_fabrikam_clear_c",
+      "load_band": "recovery_tail",
+      "arrival_tick": 92,
+      "correction_service_units": 1,
+      "payload_path": "case_recovery_fabrikam_clear.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-037",
+        "inputs": {
+          "invoice_number": "FAB-2026-237"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Fabrikam Stationery GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "240.00",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release"
+    },
+    {
+      "sequence_index": 38,
+      "case_id": "recovery_038_northwind_clear_d",
+      "load_band": "recovery_tail",
+      "arrival_tick": 96,
+      "correction_service_units": 1,
+      "payload_path": "case_recovery_seed_northwind.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-038",
+        "inputs": {
+          "invoice_number": "NW-2026-238"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "1200.50",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release"
+    },
+    {
+      "sequence_index": 39,
+      "case_id": "recovery_039_northwind_clear_e",
+      "load_band": "recovery_tail",
+      "arrival_tick": 100,
+      "correction_service_units": 1,
+      "payload_path": "case_recovery_seed_northwind.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-039",
+        "inputs": {
+          "invoice_number": "NW-2026-239"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "1200.50",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release"
+    },
+    {
+      "sequence_index": 40,
+      "case_id": "recovery_040_northwind_clear_f",
+      "load_band": "recovery_tail",
+      "arrival_tick": 104,
+      "correction_service_units": 1,
+      "payload_path": "case_recovery_seed_northwind.json",
+      "payload_overrides": {
+        "document_id": "v1x-doc-040",
+        "inputs": {
+          "invoice_number": "NW-2026-240"
+        }
+      },
+      "truth": {
+        "document_class": "vendor_invoice",
+        "extraction_profile": "invoice_extraction",
+        "normalized_vendor": "Northwind Office GmbH",
+        "normalized_currency": "EUR",
+        "normalized_total": "1200.50",
+        "reviewer_status": "clear",
+        "governance_action": "approved_release",
+        "final_status": "accepted"
+      },
+      "expected_governance": "approved_release"
+    }
+  ]
+}

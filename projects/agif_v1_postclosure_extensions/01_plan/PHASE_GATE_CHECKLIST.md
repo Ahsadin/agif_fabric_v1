@@ -21,11 +21,11 @@
 - [x] `AGIF_FABRIC_V1X_SETUP_PASS` is earned honestly
 
 ## Gap 1 Organic Load
-- [ ] deterministic 40-case stream is frozen
-- [ ] elastic vs no-split control comparison is frozen
-- [ ] organically approved split occurs inside the deterministic stream
-- [ ] latency or queue improvement is shown without accuracy regression
-- [ ] `AGIF_FABRIC_V1X_G1_PASS` is earned honestly
+- [x] deterministic 40-case stream is frozen
+- [x] elastic vs no-split control comparison is frozen
+- [x] organically approved split occurs inside the deterministic stream
+- [x] latency or queue improvement is shown without accuracy regression
+- [x] `AGIF_FABRIC_V1X_G1_PASS` is earned honestly
 
 ## Gap 2 Skill Graph
 - [ ] descriptor graph and transfer-approval path exist

@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026-03-18 Track B Gap 1 Organic Split-Merge Closure
+- Closed only the Track B Gap 1 organic split or merge proof.
+- Added the deterministic Gap 1 fixture set under:
+  - `fixtures/document_workflow/v1x/finance_organic_load/`
+- Added the bounded benchmark and verifier path:
+  - `intelligence/fabric/benchmarking/v1x_organic_load.py`
+  - `scripts/check_v1x_organic_load.py`
+- Added the local Gap 1 evidence and result tables:
+  - `05_testing/V1X_ORGANIC_LOAD_EVIDENCE.md`
+  - `06_outputs/result_tables/v1x_finance_organic_load.md`
+  - `06_outputs/result_tables/v1x_finance_organic_load.json`
+- Updated the finance runtime only enough to let existing lifecycle split children participate in the Gap 1 correction-stage workload.
+- Recorded the closed Gap 1 state:
+  - Track B progress is now `50/130`
+  - `AGIF_FABRIC_V1X_G1_PASS` is now earned
+  - root AGIF v1 remains `600/600`
+
 ## 2026-03-18 Track B Setup-And-Freeze Closure
 - Closed the Track B setup-and-freeze gate honestly.
 - Added the missing frozen requirements for later work:

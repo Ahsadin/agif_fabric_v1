@@ -1,0 +1,19 @@
+{
+  "workflow_name": "finance_document_workflow_phase7",
+  "document_id": "v1x-doc-012",
+  "inputs": {
+    "document_type": "invoice",
+    "vendor_name": "Orbit Travel Claims Ltd",
+    "invoice_number": "ORBIT-2026-212",
+    "invoice_date": "2026-03-16",
+    "due_date": "2026-03-13",
+    "currency": "EUR",
+    "subtotal": "9500.00",
+    "tax": "0.00",
+    "total": "9500.00",
+    "payment_terms": "Net 7",
+    "cost_center": "UNKNOWN-99",
+    "ocr_quality": "high",
+    "source_channel": "portal_upload"
+  }
+}

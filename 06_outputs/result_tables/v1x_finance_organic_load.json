@@ -1,0 +1,2970 @@
+{
+  "acceptance": {
+    "accuracy_preserved_or_improved": true,
+    "control_has_no_split_transition": true,
+    "passed": true,
+    "population_returns_near_start": true,
+    "queue_or_latency_improved": true,
+    "same_case_sequence": true,
+    "split_occurs_inside_stream": true,
+    "usefulness_not_just_activity": true
+  },
+  "comparison": {
+    "overhead_vs_usefulness": {
+      "accuracy_delta_vs_control": 0.0,
+      "extra_authority_reviews": 2,
+      "extra_correction_worker_units": 34,
+      "extra_lifecycle_events": 5,
+      "latency_gain_vs_control": 16.5,
+      "post_split_latency_gain_vs_control": 19.411765,
+      "post_split_queue_gain_vs_control": 19.411764,
+      "queue_age_gain_vs_control": 16.5
+    },
+    "pre_post_accuracy": {
+      "control_post_split_accuracy": 0.757353,
+      "elastic_post_split_accuracy": 0.757353
+    },
+    "pre_post_queue_age": {
+      "control_post_split_latency": 27.235294,
+      "control_post_split_queue_age": 19.470588,
+      "elastic_post_split_latency": 7.823529,
+      "elastic_post_split_queue_age": 0.058824
+    },
+    "same_case_sequence": true,
+    "usefulness_gate_passed": true
+  },
+  "runs": {
+    "control": {
+      "case_ids": [
+        "recovery_001_seed_northwind",
+        "alias_002_northwind_followup_a",
+        "alias_003_northwind_followup_b",
+        "alias_004_northwind_followup_c",
+        "alias_005_northwind_followup_d",
+        "alias_006_northwind_high_value_a",
+        "alias_007_northwind_followup_e",
+        "alias_008_northwind_followup_f",
+        "alias_009_northwind_high_value_b",
+        "alias_010_northwind_followup_g",
+        "alias_011_northwind_followup_h",
+        "novelty_012_orbit_a",
+        "novelty_013_fabrikam_a",
+        "novelty_014_orbit_b",
+        "novelty_015_fabrikam_b",
+        "novelty_016_orbit_c",
+        "alias_017_northwind_followup_i",
+        "alias_018_northwind_followup_j",
+        "alias_019_northwind_followup_k",
+        "alias_020_northwind_high_value_c",
+        "alias_021_northwind_followup_l",
+        "alias_022_northwind_followup_m",
+        "alias_023_northwind_followup_n",
+        "alias_024_northwind_high_value_d",
+        "alias_025_northwind_followup_o",
+        "alias_026_northwind_followup_p",
+        "novelty_027_fabrikam_c",
+        "novelty_028_orbit_d",
+        "novelty_029_fabrikam_d",
+        "novelty_030_orbit_e",
+        "novelty_031_fabrikam_e",
+        "recovery_032_northwind_clear_a",
+        "recovery_033_fabrikam_clear_a",
+        "recovery_034_northwind_clear_b",
+        "recovery_035_fabrikam_clear_b",
+        "recovery_036_northwind_clear_c",
+        "recovery_037_fabrikam_clear_c",
+        "recovery_038_northwind_clear_d",
+        "recovery_039_northwind_clear_e",
+        "recovery_040_northwind_clear_f"
+      ],
+      "case_results": [
+        {
+          "anomaly_count": 0,
+          "case_id": "recovery_001_seed_northwind",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "accepted",
+          "governance_action": "approved_release",
+          "load_band": "recovery_tail",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 0,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 0,
+            "completion_tick": 1,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 6.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 0
+          },
+          "reviewer_status": "clear",
+          "sequence_index": 1
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_002_northwind_followup_a",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 2,
+            "completion_tick": 5,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 8.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 2
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 2
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_003_northwind_followup_b",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 4,
+            "completion_tick": 8,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 9.0,
+            "queue_age_units": 1.0,
+            "service_start_tick": 5
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 3
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_004_northwind_followup_c",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 6,
+            "completion_tick": 11,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 10.0,
+            "queue_age_units": 2.0,
+            "service_start_tick": 8
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 4
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_005_northwind_followup_d",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 8,
+            "completion_tick": 14,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 11.0,
+            "queue_age_units": 3.0,
+            "service_start_tick": 11
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 5
+        },
+        {
+          "anomaly_count": 2,
+          "case_id": "alias_006_northwind_high_value_a",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 0.75,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 10,
+            "completion_tick": 17,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 12.0,
+            "queue_age_units": 4.0,
+            "service_start_tick": 14
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 6
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_007_northwind_followup_e",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 12,
+            "completion_tick": 20,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 13.0,
+            "queue_age_units": 5.0,
+            "service_start_tick": 17
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 7
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_008_northwind_followup_f",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 14,
+            "completion_tick": 23,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 14.0,
+            "queue_age_units": 6.0,
+            "service_start_tick": 20
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 8
+        },
+        {
+          "anomaly_count": 2,
+          "case_id": "alias_009_northwind_high_value_b",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 0.75,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 16,
+            "completion_tick": 26,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 15.0,
+            "queue_age_units": 7.0,
+            "service_start_tick": 23
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 9
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_010_northwind_followup_g",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 18,
+            "completion_tick": 29,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 16.0,
+            "queue_age_units": 8.0,
+            "service_start_tick": 26
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 10
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_011_northwind_followup_h",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 20,
+            "completion_tick": 32,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 17.0,
+            "queue_age_units": 9.0,
+            "service_start_tick": 29
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 11
+        },
+        {
+          "anomaly_count": 2,
+          "case_id": "novelty_012_orbit_a",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "novelty_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 22,
+            "completion_tick": 36,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 19.0,
+            "queue_age_units": 10.0,
+            "service_start_tick": 32
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 12
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "novelty_013_fabrikam_a",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "novelty_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 24,
+            "completion_tick": 40,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 21.0,
+            "queue_age_units": 12.0,
+            "service_start_tick": 36
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 13
+        },
+        {
+          "anomaly_count": 2,
+          "case_id": "novelty_014_orbit_b",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "novelty_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 26,
+            "completion_tick": 44,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 23.0,
+            "queue_age_units": 14.0,
+            "service_start_tick": 40
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 14
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "novelty_015_fabrikam_b",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "novelty_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 28,
+            "completion_tick": 48,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 25.0,
+            "queue_age_units": 16.0,
+            "service_start_tick": 44
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 15
+        },
+        {
+          "anomaly_count": 2,
+          "case_id": "novelty_016_orbit_c",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "novelty_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 30,
+            "completion_tick": 52,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 27.0,
+            "queue_age_units": 18.0,
+            "service_start_tick": 48
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 16
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_017_northwind_followup_i",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 32,
+            "completion_tick": 55,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 28.0,
+            "queue_age_units": 20.0,
+            "service_start_tick": 52
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 17
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_018_northwind_followup_j",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 34,
+            "completion_tick": 58,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 29.0,
+            "queue_age_units": 21.0,
+            "service_start_tick": 55
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 18
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_019_northwind_followup_k",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 36,
+            "completion_tick": 61,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 30.0,
+            "queue_age_units": 22.0,
+            "service_start_tick": 58
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 19
+        },
+        {
+          "anomaly_count": 2,
+          "case_id": "alias_020_northwind_high_value_c",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 0.75,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 38,
+            "completion_tick": 64,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 31.0,
+            "queue_age_units": 23.0,
+            "service_start_tick": 61
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 20
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_021_northwind_followup_l",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 40,
+            "completion_tick": 67,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 32.0,
+            "queue_age_units": 24.0,
+            "service_start_tick": 64
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 21
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_022_northwind_followup_m",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 42,
+            "completion_tick": 70,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 33.0,
+            "queue_age_units": 25.0,
+            "service_start_tick": 67
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 22
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_023_northwind_followup_n",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 44,
+            "completion_tick": 73,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 34.0,
+            "queue_age_units": 26.0,
+            "service_start_tick": 70
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 23
+        },
+        {
+          "anomaly_count": 2,
+          "case_id": "alias_024_northwind_high_value_d",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 0.75,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 46,
+            "completion_tick": 76,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 35.0,
+            "queue_age_units": 27.0,
+            "service_start_tick": 73
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 24
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_025_northwind_followup_o",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 48,
+            "completion_tick": 79,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 36.0,
+            "queue_age_units": 28.0,
+            "service_start_tick": 76
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 25
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_026_northwind_followup_p",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 50,
+            "completion_tick": 82,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 37.0,
+            "queue_age_units": 29.0,
+            "service_start_tick": 79
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 26
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "novelty_027_fabrikam_c",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "novelty_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 52,
+            "completion_tick": 86,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 39.0,
+            "queue_age_units": 30.0,
+            "service_start_tick": 82
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 27
+        },
+        {
+          "anomaly_count": 2,
+          "case_id": "novelty_028_orbit_d",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "novelty_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 56,
+            "completion_tick": 90,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 39.0,
+            "queue_age_units": 30.0,
+            "service_start_tick": 86
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 28
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "novelty_029_fabrikam_d",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "novelty_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 60,
+            "completion_tick": 94,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 39.0,
+            "queue_age_units": 30.0,
+            "service_start_tick": 90
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 29
+        },
+        {
+          "anomaly_count": 2,
+          "case_id": "novelty_030_orbit_e",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "novelty_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 64,
+            "completion_tick": 98,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 39.0,
+            "queue_age_units": 30.0,
+            "service_start_tick": 94
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 30
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "novelty_031_fabrikam_e",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "novelty_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 68,
+            "completion_tick": 102,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 39.0,
+            "queue_age_units": 30.0,
+            "service_start_tick": 98
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 31
+        },
+        {
+          "anomaly_count": 0,
+          "case_id": "recovery_032_northwind_clear_a",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "accepted",
+          "governance_action": "approved_release",
+          "load_band": "recovery_tail",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 72,
+            "completion_tick": 103,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 36.0,
+            "queue_age_units": 30.0,
+            "service_start_tick": 102
+          },
+          "reviewer_status": "clear",
+          "sequence_index": 32
+        },
+        {
+          "anomaly_count": 0,
+          "case_id": "recovery_033_fabrikam_clear_a",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "accepted",
+          "governance_action": "approved_release",
+          "load_band": "recovery_tail",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 76,
+            "completion_tick": 104,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 33.0,
+            "queue_age_units": 27.0,
+            "service_start_tick": 103
+          },
+          "reviewer_status": "clear",
+          "sequence_index": 33
+        },
+        {
+          "anomaly_count": 0,
+          "case_id": "recovery_034_northwind_clear_b",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "accepted",
+          "governance_action": "approved_release",
+          "load_band": "recovery_tail",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 80,
+            "completion_tick": 105,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 30.0,
+            "queue_age_units": 24.0,
+            "service_start_tick": 104
+          },
+          "reviewer_status": "clear",
+          "sequence_index": 34
+        },
+        {
+          "anomaly_count": 0,
+          "case_id": "recovery_035_fabrikam_clear_b",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "accepted",
+          "governance_action": "approved_release",
+          "load_band": "recovery_tail",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 84,
+            "completion_tick": 106,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 27.0,
+            "queue_age_units": 21.0,
+            "service_start_tick": 105
+          },
+          "reviewer_status": "clear",
+          "sequence_index": 35
+        },
+        {
+          "anomaly_count": 0,
+          "case_id": "recovery_036_northwind_clear_c",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "accepted",
+          "governance_action": "approved_release",
+          "load_band": "recovery_tail",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 88,
+            "completion_tick": 107,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 24.0,
+            "queue_age_units": 18.0,
+            "service_start_tick": 106
+          },
+          "reviewer_status": "clear",
+          "sequence_index": 36
+        },
+        {
+          "anomaly_count": 0,
+          "case_id": "recovery_037_fabrikam_clear_c",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "accepted",
+          "governance_action": "approved_release",
+          "load_band": "recovery_tail",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 92,
+            "completion_tick": 108,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 21.0,
+            "queue_age_units": 15.0,
+            "service_start_tick": 107
+          },
+          "reviewer_status": "clear",
+          "sequence_index": 37
+        },
+        {
+          "anomaly_count": 0,
+          "case_id": "recovery_038_northwind_clear_d",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "accepted",
+          "governance_action": "approved_release",
+          "load_band": "recovery_tail",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 96,
+            "completion_tick": 109,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 18.0,
+            "queue_age_units": 12.0,
+            "service_start_tick": 108
+          },
+          "reviewer_status": "clear",
+          "sequence_index": 38
+        },
+        {
+          "anomaly_count": 0,
+          "case_id": "recovery_039_northwind_clear_e",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "accepted",
+          "governance_action": "approved_release",
+          "load_band": "recovery_tail",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 100,
+            "completion_tick": 110,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 15.0,
+            "queue_age_units": 9.0,
+            "service_start_tick": 109
+          },
+          "reviewer_status": "clear",
+          "sequence_index": 39
+        },
+        {
+          "anomaly_count": 0,
+          "case_id": "recovery_040_northwind_clear_f",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "accepted",
+          "governance_action": "approved_release",
+          "load_band": "recovery_tail",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 104,
+            "completion_tick": 111,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 12.0,
+            "queue_age_units": 6.0,
+            "service_start_tick": 110
+          },
+          "reviewer_status": "clear",
+          "sequence_index": 40
+        }
+      ],
+      "config_ref": "fixtures/document_workflow/v1x/finance_organic_load/minimal_fabric_config_control.json",
+      "merge_event_count": 0,
+      "merge_events": [],
+      "metrics": {
+        "mean_end_to_end_latency_units": 24.55,
+        "mean_queue_age_units": 16.8,
+        "post_split_accuracy": 0.725,
+        "post_split_queue_age_units": 16.8,
+        "pre_split_accuracy": 0.725,
+        "pre_split_queue_age_units": 16.8,
+        "task_accuracy": 0.725
+      },
+      "mode": "control",
+      "overhead": {
+        "authority_review_delta": 70,
+        "correction_worker_units": 40,
+        "lifecycle_event_delta": 30,
+        "routing_decision_delta": 400,
+        "settle_hibernated_cells": [
+          "finance_anomaly_reviewer",
+          "finance_audit_reporter",
+          "finance_correction_specialist",
+          "finance_document_classifier",
+          "finance_governance_coordinator",
+          "finance_intake_router",
+          "finance_invoice_extractor",
+          "finance_normalizer",
+          "finance_output_formatter",
+          "finance_workspace_guard"
+        ],
+        "split_transition_count": 0
+      },
+      "population": {
+        "after_settle": {
+          "active_population": 0,
+          "burst_active_population_cap": 12,
+          "logical_population": 11,
+          "steady_active_population_target": 10
+        },
+        "after_stream": {
+          "active_population": 10,
+          "burst_active_population_cap": 12,
+          "logical_population": 11,
+          "steady_active_population_target": 10
+        },
+        "initial": {
+          "active_population": 0,
+          "burst_active_population_cap": 12,
+          "logical_population": 11,
+          "steady_active_population_target": 10
+        },
+        "max_active_population": 10,
+        "returned_near_start": true
+      },
+      "split_case_index": null,
+      "split_event_count": 0,
+      "split_events": [],
+      "split_governance_enabled": false,
+      "split_proposals": [
+        {
+          "approved": false,
+          "case_id": "alias_006_northwind_high_value_a",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 6,
+          "signal_kind": "overload",
+          "signal_severity": 0.92
+        },
+        {
+          "approved": false,
+          "case_id": "alias_007_northwind_followup_e",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 7,
+          "signal_kind": "overload",
+          "signal_severity": 0.96
+        },
+        {
+          "approved": false,
+          "case_id": "alias_008_northwind_followup_f",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 8,
+          "signal_kind": "overload",
+          "signal_severity": 0.98
+        },
+        {
+          "approved": false,
+          "case_id": "alias_009_northwind_high_value_b",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 9,
+          "signal_kind": "overload",
+          "signal_severity": 0.98
+        },
+        {
+          "approved": false,
+          "case_id": "alias_010_northwind_followup_g",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 10,
+          "signal_kind": "overload",
+          "signal_severity": 0.98
+        },
+        {
+          "approved": false,
+          "case_id": "alias_011_northwind_followup_h",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 11,
+          "signal_kind": "overload",
+          "signal_severity": 0.98
+        },
+        {
+          "approved": false,
+          "case_id": "novelty_012_orbit_a",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 12,
+          "signal_kind": "overload",
+          "signal_severity": 0.98
+        },
+        {
+          "approved": false,
+          "case_id": "novelty_013_fabrikam_a",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 13,
+          "signal_kind": "novelty",
+          "signal_severity": 0.98
+        },
+        {
+          "approved": false,
+          "case_id": "novelty_014_orbit_b",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 14,
+          "signal_kind": "novelty",
+          "signal_severity": 0.98
+        },
+        {
+          "approved": false,
+          "case_id": "novelty_015_fabrikam_b",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 15,
+          "signal_kind": "novelty",
+          "signal_severity": 0.98
+        },
+        {
+          "approved": false,
+          "case_id": "novelty_016_orbit_c",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 16,
+          "signal_kind": "novelty",
+          "signal_severity": 0.98
+        },
+        {
+          "approved": false,
+          "case_id": "alias_017_northwind_followup_i",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 17,
+          "signal_kind": "novelty",
+          "signal_severity": 0.98
+        },
+        {
+          "approved": false,
+          "case_id": "alias_018_northwind_followup_j",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 18,
+          "signal_kind": "novelty",
+          "signal_severity": 0.98
+        },
+        {
+          "approved": false,
+          "case_id": "alias_019_northwind_followup_k",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 19,
+          "signal_kind": "novelty",
+          "signal_severity": 0.98
+        },
+        {
+          "approved": false,
+          "case_id": "alias_020_northwind_high_value_c",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 20,
+          "signal_kind": "overload",
+          "signal_severity": 0.98
+        },
+        {
+          "approved": false,
+          "case_id": "alias_021_northwind_followup_l",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 21,
+          "signal_kind": "overload",
+          "signal_severity": 0.98
+        },
+        {
+          "approved": false,
+          "case_id": "alias_022_northwind_followup_m",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 22,
+          "signal_kind": "overload",
+          "signal_severity": 0.98
+        },
+        {
+          "approved": false,
+          "case_id": "alias_023_northwind_followup_n",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 23,
+          "signal_kind": "overload",
+          "signal_severity": 0.98
+        },
+        {
+          "approved": false,
+          "case_id": "alias_024_northwind_high_value_d",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 24,
+          "signal_kind": "overload",
+          "signal_severity": 0.98
+        },
+        {
+          "approved": false,
+          "case_id": "alias_025_northwind_followup_o",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 25,
+          "signal_kind": "overload",
+          "signal_severity": 0.98
+        },
+        {
+          "approved": false,
+          "case_id": "alias_026_northwind_followup_p",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 26,
+          "signal_kind": "overload",
+          "signal_severity": 0.98
+        },
+        {
+          "approved": false,
+          "case_id": "novelty_027_fabrikam_c",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 27,
+          "signal_kind": "overload",
+          "signal_severity": 0.98
+        },
+        {
+          "approved": false,
+          "case_id": "novelty_028_orbit_d",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 28,
+          "signal_kind": "novelty",
+          "signal_severity": 0.98
+        },
+        {
+          "approved": false,
+          "case_id": "novelty_029_fabrikam_d",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 29,
+          "signal_kind": "novelty",
+          "signal_severity": 0.98
+        },
+        {
+          "approved": false,
+          "case_id": "novelty_030_orbit_e",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 30,
+          "signal_kind": "novelty",
+          "signal_severity": 0.98
+        },
+        {
+          "approved": false,
+          "case_id": "novelty_031_fabrikam_e",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 31,
+          "signal_kind": "novelty",
+          "signal_severity": 0.98
+        },
+        {
+          "approved": false,
+          "case_id": "recovery_032_northwind_clear_a",
+          "governance_outcome": "split_disabled_by_governance",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 32,
+          "signal_kind": "novelty",
+          "signal_severity": 0.98
+        }
+      ]
+    },
+    "elastic": {
+      "case_ids": [
+        "recovery_001_seed_northwind",
+        "alias_002_northwind_followup_a",
+        "alias_003_northwind_followup_b",
+        "alias_004_northwind_followup_c",
+        "alias_005_northwind_followup_d",
+        "alias_006_northwind_high_value_a",
+        "alias_007_northwind_followup_e",
+        "alias_008_northwind_followup_f",
+        "alias_009_northwind_high_value_b",
+        "alias_010_northwind_followup_g",
+        "alias_011_northwind_followup_h",
+        "novelty_012_orbit_a",
+        "novelty_013_fabrikam_a",
+        "novelty_014_orbit_b",
+        "novelty_015_fabrikam_b",
+        "novelty_016_orbit_c",
+        "alias_017_northwind_followup_i",
+        "alias_018_northwind_followup_j",
+        "alias_019_northwind_followup_k",
+        "alias_020_northwind_high_value_c",
+        "alias_021_northwind_followup_l",
+        "alias_022_northwind_followup_m",
+        "alias_023_northwind_followup_n",
+        "alias_024_northwind_high_value_d",
+        "alias_025_northwind_followup_o",
+        "alias_026_northwind_followup_p",
+        "novelty_027_fabrikam_c",
+        "novelty_028_orbit_d",
+        "novelty_029_fabrikam_d",
+        "novelty_030_orbit_e",
+        "novelty_031_fabrikam_e",
+        "recovery_032_northwind_clear_a",
+        "recovery_033_fabrikam_clear_a",
+        "recovery_034_northwind_clear_b",
+        "recovery_035_fabrikam_clear_b",
+        "recovery_036_northwind_clear_c",
+        "recovery_037_fabrikam_clear_c",
+        "recovery_038_northwind_clear_d",
+        "recovery_039_northwind_clear_e",
+        "recovery_040_northwind_clear_f"
+      ],
+      "case_results": [
+        {
+          "anomaly_count": 0,
+          "case_id": "recovery_001_seed_northwind",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "accepted",
+          "governance_action": "approved_release",
+          "load_band": "recovery_tail",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 0,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 0,
+            "completion_tick": 1,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 6.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 0
+          },
+          "reviewer_status": "clear",
+          "sequence_index": 1
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_002_northwind_followup_a",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 2,
+            "completion_tick": 5,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 8.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 2
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 2
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_003_northwind_followup_b",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 4,
+            "completion_tick": 8,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 9.0,
+            "queue_age_units": 1.0,
+            "service_start_tick": 5
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 3
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_004_northwind_followup_c",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 6,
+            "completion_tick": 11,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 10.0,
+            "queue_age_units": 2.0,
+            "service_start_tick": 8
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 4
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_005_northwind_followup_d",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 8,
+            "completion_tick": 14,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 11.0,
+            "queue_age_units": 3.0,
+            "service_start_tick": 11
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 5
+        },
+        {
+          "anomaly_count": 2,
+          "case_id": "alias_006_northwind_high_value_a",
+          "correction_selected_cell": "finance_correction_specialist",
+          "correctness_score": 0.75,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "population_before_case": {
+            "active_population": 10,
+            "logical_population": 11
+          },
+          "queue_metrics": {
+            "arrival_tick": 10,
+            "completion_tick": 17,
+            "correction_worker_count": 1,
+            "end_to_end_latency_units": 12.0,
+            "queue_age_units": 4.0,
+            "service_start_tick": 14
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 6
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_007_northwind_followup_e",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 12,
+            "completion_tick": 15,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 8.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 12
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 7
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_008_northwind_followup_f",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 14,
+            "completion_tick": 18,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 9.0,
+            "queue_age_units": 1.0,
+            "service_start_tick": 15
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 8
+        },
+        {
+          "anomaly_count": 2,
+          "case_id": "alias_009_northwind_high_value_b",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 0.75,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 16,
+            "completion_tick": 20,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 9.0,
+            "queue_age_units": 1.0,
+            "service_start_tick": 17
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 9
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_010_northwind_followup_g",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 18,
+            "completion_tick": 21,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 8.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 18
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 10
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_011_northwind_followup_h",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 20,
+            "completion_tick": 23,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 8.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 20
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 11
+        },
+        {
+          "anomaly_count": 2,
+          "case_id": "novelty_012_orbit_a",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "novelty_heavy",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 22,
+            "completion_tick": 26,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 9.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 22
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 12
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "novelty_013_fabrikam_a",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "novelty_heavy",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 24,
+            "completion_tick": 28,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 9.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 24
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 13
+        },
+        {
+          "anomaly_count": 2,
+          "case_id": "novelty_014_orbit_b",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "novelty_heavy",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 26,
+            "completion_tick": 30,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 9.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 26
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 14
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "novelty_015_fabrikam_b",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "novelty_heavy",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 28,
+            "completion_tick": 32,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 9.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 28
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 15
+        },
+        {
+          "anomaly_count": 2,
+          "case_id": "novelty_016_orbit_c",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "novelty_heavy",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 30,
+            "completion_tick": 34,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 9.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 30
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 16
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_017_northwind_followup_i",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 32,
+            "completion_tick": 35,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 8.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 32
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 17
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_018_northwind_followup_j",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 34,
+            "completion_tick": 37,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 8.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 34
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 18
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_019_northwind_followup_k",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 36,
+            "completion_tick": 39,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 8.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 36
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 19
+        },
+        {
+          "anomaly_count": 2,
+          "case_id": "alias_020_northwind_high_value_c",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 0.75,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 38,
+            "completion_tick": 41,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 8.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 38
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 20
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_021_northwind_followup_l",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 40,
+            "completion_tick": 43,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 8.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 40
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 21
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_022_northwind_followup_m",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 42,
+            "completion_tick": 45,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 8.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 42
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 22
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_023_northwind_followup_n",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 44,
+            "completion_tick": 47,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 8.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 44
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 23
+        },
+        {
+          "anomaly_count": 2,
+          "case_id": "alias_024_northwind_high_value_d",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 0.75,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 46,
+            "completion_tick": 49,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 8.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 46
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 24
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_025_northwind_followup_o",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 48,
+            "completion_tick": 51,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 8.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 48
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 25
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "alias_026_northwind_followup_p",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 0.375,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "alias_heavy",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 50,
+            "completion_tick": 53,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 8.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 50
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 26
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "novelty_027_fabrikam_c",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "novelty_heavy",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 52,
+            "completion_tick": 56,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 9.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 52
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 27
+        },
+        {
+          "anomaly_count": 2,
+          "case_id": "novelty_028_orbit_d",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "novelty_heavy",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 56,
+            "completion_tick": 60,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 9.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 56
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 28
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "novelty_029_fabrikam_d",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "novelty_heavy",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 60,
+            "completion_tick": 64,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 9.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 60
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 29
+        },
+        {
+          "anomaly_count": 2,
+          "case_id": "novelty_030_orbit_e",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "novelty_heavy",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 64,
+            "completion_tick": 68,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 9.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 64
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 30
+        },
+        {
+          "anomaly_count": 1,
+          "case_id": "novelty_031_fabrikam_e",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "hold_for_review",
+          "final_status": "hold",
+          "governance_action": "hold_for_review",
+          "load_band": "novelty_heavy",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 68,
+            "completion_tick": 72,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 9.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 68
+          },
+          "reviewer_status": "review_required",
+          "sequence_index": 31
+        },
+        {
+          "anomaly_count": 0,
+          "case_id": "recovery_032_northwind_clear_a",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "accepted",
+          "governance_action": "approved_release",
+          "load_band": "recovery_tail",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 72,
+            "completion_tick": 73,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 6.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 72
+          },
+          "reviewer_status": "clear",
+          "sequence_index": 32
+        },
+        {
+          "anomaly_count": 0,
+          "case_id": "recovery_033_fabrikam_clear_a",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "accepted",
+          "governance_action": "approved_release",
+          "load_band": "recovery_tail",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 76,
+            "completion_tick": 77,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 6.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 76
+          },
+          "reviewer_status": "clear",
+          "sequence_index": 33
+        },
+        {
+          "anomaly_count": 0,
+          "case_id": "recovery_034_northwind_clear_b",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "accepted",
+          "governance_action": "approved_release",
+          "load_band": "recovery_tail",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 80,
+            "completion_tick": 81,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 6.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 80
+          },
+          "reviewer_status": "clear",
+          "sequence_index": 34
+        },
+        {
+          "anomaly_count": 0,
+          "case_id": "recovery_035_fabrikam_clear_b",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "accepted",
+          "governance_action": "approved_release",
+          "load_band": "recovery_tail",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 84,
+            "completion_tick": 85,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 6.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 84
+          },
+          "reviewer_status": "clear",
+          "sequence_index": 35
+        },
+        {
+          "anomaly_count": 0,
+          "case_id": "recovery_036_northwind_clear_c",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "accepted",
+          "governance_action": "approved_release",
+          "load_band": "recovery_tail",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 88,
+            "completion_tick": 89,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 6.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 88
+          },
+          "reviewer_status": "clear",
+          "sequence_index": 36
+        },
+        {
+          "anomaly_count": 0,
+          "case_id": "recovery_037_fabrikam_clear_c",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "accepted",
+          "governance_action": "approved_release",
+          "load_band": "recovery_tail",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 92,
+            "completion_tick": 93,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 6.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 92
+          },
+          "reviewer_status": "clear",
+          "sequence_index": 37
+        },
+        {
+          "anomaly_count": 0,
+          "case_id": "recovery_038_northwind_clear_d",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "accepted",
+          "governance_action": "approved_release",
+          "load_band": "recovery_tail",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 96,
+            "completion_tick": 97,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 6.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 96
+          },
+          "reviewer_status": "clear",
+          "sequence_index": 38
+        },
+        {
+          "anomaly_count": 0,
+          "case_id": "recovery_039_northwind_clear_e",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "accepted",
+          "governance_action": "approved_release",
+          "load_band": "recovery_tail",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 100,
+            "completion_tick": 101,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 6.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 100
+          },
+          "reviewer_status": "clear",
+          "sequence_index": 39
+        },
+        {
+          "anomaly_count": 0,
+          "case_id": "recovery_040_northwind_clear_f",
+          "correction_selected_cell": "finance_correction_specialist__child_001",
+          "correctness_score": 1.0,
+          "descriptor_reuse_eligible": false,
+          "descriptor_reuse_used": false,
+          "expected_governance": "approved_release",
+          "final_status": "accepted",
+          "governance_action": "approved_release",
+          "load_band": "recovery_tail",
+          "population_after_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "population_before_case": {
+            "active_population": 11,
+            "logical_population": 13
+          },
+          "queue_metrics": {
+            "arrival_tick": 104,
+            "completion_tick": 105,
+            "correction_worker_count": 2,
+            "end_to_end_latency_units": 6.0,
+            "queue_age_units": 0.0,
+            "service_start_tick": 104
+          },
+          "reviewer_status": "clear",
+          "sequence_index": 40
+        }
+      ],
+      "config_ref": "fixtures/document_workflow/v1x/finance_organic_load/minimal_fabric_config_elastic.json",
+      "merge_event_count": 1,
+      "merge_events": [
+        {
+          "approver": "tissue:finance_document_workflow:coordinator+governance:phase7_local_board",
+          "lineage_chain": "finance_correction_specialist__child_001 + finance_correction_specialist__child_002 -> finance_correction_specialist__child_001",
+          "post_active_population": 9,
+          "pre_active_population": 11,
+          "proposer": "tissue:finance_validation_correction_tissue:organic_monitor",
+          "retire_event_id": "lifecycle_00028",
+          "retired_cell_id": "finance_correction_specialist__child_002",
+          "survivor_cell_id": "finance_correction_specialist__child_001"
+        }
+      ],
+      "metrics": {
+        "mean_end_to_end_latency_units": 8.05,
+        "mean_queue_age_units": 0.3,
+        "post_split_accuracy": 0.757353,
+        "post_split_queue_age_units": 0.058824,
+        "pre_split_accuracy": 0.541667,
+        "pre_split_queue_age_units": 1.666667,
+        "task_accuracy": 0.725
+      },
+      "mode": "elastic",
+      "overhead": {
+        "authority_review_delta": 72,
+        "correction_worker_units": 74,
+        "lifecycle_event_delta": 35,
+        "routing_decision_delta": 400,
+        "settle_hibernated_cells": [
+          "finance_anomaly_reviewer",
+          "finance_audit_reporter",
+          "finance_document_classifier",
+          "finance_governance_coordinator",
+          "finance_intake_router",
+          "finance_invoice_extractor",
+          "finance_normalizer",
+          "finance_output_formatter",
+          "finance_workspace_guard"
+        ],
+        "split_transition_count": 1
+      },
+      "population": {
+        "after_settle": {
+          "active_population": 0,
+          "burst_active_population_cap": 12,
+          "logical_population": 13,
+          "steady_active_population_target": 10
+        },
+        "after_stream": {
+          "active_population": 11,
+          "burst_active_population_cap": 12,
+          "logical_population": 13,
+          "steady_active_population_target": 10
+        },
+        "initial": {
+          "active_population": 0,
+          "burst_active_population_cap": 12,
+          "logical_population": 11,
+          "steady_active_population_target": 10
+        },
+        "max_active_population": 11,
+        "returned_near_start": true
+      },
+      "split_case_index": 6,
+      "split_event_count": 1,
+      "split_events": [
+        {
+          "approver": "governance:phase7_local_board",
+          "case_id": "alias_006_northwind_high_value_a",
+          "child_ids": [
+            "finance_correction_specialist__child_001",
+            "finance_correction_specialist__child_002"
+          ],
+          "event_id": "lifecycle_00023",
+          "history_transition": "split_pending_to_active_children",
+          "lineage_chain": "finance_correction_specialist -> finance_correction_specialist__child_001, finance_correction_specialist__child_002",
+          "lineage_id": "lineage::finance_correction_specialist",
+          "post_active_population": 11,
+          "post_logical_population": 13,
+          "pre_active_population": 10,
+          "pre_logical_population": 11,
+          "proposer": "tissue:finance_validation_correction_tissue:organic_monitor",
+          "sequence_index": 6,
+          "split_approver": "governance:phase7_local_board",
+          "split_proposer": "tissue:finance_validation_correction_tissue:organic_monitor",
+          "trigger_queue_age_units": 4.0
+        }
+      ],
+      "split_governance_enabled": true,
+      "split_proposals": [
+        {
+          "approved": true,
+          "case_id": "alias_006_northwind_high_value_a",
+          "event": {
+            "approver": "governance:phase7_local_board",
+            "case_id": "alias_006_northwind_high_value_a",
+            "child_ids": [
+              "finance_correction_specialist__child_001",
+              "finance_correction_specialist__child_002"
+            ],
+            "event_id": "lifecycle_00023",
+            "history_transition": "split_pending_to_active_children",
+            "lineage_chain": "finance_correction_specialist -> finance_correction_specialist__child_001, finance_correction_specialist__child_002",
+            "lineage_id": "lineage::finance_correction_specialist",
+            "post_active_population": 11,
+            "post_logical_population": 13,
+            "pre_active_population": 10,
+            "pre_logical_population": 11,
+            "proposer": "tissue:finance_validation_correction_tissue:organic_monitor",
+            "sequence_index": 6,
+            "split_approver": "governance:phase7_local_board",
+            "split_proposer": "tissue:finance_validation_correction_tissue:organic_monitor",
+            "trigger_queue_age_units": 4.0
+          },
+          "governance_outcome": "approved",
+          "reason": "organic correction pressure exceeded the deterministic queue threshold while the active population sat at the steady cap",
+          "sequence_index": 6,
+          "signal_kind": "overload",
+          "signal_severity": 0.92
+        }
+      ]
+    }
+  },
+  "suite_id": "v1x_finance_organic_load_v1",
+  "suite_summary": {
+    "case_count": 40,
+    "composition": {
+      "alias_heavy": 20,
+      "novelty_heavy": 10,
+      "recovery_tail": 10
+    },
+    "queue_model": {
+      "base_end_to_end_units": 5,
+      "normal_load_note": "Arrival timing stays fixed across elastic and no-split control. Only governance-approved elastic split may add correction-stage worker capacity.",
+      "tracked_stage": "correction",
+      "unit_label": "queue_tick"
+    }
+  }
+}

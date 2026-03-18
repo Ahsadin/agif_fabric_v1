@@ -1,0 +1,19 @@
+{
+  "workflow_name": "finance_document_workflow_phase7",
+  "document_id": "v1x-doc-033",
+  "inputs": {
+    "document_type": "invoice",
+    "vendor_name": "Fabrikam Stationery GmbH",
+    "invoice_number": "FAB-2026-233",
+    "invoice_date": "2026-04-06",
+    "due_date": "2026-04-20",
+    "currency": "eur",
+    "subtotal": "201.68",
+    "tax": "38.32",
+    "total": "240.00",
+    "payment_terms": "Net 14",
+    "cost_center": "AP-TEAM",
+    "ocr_quality": "high",
+    "source_channel": "email_pdf"
+  }
+}

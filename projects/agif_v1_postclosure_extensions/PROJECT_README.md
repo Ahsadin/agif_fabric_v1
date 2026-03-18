@@ -34,7 +34,9 @@
 ## Current Status
 - Setup-and-freeze gate is closed.
 - `AGIF_FABRIC_V1X_SETUP_PASS` is earned.
-- Current extension progress: `15/130`
+- Gap 1 organic split or merge proof is closed honestly.
+- `AGIF_FABRIC_V1X_G1_PASS` is earned.
+- Current extension progress: `50/130`
 
 ## In Scope
 - project-local planning and freeze records
@@ -78,6 +80,13 @@
 
 ## Current Verification
 - `python3 scripts/check_v1x_setup.py` passes locally.
+- `python3 scripts/check_v1x_organic_load.py` passes locally.
 - Root AGIF v1 remains closed at `600/600`.
 - Root tracker isolation is explicit in the Track B docs.
-- Gap 1 and Gap 3 start rules are frozen for later execution work.
+- Gap 1 is now locally verified by:
+  - `fixtures/document_workflow/v1x/finance_organic_load/benchmark_sequence.json`
+  - `05_testing/V1X_ORGANIC_LOAD_EVIDENCE.md`
+  - `06_outputs/result_tables/v1x_finance_organic_load.md`
+  - `06_outputs/result_tables/v1x_finance_organic_load.json`
+  - `scripts/check_v1x_organic_load.py`
+- Gap 3 start rules remain frozen for later execution work.

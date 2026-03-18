@@ -1,0 +1,19 @@
+{
+  "workflow_name": "finance_document_workflow_phase7",
+  "document_id": "v1x-doc-001",
+  "inputs": {
+    "document_type": "invoice",
+    "vendor_name": "Northwind Office GmbH",
+    "invoice_number": "NW-2026-201",
+    "invoice_date": "2026/03/01",
+    "due_date": "15-03-2026",
+    "currency": "eur",
+    "subtotal": "972.40",
+    "tax": "228.10",
+    "total": "1200.50",
+    "payment_terms": "Net 14",
+    "cost_center": "FIN-OPS",
+    "ocr_quality": "high",
+    "source_channel": "email_pdf"
+  }
+}

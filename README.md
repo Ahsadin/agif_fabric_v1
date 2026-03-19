@@ -2,7 +2,7 @@
 
 AGIF v1 is a bounded software proof of a governed intelligence fabric.
 
-This repo does not claim AGI. It claims something narrower and testable: a local, auditable system made of specialized cells can coordinate through tissues, shared workspace state, reviewed memory, bounded adaptation, and explicit governance, and can outperform flatter baselines on structured multi-step work.
+This repo claims something narrower and testable: a local, auditable system made of specialized cells can coordinate through tissues, shared workspace state, reviewed memory, bounded adaptation, and explicit governance, and can outperform flatter baselines on structured multi-step work.
 
 ## Current Status
 

@@ -1,106 +1,178 @@
 # AGIF Fabric v1
 
-AGIF v1 is a bounded software proof of a governed intelligence fabric.
+**AGIF v1 is a bounded software proof of a governed intelligence fabric.**
 
-This repo claims something narrower and testable: a local, auditable system made of specialized cells can coordinate through tissues, shared workspace state, reviewed memory, bounded adaptation, and explicit governance, and can outperform flatter baselines on structured multi-step work.
+This repo claims something narrower and testable: a local, auditable system made of specialized cells can coordinate through tissues, shared workspace state, reviewed memory, bounded adaptation, and explicit governance — and can outperform flatter baselines on structured multi-step work.
+
+---
 
 ## Current Status
 
-- AGIF v1 root closure is complete at `600/600`
-- Root closure token earned: `AGIF_FABRIC_P9_PASS`
-- Post-closure extension bundle is complete at `130/130`
-- Extension bundle token earned: `AGIF_FABRIC_V1X_PASS`
-- Public GitHub repo: [github.com/Ahsadin/agif_fabric_v1](https://github.com/Ahsadin/agif_fabric_v1)
-- License: MIT
+| Item | Status |
+|---|---|
+| Root v1 closure | **600/600 complete** |
+| Root closure token | `AGIF_FABRIC_P9_PASS` |
+| Post-closure extension bundle | **130/130 complete** |
+| Extension bundle token | `AGIF_FABRIC_V1X_PASS` |
+| Public repo | [github.com/Ahsadin/agif_fabric_v1](https://github.com/Ahsadin/agif_fabric_v1) |
+| License | MIT |
+
+---
+
+## Requirements
+
+Python 3.11 or later. No external dependencies beyond the standard library.
+
+---
 
 ## What This Repo Proves
 
-AGIF v1 now includes:
+AGIF v1 is a working local software system, not a concept. The repo contains:
 
 - a real multi-cell software runtime with bounded lifecycle control
-- explicit tissues and shared workspace coordination
-- reviewed memory with hot, warm, cold, and ephemeral handling
+- explicit tissues and shared workspace coordination across 5 traced handoffs per case
+- reviewed memory with hot, warm, cold, and ephemeral tier handling
 - routing, authority approval, veto, replay, rollback, and quarantine paths
-- a deterministic finance workflow benchmark suite
-- real `24h` and real `72h` soak evidence from the MSI soak machine
-- a post-closure extension bundle that closes the biggest bounded v1 proof gaps
+- a deterministic finance workflow benchmark suite (6 cases, 3 system classes)
+- real 24h and real 72h soak evidence from the MSI soak machine
+- a post-closure extension bundle that closes the three largest bounded v1 proof gaps
+
+---
 
 ## Key Results
 
-The public evidence in this repo supports these bounded results:
+| Result | Value |
+|---|---|
+| Adaptive fabric accuracy (6-case finance suite) | **1.000** vs 0.583 for flat baseline |
+| Unsafe / misaligned action rate (multi-cell classes) | **0.000** vs 0.500 for flat baseline |
+| Descriptor reuse causality | Finance alias-heavy cases: 0.500 → 1.000 (causal, authority-approved) |
+| Adaptation efficiency | **9× better** accuracy gain per retained KiB than governance alone |
+| 72h soak runtime memory (repeated-cycle lane) | Fixed at **1,507,328 bytes** across 1690 cycles |
+| 72h soak cycle score | **0.994434** average; improved from 0.988750 (first 100) to 0.995000 (last 100) |
+| Organic load lane | 40-case near-capacity stream; one governed split with **no accuracy regression and measurable latency improvement** |
+| Skill graph | Explicit `transfer_approval`, provenance, abstain paths, and denial paths |
+| POS domain | 2nd bounded proof domain; 5 cases; **2 outcomes causally improved by finance-origin descriptor transfer** |
+| Total deterministic proof coverage | **11 cases across 2 domains** |
 
-- the adaptive fabric benchmark reached `1.000` task accuracy versus `0.583` for the flat baseline on the original six-case finance suite
-- unsafe or misaligned action rate fell to `0.000` for the multi-cell classes versus `0.500` for the flat baseline
-- descriptor reuse causally improved alias-heavy finance cases
-- the real `72h` soak completed `1690` cycles while keeping repeated-cycle runtime memory fixed at `1,507,328` bytes
-- the post-closure organic-load lane used a deterministic `40`-case finance stream and showed one organically triggered, governance-approved split with no accuracy loss
-- the post-closure skill graph added explicit transfer approvals, abstains, denials, and provenance
-- the post-closure POS proof added a second bounded domain with `5` deterministic cases and `2` causally improved outcomes from finance-origin transfer
+---
 
-## What The Post-Closure Bundle Added
+## What the Post-Closure Bundle Added
 
-The post-closure extension work closed three bounded proof gaps:
+The extension track closed three bounded proof gaps that remained after v1 root closure:
 
-1. Split or merge under normal organic load
-   - closed with a deterministic `40`-case near-capacity finance lane
-2. Governed descriptor transfer
-   - closed with a skill graph and explicit `transfer_approval`
-3. Second proof domain
-   - closed with a bounded POS operations suite
+### Gap 1 — Split/Merge Under Normal Organic Load
+- A deterministic 40-case near-capacity finance stream drove organic lifecycle pressure
+- One governance-approved split occurred without an explicit stress-mode injection
+- Elastic run showed no accuracy regression and measurable latency improvement over the no-split control run
+- Active population returned near starting level after pressure fell
 
-That means the current bounded proof set now covers:
+### Gap 2 — Governed Descriptor Transfer
+- Extended `DescriptorRecord` with `domain_tags`, `transfer_eligible`, `transfer_score`, `conflict_score`, `retirement_score`, and `provenance_chain`
+- Built a descriptor graph with `derived_from`, `supersedes`, `conflicts_with`, and `transfers_to` edges
+- Cross-domain influence now requires an explicit `transfer_approval` — separate from standard descriptor approval
+- Low-quality and low-trust transfer candidates can abstain or be denied; this is verified deterministically
 
-- `6` deterministic finance benchmark cases
-- `1` deterministic `40`-case finance organic-load lane
-- `5` deterministic POS cases
+### Gap 3 — Second Bounded Proof Domain (POS Operations)
+- Six POS tissues added: intake/routing, validation, anomaly/fraud, governance, correction memory, output
+- Five deterministic POS benchmark cases including one cross-domain transfer case
+- Finance-origin descriptor causally improved 2 POS outcomes via the governed transfer path
+- Transfer approval and provenance are recorded in the skill graph for every case
+
+---
 
 ## What This Repo Does Not Claim
 
 This repo does not claim:
 
-- AGI
-- open-world general intelligence
+- AGI or open-world general intelligence
 - noisy production-scale proof
 - proof of the full CellPOS product
-- MacBook-only long-run endurance proof
+- MacBook Air-only long-run endurance proof
+- broad multi-domain generalization beyond the two bounded proof domains
 
-Important machine distinction:
+**Machine roles are explicit:**
+- **MacBook Air** — development, documentation, benchmark, and primary target machine
+- **MSI** — long-run soak machine (24h and 72h evidence)
 
-- MacBook Air = development, documentation, benchmark, and primary target machine
-- MSI = long-run soak machine
+The long-run soak evidence is real and analyzed, but it is MSI evidence. MacBook Air-only multi-day endurance is not claimed.
 
-The long-run soak evidence is real, but it is MSI evidence, not MacBook-only endurance proof.
+---
 
 ## Best Starting Points
 
-If you want the public truth first, read:
+### For the public v1 truth
 
-- [PROJECT_README.md](PROJECT_README.md)
-- [DECISIONS.md](DECISIONS.md)
-- [CHANGELOG.md](CHANGELOG.md)
-- [agif_v1_release_note.md](06_outputs/evidence_bundle_manifests/agif_v1_release_note.md)
-- [phase9_claims_to_evidence_matrix.md](06_outputs/evidence_bundle_manifests/phase9_claims_to_evidence_matrix.md)
-- [phase9_reproducibility_package.md](06_outputs/evidence_bundle_manifests/phase9_reproducibility_package.md)
+| File | What it contains |
+|---|---|
+| `PROJECT_README.md` | Full project overview and architecture |
+| `DECISIONS.md` | Every major design decision with rationale |
+| `CHANGELOG.md` | Phase-by-phase record of all changes |
+| `06_outputs/evidence_bundle_manifests/agif_v1_release_note.md` | Formal v1 release note: what v1 proves, does not prove, and excluded by design |
+| `06_outputs/evidence_bundle_manifests/phase9_claims_to_evidence_matrix.md` | Every paper claim mapped to a concrete artifact and verification command |
+| `06_outputs/evidence_bundle_manifests/phase9_reproducibility_package.md` | Reviewer-ready package with expected outputs and machine-role distinctions |
 
-For the post-closure extension evidence:
+### For the post-closure extension evidence
 
-- [V1X_ORGANIC_LOAD_EVIDENCE.md](05_testing/V1X_ORGANIC_LOAD_EVIDENCE.md)
-- [V1X_SKILL_GRAPH_EVIDENCE.md](05_testing/V1X_SKILL_GRAPH_EVIDENCE.md)
-- [V1X_POS_DOMAIN_EVIDENCE.md](05_testing/V1X_POS_DOMAIN_EVIDENCE.md)
-- [V1X_BUNDLE_CLOSURE_EVIDENCE.md](05_testing/V1X_BUNDLE_CLOSURE_EVIDENCE.md)
+| File | What it contains |
+|---|---|
+| `05_testing/V1X_ORGANIC_LOAD_EVIDENCE.md` | Gap 1 — organic split/merge proof |
+| `05_testing/V1X_SKILL_GRAPH_EVIDENCE.md` | Gap 2 — skill graph and governed transfer proof |
+| `05_testing/V1X_POS_DOMAIN_EVIDENCE.md` | Gap 3 — POS domain and cross-domain transfer proof |
+| `05_testing/V1X_BUNDLE_CLOSURE_EVIDENCE.md` | Full extension bundle closure record |
+
+---
 
 ## Verification
 
-Root AGIF v1 closure:
+### Root AGIF v1 closure
 
 ```bash
+git clone https://github.com/Ahsadin/agif_fabric_v1.git
+cd agif_fabric_v1
 python3 scripts/check_phase9_closure.py
 ```
 
-Post-closure extension bundle:
+Expected output: `AGIF_FABRIC_P9_PASS`
+
+### Post-closure extension bundle
 
 ```bash
 python3 scripts/check_v1x_bundle.py
 ```
 
-If both pass locally, the repo matches the closed public state described above.
+Expected output: `AGIF_FABRIC_V1X_PASS`
+
+> **Note:** `check_v1x_bundle.py` runs the full ordered chain including Phase 9 closure re-verification. Allow 3–5 minutes for a complete local run.
+
+If both commands pass, the repo matches the closed public state described in this README.
+
+### Individual gap checks (faster)
+
+```bash
+python3 scripts/check_v1x_organic_load.py   # Gap 1 — organic load (~30s)
+python3 scripts/check_v1x_skill_graph.py    # Gap 2 — skill graph (<1s)
+python3 scripts/check_v1x_pos_domain.py     # Gap 3 — POS domain (<1s)
+```
+
+---
+
+## Pass Tokens
+
+| Token | Meaning |
+|---|---|
+| `AGIF_FABRIC_P3_PASS` | Runner and fabric foundation verified |
+| `AGIF_FABRIC_P4_PASS` | Elastic lifecycle and lineage verified |
+| `AGIF_FABRIC_P5_PASS` | Reviewed memory and bounded growth verified |
+| `AGIF_FABRIC_P6_PASS` | Need signals, routing, and authority verified |
+| `AGIF_FABRIC_P7_PASS` | Finance tissues and benchmark system verified |
+| `AGIF_FABRIC_P8_PASS` | Long-run soak evidence verified (24h + 72h MSI) |
+| `AGIF_FABRIC_P9_PASS` | Paper, claims matrix, and reproducibility package verified |
+| `AGIF_FABRIC_V1X_SETUP_PASS` | Extension track scaffold and freeze verified |
+| `AGIF_FABRIC_V1X_G1_PASS` | Organic split/merge proof verified |
+| `AGIF_FABRIC_V1X_G2_PASS` | Skill graph and governed transfer verified |
+| `AGIF_FABRIC_V1X_G3_PASS` | POS domain and cross-domain transfer verified |
+| `AGIF_FABRIC_V1X_PASS` | Full extension bundle verified |
+
+---
+
+*Root v1 closure: 2026-03-18. Post-closure extension bundle: 2026-03-18. Author: Danish Z. Khan.*
